@@ -37,8 +37,8 @@ export function exportToExcel(applications: StudentApplication[], filename: stri
     'JEE Score': app.academicDetails.jeeScore || '-',
     'JEE Rank': app.academicDetails.jeeRank || '-',
     'Preferred Course': app.coursePreference.preferredCourse,
-    'Alternative Course': app.coursePreference.alternativeCourse || '-',
     'Specialization': app.coursePreference.courseSpecialization || '-',
+    'Additional Free Courses': app.coursePreference.additionalFreeCourses?.join(', ') || '-',
     'Community': app.communityScholarship.community,
     'Scholarship Type': app.communityScholarship.scholarshipType,
     'Annual Income': app.communityScholarship.annualFamilyIncome,
@@ -252,9 +252,9 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
 
   const courseDetails = [
     ['Preferred Course', application.coursePreference.preferredCourse],
-    ['Alternative Course', application.coursePreference.alternativeCourse || '-'],
     ['Specialization', application.coursePreference.courseSpecialization || '-'],
     ['Preferred Colleges', application.coursePreference.preferredColleges.join(', ')],
+    ['Additional Free Courses', application.coursePreference.additionalFreeCourses?.join(', ') || '-'],
   ];
 
   autoTable(doc, {

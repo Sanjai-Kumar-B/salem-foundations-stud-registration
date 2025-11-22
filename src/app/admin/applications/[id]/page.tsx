@@ -406,11 +406,6 @@ export default function ApplicationDetailPage() {
               <p className="text-gray-900 mt-1 font-semibold">{application.coursePreference.preferredCourse}</p>
             </div>
 
-            <div>
-              <label className="text-sm font-medium text-gray-600">Alternative Course</label>
-              <p className="text-gray-900 mt-1">{application.coursePreference.alternativeCourse || '-'}</p>
-            </div>
-
             <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-600">Course Specialization</label>
               <p className="text-gray-900 mt-1">{application.coursePreference.courseSpecialization || '-'}</p>
@@ -424,6 +419,17 @@ export default function ApplicationDetailPage() {
                 ))}
               </ul>
             </div>
+
+            {application.coursePreference.additionalFreeCourses && application.coursePreference.additionalFreeCourses.length > 0 && (
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-600">Additional Free Courses</label>
+                <ul className="list-disc list-inside text-gray-900 mt-1 space-y-1">
+                  {application.coursePreference.additionalFreeCourses.map((course, index) => (
+                    <li key={index}>{course}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
 
