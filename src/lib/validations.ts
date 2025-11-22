@@ -1,5 +1,5 @@
 import * as Yup from 'yup';
-import { Gender, PlusTwoGroup, CourseType, Community, ScholarshipType } from '@/types';
+import { Gender, TwelfthGroup, CourseType, Community, ScholarshipType, ReferralSource } from '@/types';
 
 // Personal Details Validation
 export const personalDetailsSchema = Yup.object().shape({
@@ -36,11 +36,8 @@ export const personalDetailsSchema = Yup.object().shape({
     .matches(/^[6-9]\d{9}$/, 'Invalid mobile number'),
   
   whatsappNumber: Yup.string()
-    .test('valid-whatsapp', 'Invalid WhatsApp number', function(value) {
-      if (!value || value === '') return true;
-      return /^[6-9]\d{9}$/.test(value);
-    })
-    .nullable(),
+    .required('WhatsApp number is required')
+    .matches(/^[6-9]\d{9}$/, 'Invalid WhatsApp number'),
   
   aadharNumber: Yup.string()
     .required('Aadhar number is required')
@@ -58,7 +55,13 @@ export const personalDetailsSchema = Yup.object().shape({
   }),
   
   fatherName: Yup.string().required('Father\'s name is required'),
+  fatherMobile: Yup.string()
+    .required('Father\'s mobile number is required')
+    .matches(/^[6-9]\d{9}$/, 'Invalid mobile number'),
   motherName: Yup.string().required('Mother\'s name is required'),
+  motherMobile: Yup.string()
+    .required('Mother\'s mobile number is required')
+    .matches(/^[6-9]\d{9}$/, 'Invalid mobile number'),
   guardianName: Yup.string().nullable(),
   guardianMobile: Yup.string()
     .test('valid-guardian-mobile', 'Invalid guardian mobile number', function(value) {
@@ -101,9 +104,9 @@ export const academicDetailsSchema = Yup.object().shape({
   twelfthTotalMarks: Yup.number()
     .required('12th total marks is required')
     .min(0, 'Total marks must be positive'),
-  plusTwoGroup: Yup.string()
-    .required('+2 group is required')
-    .oneOf(Object.values(PlusTwoGroup), 'Invalid +2 group'),
+  twelfthGroup: Yup.string()
+    .required('12th group is required')
+    .oneOf(Object.values(TwelfthGroup), 'Invalid 12th group'),
   
   neetScore: Yup.number()
     .transform((value, originalValue) => originalValue === '' ? undefined : value)
@@ -144,14 +147,10 @@ export const coursePreferenceSchema = Yup.object().shape({
     .required('Preferred course is required')
     .oneOf(Object.values(CourseType), 'Invalid course type'),
   
-  alternativeCourse: Yup.string()
-    .oneOf(Object.values(CourseType), 'Invalid course type')
-    .nullable(),
-  
   preferredColleges: Yup.array()
     .of(Yup.string())
     .min(1, 'Please select at least one preferred college')
-    .max(5, 'You can select up to 5 preferred colleges'),
+    .max(3, 'You can select up to 3 preferred colleges'),
   
   courseSpecialization: Yup.string().nullable(),
 });
@@ -173,4 +172,33 @@ export const communityScholarshipSchema = Yup.object().shape({
     .min(0, 'Income must be positive'),
   
   firstGraduate: Yup.boolean().required(),
+});
+
+// Referral Details Validation
+export const referralDetailsSchema = Yup.object().shape({
+  source: Yup.string()
+    .required('Please tell us how you heard about Salem Foundations')
+    .oneOf(Object.values(ReferralSource), 'Invalid referral source'),
+  
+  referrerName: Yup.string()
+    .when('source', {
+      is: (val: string) => val === ReferralSource.FRIENDS_FAMILY || val === ReferralSource.SCHOOL_COLLEGE || val === ReferralSource.OTHERS,
+      then: (schema) => schema.required('Referrer name is required'),
+      otherwise: (schema) => schema.nullable(),
+    }),
+  
+  referrerMobile: Yup.string()
+    .test('valid-mobile', 'Invalid mobile number', function(value) {
+      if (!value || value === '') return true;
+      return /^[6-9]\d{9}$/.test(value);
+    })
+    .nullable(),
+  
+  referrerDetails: Yup.string().nullable(),
+  
+  followedSocialMedia: Yup.object().shape({
+    instagram: Yup.boolean(),
+    facebook: Yup.boolean(),
+    youtube: Yup.boolean(),
+  }),
 });

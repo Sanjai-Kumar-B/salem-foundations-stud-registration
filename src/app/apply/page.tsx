@@ -5,6 +5,7 @@ import { Formik, Form } from 'formik';
 import * as Yup from 'yup';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 import { 
   User, 
   GraduationCap, 
@@ -14,54 +15,121 @@ import {
   CheckCircle,
   ArrowLeft,
   ArrowRight,
+  Star,
+  X,
 } from 'lucide-react';
 import {
   Gender,
-  PlusTwoGroup,
+  TwelfthGroup,
   CourseType,
   Community,
   ScholarshipType,
+  ReferralSource,
   ApplicationStatus,
   PersonalDetails,
   AcademicDetails,
   CoursePreference,
   CommunityScholarshipDetails,
+  ReferralDetails,
   Documents,
+  SPECIALIZED_COURSES,
+  FREE_COURSES,
 } from '@/types';
 import {
   personalDetailsSchema,
   academicDetailsSchema,
   coursePreferenceSchema,
   communityScholarshipSchema,
+  referralDetailsSchema,
 } from '@/lib/validations';
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
-import { createApplication } from '@/lib/firestore';
+import { createApplication, storeStudentRating } from '@/lib/firestore';
 import { generateApplicationNumber } from '@/lib/utils';
 
-const TOTAL_STEPS = 4;
+const TOTAL_STEPS = 5;
 
 const DISTRICTS = [
-  'Salem', 'Namakkal', 'Erode', 'Dharmapuri', 'Krishnagiri',
-  'Coimbatore', 'Tiruppur', 'Karur', 'Trichy', 'Chennai',
-  'Madurai', 'Other'
+  'Ariyalur', 'Chengalpattu', 'Chennai', 'Coimbatore', 'Cuddalore',
+  'Dharmapuri', 'Dindigul', 'Erode', 'Kallakurichi', 'Kancheepuram',
+  'Kanyakumari', 'Karur', 'Krishnagiri', 'Madurai', 'Mayiladuthurai',
+  'Nagapattinam', 'Namakkal', 'Nilgiris', 'Perambalur', 'Pudukkottai',
+  'Ramanathapuram', 'Ranipet', 'Salem', 'Sivaganga', 'Tenkasi',
+  'Thanjavur', 'Theni', 'Thoothukudi', 'Tiruchirappalli', 'Tirunelveli',
+  'Tirupathur', 'Tiruppur', 'Tiruvallur', 'Tiruvannamalai', 'Tiruvarur',
+  'Vellore', 'Viluppuram', 'Virudhunagar', 'Other'
+];
+
+const STATES = [
+  'Tamil Nadu', 'Andhra Pradesh', 'Karnataka', 'Kerala', 'Puducherry', 'Other'
+];
+
+const BOARDS = [
+  'CBSE', 'Matric', 'State Board', 'ICSE'
+];
+
+const TWELFTH_GROUPS = [
+  { value: TwelfthGroup.PHYSICS_CHEMISTRY_BIOLOGY, label: 'Physics, Chemistry, Biology' },
+  { value: TwelfthGroup.PHYSICS_CHEMISTRY_MATHS, label: 'Physics, Chemistry, Maths' },
+  { value: TwelfthGroup.PHYSICS_CHEMISTRY_COMPUTER_SCIENCE, label: 'Physics, Chemistry, Computer Science' },
+  { value: TwelfthGroup.COMMERCE_ACCOUNTANCY, label: 'Commerce with Accountancy' },
+  { value: TwelfthGroup.COMMERCE_COMPUTER_APPLICATIONS, label: 'Commerce with Computer Applications' },
+  { value: TwelfthGroup.COMMERCE_MATHS, label: 'Commerce with Maths' },
+  { value: TwelfthGroup.ARTS_HISTORY, label: 'Arts with History' },
+  { value: TwelfthGroup.ARTS_ECONOMICS, label: 'Arts with Economics' },
+  { value: TwelfthGroup.VOCATIONAL, label: 'Vocational' },
+];
+
+const COURSE_TYPES = [
+  { value: CourseType.ENGINEERING_TECHNOLOGY, label: 'Engineering & Technology' },
+  { value: CourseType.MEDICAL_HEALTH, label: 'Medical & Health Sciences' },
+  { value: CourseType.ARTS_SCIENCE, label: 'Arts & Science' },
+  { value: CourseType.LAW_CIVIL, label: 'Law & Civil Services' },
+  { value: CourseType.OTHERS, label: 'Others' },
+];
+
+const SCHOLARSHIP_TYPES = [
+  { value: ScholarshipType.SEVEN_FIVE_PERCENT_GOVERNMENT, label: '75% Government Scholarship' },
+  { value: ScholarshipType.POST_MATRIC_GOVERNMENT, label: 'Post Matric Government Scholarship' },
+  { value: ScholarshipType.TNMM_GOVERNMENT, label: 'TNMM Government Scholarship' },
+  { value: ScholarshipType.CENTRAL_SECTOR_GOVERNMENT, label: 'Central Sector Government Scholarship' },
+  { value: ScholarshipType.NSP_GOVERNMENT, label: 'NSP Government Scholarship' },
+  { value: ScholarshipType.STATE_SCHOLARSHIP, label: 'State Scholarship' },
+  { value: ScholarshipType.MOOVALUR_SCHOLARSHIP, label: 'Moovalur Scholarship' },
+  { value: ScholarshipType.MERIT_SCHOLARSHIP, label: 'Merit Scholarship' },
+  { value: ScholarshipType.SPORTS_SCHOLARSHIP, label: 'Sports Scholarship' },
+  { value: ScholarshipType.MINORITY_SCHOLARSHIP, label: 'Minority Scholarship' },
+  { value: ScholarshipType.EWS_SCHOLARSHIP, label: 'EWS Scholarship' },
+  { value: ScholarshipType.PRIVATE_TRUST, label: 'Private Trust' },
+  { value: ScholarshipType.COLLEGE_SCHOLARSHIP, label: 'College Scholarship' },
+  { value: ScholarshipType.NONE, label: 'None' },
+];
+
+const REFERRAL_SOURCES = [
+  { value: ReferralSource.FRIENDS_FAMILY, label: 'Friends/Family' },
+  { value: ReferralSource.SCHOOL_COLLEGE, label: 'School/College' },
+  { value: ReferralSource.COUNSELOR, label: 'Counselor' },
+  { value: ReferralSource.SOCIAL_MEDIA, label: 'Social Media' },
+  { value: ReferralSource.NEWSPAPER_AD, label: 'Newspaper Advertisement' },
+  { value: ReferralSource.WEBSITE, label: 'Website' },
+  { value: ReferralSource.WHATSAPP, label: 'WhatsApp' },
+  { value: ReferralSource.OTHERS, label: 'Others' },
 ];
 
 const COLLEGES = [
-  'Government Medical College',
-  'Private Medical College',
-  'Government Engineering College',
-  'Private Engineering College',
-  'Arts and Science College',
-  'Nursing College',
-  'Paramedical Institute',
-  'Polytechnic College',
-  'Other'
+  'Government College',
+  'Private College',
+  'Abroad College'
 ];
 
 export default function ApplyPage() {
   const router = useRouter();
   const [currentStep, setCurrentStep] = useState(1);
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [showRatingModal, setShowRatingModal] = useState(false);
+  const [selectedRating, setSelectedRating] = useState(0);
+  const [hoverRating, setHoverRating] = useState(0);
+  const [ratingComment, setRatingComment] = useState('');
+  const [isSubmittingRating, setIsSubmittingRating] = useState(false);
 
   const initialValues = {
     // Personal Details
@@ -82,7 +150,9 @@ export default function ApplyPage() {
       pincode: '',
     },
     fatherName: '',
+    fatherMobile: '',
     motherName: '',
+    motherMobile: '',
     guardianName: '',
     guardianMobile: '',
 
@@ -99,7 +169,7 @@ export default function ApplyPage() {
     twelfthPercentage: '' as any,
     twelfthMarks: '' as any,
     twelfthTotalMarks: '' as any,
-    plusTwoGroup: '' as PlusTwoGroup,
+    twelfthGroup: '' as TwelfthGroup,
     neetScore: '' as any,
     neetRank: '' as any,
     neetYear: '',
@@ -109,9 +179,9 @@ export default function ApplyPage() {
 
     // Course Preference
     preferredCourse: '' as CourseType,
-    alternativeCourse: '' as CourseType,
-    preferredColleges: [] as string[],
     courseSpecialization: '',
+    preferredColleges: [] as string[],
+    additionalFreeCourses: [] as string[],
 
     // Community & Scholarship
     community: '' as Community,
@@ -119,6 +189,17 @@ export default function ApplyPage() {
     scholarshipDetails: '',
     annualFamilyIncome: '' as any,
     firstGraduate: false,
+
+    // Referral Details
+    source: '' as ReferralSource,
+    referrerName: '',
+    referrerMobile: '',
+    referrerDetails: '',
+    followedSocialMedia: {
+      instagram: false,
+      facebook: false,
+      youtube: false,
+    },
   };
 
   const getCurrentValidationSchema = () => {
@@ -131,6 +212,8 @@ export default function ApplyPage() {
         return coursePreferenceSchema;
       case 4:
         return communityScholarshipSchema;
+      case 5:
+        return referralDetailsSchema;
       default:
         return Yup.object().shape({});
     }
@@ -198,7 +281,9 @@ export default function ApplyPage() {
         aadharNumber: values.aadharNumber,
         address: values.address,
         fatherName: values.fatherName,
+        fatherMobile: values.fatherMobile,
         motherName: values.motherName,
+        motherMobile: values.motherMobile,
         guardianName: values.guardianName,
         guardianMobile: values.guardianMobile,
       });
@@ -216,7 +301,7 @@ export default function ApplyPage() {
         twelfthPercentage: Number(values.twelfthPercentage),
         twelfthMarks: Number(values.twelfthMarks),
         twelfthTotalMarks: Number(values.twelfthTotalMarks),
-        plusTwoGroup: values.plusTwoGroup,
+        twelfthGroup: values.twelfthGroup,
         neetScore: values.neetScore ? Number(values.neetScore) : undefined,
         neetRank: values.neetRank ? Number(values.neetRank) : undefined,
         neetYear: values.neetYear,
@@ -227,9 +312,9 @@ export default function ApplyPage() {
 
       const coursePreference: CoursePreference = removeUndefined({
         preferredCourse: values.preferredCourse,
-        alternativeCourse: values.alternativeCourse,
-        preferredColleges: values.preferredColleges,
         courseSpecialization: values.courseSpecialization,
+        preferredColleges: values.preferredColleges,
+        additionalFreeCourses: values.additionalFreeCourses,
       });
 
       const communityScholarship: CommunityScholarshipDetails = removeUndefined({
@@ -240,12 +325,21 @@ export default function ApplyPage() {
         firstGraduate: values.firstGraduate,
       });
 
+      const referralDetails: ReferralDetails = removeUndefined({
+        source: values.source,
+        referrerName: values.referrerName,
+        referrerMobile: values.referrerMobile,
+        referrerDetails: values.referrerDetails,
+        followedSocialMedia: values.followedSocialMedia,
+      });
+
       // Create application
       const applicationId = await createApplication({
         personalDetails,
         academicDetails,
         coursePreference,
         communityScholarship,
+        referralDetails,
         status: ApplicationStatus.NEW,
       });
 
@@ -265,6 +359,60 @@ export default function ApplyPage() {
     }
   };
 
+  const handleRatingSubmit = async () => {
+    if (selectedRating === 0) {
+      toast.error('Please select a rating');
+      return;
+    }
+
+    setIsSubmittingRating(true);
+
+    try {
+      console.log('Submitting rating:', { rating: selectedRating, comment: ratingComment });
+      
+      // Store rating in Firestore
+      const ratingId = await storeStudentRating({
+        rating: selectedRating,
+        comment: ratingComment || undefined,
+      });
+
+      console.log('Rating submitted successfully with ID:', ratingId);
+
+      // Handle different rating scenarios
+      if (selectedRating <= 2) {
+        // Low rating
+        toast.success('Thank you! We value your feedback and will improve our services.');
+        setShowRatingModal(false);
+      } else if (selectedRating === 3) {
+        // Neutral rating
+        toast.success('Thanks for your feedback!');
+        setShowRatingModal(false);
+      } else {
+        // High rating (4 or 5)
+        toast.success('Thank you for your positive feedback!');
+        setTimeout(() => {
+          window.open('https://share.google/IHtKKwBHs9Am6uIDF', '_blank');
+          setShowRatingModal(false);
+        }, 1000);
+      }
+
+      // Reset form
+      setSelectedRating(0);
+      setRatingComment('');
+    } catch (error) {
+      console.error('Error submitting rating:', error);
+      
+      // More detailed error message
+      if (error instanceof Error) {
+        toast.error(`Failed to submit rating: ${error.message}`);
+      } else {
+        toast.error('Failed to submit rating. Please try again.');
+      }
+    } finally {
+      setIsSubmittingRating(false);
+    }
+  };
+
   const stepTitles = [
     { number: 1, title: 'Personal Details', icon: User },
     { number: 2, title: 'Academic Details', icon: GraduationCap },
@@ -277,10 +425,23 @@ export default function ApplyPage() {
       <div className="max-w-4xl mx-auto px-4">
         {/* Header */}
         <div className="text-center mb-8">
+          {/* Logo */}
+          <div className="flex justify-center mb-4">
+            <div className="relative w-32 h-32">
+              <Image
+                src="/logo.jpg"
+                alt="Salem Foundations Logo"
+                width={128}
+                height={128}
+                className="object-contain"
+                priority
+              />
+            </div>
+          </div>
+          
           <h1 className="text-3xl font-bold text-gray-900 mb-2">
-            Student Application Form
+            Salem Foundations Registration Form
           </h1>
-          <p className="text-gray-600">Salem Foundations - Admission 2025</p>
         </div>
 
         {/* Progress Steps */}
@@ -388,7 +549,8 @@ export default function ApplyPage() {
                     <FormInput
                       label="WhatsApp Number"
                       name="whatsappNumber"
-                      placeholder="Optional"
+                      placeholder="10-digit WhatsApp number"
+                      required
                     />
                     <FormInput
                       label="Aadhar Number"
@@ -423,9 +585,10 @@ export default function ApplyPage() {
                       options={DISTRICTS.map((d) => ({ value: d, label: d }))}
                       required
                     />
-                    <NestedFormInput
+                    <NestedFormSelect
                       label="State"
                       name="address.state"
+                      options={STATES.map((s) => ({ value: s, label: s }))}
                       required
                     />
                     <NestedFormInput
@@ -445,9 +608,21 @@ export default function ApplyPage() {
                       required
                     />
                     <FormInput
+                      label="Father's Mobile Number"
+                      name="fatherMobile"
+                      placeholder="10-digit mobile number"
+                      required
+                    />
+                    <FormInput
                       label="Mother's Name"
                       name="motherName"
                       placeholder="Enter mother's name"
+                      required
+                    />
+                    <FormInput
+                      label="Mother's Mobile Number"
+                      name="motherMobile"
+                      placeholder="10-digit mobile number"
                       required
                     />
                     <FormInput
@@ -477,10 +652,10 @@ export default function ApplyPage() {
                       placeholder="Enter school name"
                       required
                     />
-                    <FormInput
+                    <FormSelect
                       label="Board"
                       name="tenthBoard"
-                      placeholder="CBSE, State Board, etc."
+                      options={BOARDS.map((b) => ({ value: b, label: b }))}
                       required
                     />
                     <FormInput
@@ -520,10 +695,10 @@ export default function ApplyPage() {
                       placeholder="Enter school name"
                       required
                     />
-                    <FormInput
+                    <FormSelect
                       label="Board"
                       name="twelfthBoard"
-                      placeholder="CBSE, State Board, etc."
+                      options={BOARDS.map((b) => ({ value: b, label: b }))}
                       required
                     />
                     <FormInput
@@ -533,9 +708,9 @@ export default function ApplyPage() {
                       required
                     />
                     <FormSelect
-                      label="+2 Group"
-                      name="plusTwoGroup"
-                      options={Object.values(PlusTwoGroup).map((g) => ({ value: g, label: g }))}
+                      label="12th Group"
+                      name="twelfthGroup"
+                      options={TWELFTH_GROUPS}
                       required
                     />
                     <FormInput
@@ -612,26 +787,28 @@ export default function ApplyPage() {
                     <FormSelect
                       label="Preferred Course"
                       name="preferredCourse"
-                      options={Object.values(CourseType).map((c) => ({ value: c, label: c }))}
+                      options={COURSE_TYPES}
                       required
                     />
-                    <FormSelect
-                      label="Alternative Course"
-                      name="alternativeCourse"
-                      options={Object.values(CourseType).map((c) => ({ value: c, label: c }))}
-                      placeholder="Select alternative (optional)"
-                    />
-                    <div className="md:col-span-2">
-                      <FormInput
-                        label="Course Specialization (if any)"
+                    {values.preferredCourse && values.preferredCourse !== CourseType.OTHERS && (
+                      <FormSelect
+                        label="Course Specialization"
                         name="courseSpecialization"
-                        placeholder="e.g., Computer Science, Electronics"
+                        options={SPECIALIZED_COURSES[values.preferredCourse].map((s) => ({ value: s, label: s }))}
+                        placeholder="Select specialization"
                       />
-                    </div>
+                    )}
+                    {values.preferredCourse === CourseType.OTHERS && (
+                      <FormInput
+                        label="Specify Course"
+                        name="courseSpecialization"
+                        placeholder="Please specify the course"
+                      />
+                    )}
                   </div>
 
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
-                    Preferred Colleges (Select up to 5)
+                    Preferred College Type (Select up to 3)
                   </h3>
                   <div className="space-y-2">
                     {COLLEGES.map((college) => (
@@ -642,13 +819,13 @@ export default function ApplyPage() {
                           checked={values.preferredColleges.includes(college)}
                           onChange={(e) => {
                             if (e.target.checked) {
-                              if (values.preferredColleges.length < 5) {
+                              if (values.preferredColleges.length < 3) {
                                 setFieldValue('preferredColleges', [
                                   ...values.preferredColleges,
                                   college,
                                 ]);
                               } else {
-                                toast.error('You can select up to 5 colleges only');
+                                toast.error('You can select up to 3 options only');
                               }
                             } else {
                               setFieldValue(
@@ -671,6 +848,44 @@ export default function ApplyPage() {
                   {touched.preferredColleges && errors.preferredColleges && (
                     <p className="error-text">{errors.preferredColleges as string}</p>
                   )}
+
+                  <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
+                    Additional Free Courses (Optional)
+                  </h3>
+                  <p className="text-sm text-gray-600 mb-3">
+                    Select any additional free courses you're interested in
+                  </p>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    {FREE_COURSES.map((course) => (
+                      <div key={course} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                        <input
+                          type="checkbox"
+                          id={`free-course-${course}`}
+                          checked={values.additionalFreeCourses.includes(course)}
+                          onChange={(e) => {
+                            if (e.target.checked) {
+                              setFieldValue('additionalFreeCourses', [
+                                ...values.additionalFreeCourses,
+                                course,
+                              ]);
+                            } else {
+                              setFieldValue(
+                                'additionalFreeCourses',
+                                values.additionalFreeCourses.filter((c) => c !== course)
+                              );
+                            }
+                          }}
+                          className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                        />
+                        <label
+                          htmlFor={`free-course-${course}`}
+                          className="ml-3 text-sm text-gray-700 font-medium cursor-pointer"
+                        >
+                          {course}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
                 </FormStep>
 
                 {/* Step 4: Community & Scholarship */}
@@ -683,13 +898,13 @@ export default function ApplyPage() {
                     <FormSelect
                       label="Community"
                       name="community"
-                      options={Object.values(Community).map((c) => ({ value: c, label: c }))}
+                      options={Object.values(Community).map((c) => ({ value: c, label: c.replace('_', '(') + (c.includes('_') ? ')' : '') }))}
                       required
                     />
                     <FormSelect
                       label="Scholarship Type"
                       name="scholarshipType"
-                      options={Object.values(ScholarshipType).map((s) => ({ value: s, label: s }))}
+                      options={SCHOLARSHIP_TYPES}
                       required
                     />
                     <div className="md:col-span-2">
@@ -712,6 +927,153 @@ export default function ApplyPage() {
                         name="firstGraduate"
                         description="Check this if you are the first person in your family to pursue higher education"
                       />
+                    </div>
+                  </div>
+                </FormStep>
+
+                {/* Step 5: Referral Details */}
+                <FormStep currentStep={currentStep} stepNumber={5}>
+                  <h2 className="text-xl font-semibold text-gray-900 mb-4">
+                    How Did You Know About Salem Foundations?
+                  </h2>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="md:col-span-2">
+                      <FormSelect
+                        label="How did you hear about us?"
+                        name="source"
+                        options={REFERRAL_SOURCES}
+                        required
+                      />
+                    </div>
+                    
+                    {(values.source === ReferralSource.FRIENDS_FAMILY || 
+                      values.source === ReferralSource.SCHOOL_COLLEGE || 
+                      values.source === ReferralSource.COUNSELOR ||
+                      values.source === ReferralSource.OTHERS) && (
+                      <>
+                        <FormInput
+                          label="Referrer Name"
+                          name="referrerName"
+                          placeholder="Enter referrer's name"
+                          required
+                        />
+                        {(values.source === ReferralSource.FRIENDS_FAMILY || 
+                          values.source === ReferralSource.SCHOOL_COLLEGE ||
+                          values.source === ReferralSource.COUNSELOR) && (
+                          <FormInput
+                            label="Referrer Mobile Number (Optional)"
+                            name="referrerMobile"
+                            placeholder="10-digit mobile number"
+                          />
+                        )}
+                      </>
+                    )}
+                    
+                    {values.source === ReferralSource.OTHERS && (
+                      <div className="md:col-span-2">
+                        <FormInput
+                          label="Please specify"
+                          name="referrerDetails"
+                          placeholder="Tell us more about how you heard about us"
+                        />
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      Rate Your Experience ⭐
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Help us improve! Share your experience with Salem Foundations.
+                    </p>
+                    <button
+                      type="button"
+                      onClick={() => setShowRatingModal(true)}
+                      className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
+                    >
+                      <Star className="w-5 h-5 fill-current" />
+                      Rate Your Experience
+                    </button>
+                  </div>
+
+                  <div className="mt-8">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
+                      Follow Us on Social Media
+                    </h3>
+                    <p className="text-sm text-gray-600 mb-4">
+                      Stay updated with our latest programs and opportunities!
+                    </p>
+                    <div className="space-y-4">
+                      <div className="flex items-center justify-between p-4 bg-gradient-to-r from-pink-50 to-purple-50 rounded-lg">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="instagram"
+                            checked={values.followedSocialMedia.instagram}
+                            onChange={(e) => setFieldValue('followedSocialMedia.instagram', e.target.checked)}
+                            className="w-4 h-4 text-pink-600 border-gray-300 rounded focus:ring-pink-500"
+                          />
+                          <label htmlFor="instagram" className="ml-3 text-sm font-medium text-gray-700">
+                            I follow on Instagram
+                          </label>
+                        </div>
+                        <a
+                          href="https://www.instagram.com/salemfoundationsscholarship?igsh=a3g3a3kxa2RjZXBn"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-4 py-2 bg-gradient-to-r from-pink-600 to-purple-600 text-white text-sm font-medium rounded-md hover:from-pink-700 hover:to-purple-700 transition-colors"
+                        >
+                          Follow on Instagram
+                        </a>
+                      </div>
+
+                      <div className="flex items-center justify-between p-4 bg-blue-50 rounded-lg">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="facebook"
+                            checked={values.followedSocialMedia.facebook}
+                            onChange={(e) => setFieldValue('followedSocialMedia.facebook', e.target.checked)}
+                            className="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                          />
+                          <label htmlFor="facebook" className="ml-3 text-sm font-medium text-gray-700">
+                            I follow on Facebook
+                          </label>
+                        </div>
+                        <a
+                          href="https://www.facebook.com/share/1EcU2mDgoH/"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-4 py-2 bg-blue-600 text-white text-sm font-medium rounded-md hover:bg-blue-700 transition-colors"
+                        >
+                          Follow on Facebook
+                        </a>
+                      </div>
+
+                      <div className="flex items-center justify-between p-4 bg-red-50 rounded-lg">
+                        <div className="flex items-center">
+                          <input
+                            type="checkbox"
+                            id="youtube"
+                            checked={values.followedSocialMedia.youtube}
+                            onChange={(e) => setFieldValue('followedSocialMedia.youtube', e.target.checked)}
+                            className="w-4 h-4 text-red-600 border-gray-300 rounded focus:ring-red-500"
+                          />
+                          <label htmlFor="youtube" className="ml-3 text-sm font-medium text-gray-700">
+                            I subscribe on YouTube
+                          </label>
+                        </div>
+                        <a
+                          href="https://youtube.com/@salemfoundations?si=QVuyA4FHXrX2584f"
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center px-4 py-2 bg-red-600 text-white text-sm font-medium rounded-md hover:bg-red-700 transition-colors"
+                        >
+                          Subscribe on YouTube
+                        </a>
+                      </div>
                     </div>
                   </div>
                 </FormStep>
@@ -766,6 +1128,109 @@ export default function ApplyPage() {
             </Form>
           )}
         </Formik>
+
+        {/* Rating Modal */}
+        {showRatingModal && (
+          <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+            <div className="bg-white rounded-lg shadow-xl max-w-md w-full p-6 relative animate-fade-in">
+              {/* Close Button */}
+              <button
+                onClick={() => {
+                  setShowRatingModal(false);
+                  setSelectedRating(0);
+                  setRatingComment('');
+                }}
+                className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 transition-colors"
+              >
+                <X className="w-6 h-6" />
+              </button>
+
+              {/* Modal Content */}
+              <div className="text-center mb-6">
+                <h3 className="text-2xl font-bold text-gray-900 mb-2">
+                  How was your experience?
+                </h3>
+                <p className="text-gray-600">
+                  Your feedback helps us improve
+                </p>
+              </div>
+
+              {/* Star Rating */}
+              <div className="flex justify-center gap-2 mb-6">
+                {[1, 2, 3, 4, 5].map((star) => (
+                  <button
+                    key={star}
+                    type="button"
+                    onClick={() => setSelectedRating(star)}
+                    onMouseEnter={() => setHoverRating(star)}
+                    onMouseLeave={() => setHoverRating(0)}
+                    className="transition-transform hover:scale-110"
+                  >
+                    <Star
+                      className={`w-12 h-12 ${
+                        star <= (hoverRating || selectedRating)
+                          ? 'fill-yellow-400 text-yellow-400'
+                          : 'text-gray-300'
+                      } transition-colors`}
+                    />
+                  </button>
+                ))}
+              </div>
+
+              {/* Rating Text */}
+              {selectedRating > 0 && (
+                <div className="text-center mb-4">
+                  <p className="text-lg font-semibold text-gray-700">
+                    {selectedRating === 1 && 'Poor'}
+                    {selectedRating === 2 && 'Below Average'}
+                    {selectedRating === 3 && 'Average'}
+                    {selectedRating === 4 && 'Good'}
+                    {selectedRating === 5 && 'Excellent'}
+                  </p>
+                </div>
+              )}
+
+              {/* Comment Box (shown for ratings 1-3) */}
+              {selectedRating > 0 && selectedRating <= 3 && (
+                <div className="mb-6">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                    Tell us more (Optional)
+                  </label>
+                  <textarea
+                    value={ratingComment}
+                    onChange={(e) => setRatingComment(e.target.value)}
+                    placeholder="What could we improve?"
+                    rows={3}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent"
+                  />
+                </div>
+              )}
+
+              {/* Submit Button */}
+              <button
+                onClick={handleRatingSubmit}
+                disabled={selectedRating === 0 || isSubmittingRating}
+                className="w-full px-6 py-3 bg-primary-600 text-white font-semibold rounded-lg hover:bg-primary-700 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+              >
+                {isSubmittingRating ? (
+                  <span className="flex items-center justify-center gap-2">
+                    <div className="w-5 h-5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Submitting...
+                  </span>
+                ) : (
+                  'Submit Rating'
+                )}
+              </button>
+
+              {/* Info Text for High Ratings */}
+              {selectedRating >= 4 && (
+                <p className="text-xs text-gray-500 text-center mt-3">
+                  After submitting, you'll be redirected to leave a Google review
+                </p>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

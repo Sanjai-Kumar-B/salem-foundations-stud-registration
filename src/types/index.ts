@@ -18,37 +18,138 @@ export enum ApplicationStatus {
 
 // Courses
 export enum CourseType {
-  MEDICAL = 'MEDICAL',
-  ENGINEERING = 'ENGINEERING',
-  ARTS = 'ARTS',
-  NURSING = 'NURSING',
-  PARAMEDICAL = 'PARAMEDICAL',
-  SOFTWARE = 'SOFTWARE',
+  ENGINEERING_TECHNOLOGY = 'ENGINEERING_TECHNOLOGY',
+  MEDICAL_HEALTH = 'MEDICAL_HEALTH',
+  ARTS_SCIENCE = 'ARTS_SCIENCE',
+  LAW_CIVIL = 'LAW_CIVIL',
+  OTHERS = 'OTHERS',
 }
 
-// +2 Groups
-export enum PlusTwoGroup {
-  BIOLOGY = 'BIOLOGY',
-  MATHS = 'MATHS',
-  COMMERCE = 'COMMERCE',
-  ARTS = 'ARTS',
+// Specialized Course Categories
+export const SPECIALIZED_COURSES: Record<CourseType, string[]> = {
+  [CourseType.ENGINEERING_TECHNOLOGY]: [
+    'Computer Science Engineering (CSE)',
+    'Information Technology (IT)',
+    'Electronics & Communication Engineering (ECE)',
+    'Electrical Engineering (EEE)',
+    'Mechanical Engineering',
+    'Civil Engineering',
+    'Artificial Intelligence & Machine Learning',
+    'Data Science',
+    'Robotics & Automation',
+    'Aerospace Engineering',
+    'Biotechnology Engineering',
+    'Chemical Engineering',
+    'Marine Engineering',
+    'Automobile Engineering',
+    'Cybersecurity',
+    'Software Engineering',
+    'AI & Data Science',
+  ],
+  [CourseType.MEDICAL_HEALTH]: [
+    'MBBS',
+    'BDS (Dentistry)',
+    'BAMS (Ayurveda)',
+    'BHMS (Homeopathy)',
+    'BPT (Physiotherapy)',
+    'B.Sc Nursing',
+    'B.Pharm',
+    'Pharm D',
+    'Allied Health Sciences (AHS)',
+    'Radiology',
+    'Medical Lab Technology (MLT)',
+    'Operation Theatre Technology (OTT)',
+    'Anaesthesia Technology',
+    'Cardiac Care Technology',
+    'Dialysis Technology',
+  ],
+  [CourseType.ARTS_SCIENCE]: [
+    'B.Sc Physics',
+    'B.Sc Chemistry',
+    'B.Sc Mathematics',
+    'B.Sc Computer Science',
+    'B.Sc IT',
+    'B.Sc Biotechnology',
+    'B.Sc Agriculture',
+    'B.Sc Psychology',
+    'B.Sc Forensic Science',
+    'B.Sc Microbiology',
+    'B.Sc Data Science',
+    'B.Sc AI',
+    'B.Com (Bachelor of Commerce)',
+    'B.Com (Professional/Accounting/Finance)',
+    'BBA (Bachelor of Business Administration)',
+    'BMS (Bachelor of Management Studies)',
+    'BAF, BBI, BFM, BBA Analytics',
+  ],
+  [CourseType.LAW_CIVIL]: [
+    'B.A.LLB',
+    'BBA LLB',
+    'Civil Services Coaching',
+  ],
+  [CourseType.OTHERS]: [],
+};
+
+// Additional Free Courses
+export const FREE_COURSES = [
+  'Spoken English',
+  'Coding',
+  'Abroad Courses',
+  'Soft Skills',
+];
+
+// 12th Groups (renamed from +2 Groups)
+export enum TwelfthGroup {
+  PHYSICS_CHEMISTRY_BIOLOGY = 'PHYSICS_CHEMISTRY_BIOLOGY',
+  PHYSICS_CHEMISTRY_MATHS = 'PHYSICS_CHEMISTRY_MATHS',
+  PHYSICS_CHEMISTRY_COMPUTER_SCIENCE = 'PHYSICS_CHEMISTRY_COMPUTER_SCIENCE',
+  COMMERCE_ACCOUNTANCY = 'COMMERCE_ACCOUNTANCY',
+  COMMERCE_COMPUTER_APPLICATIONS = 'COMMERCE_COMPUTER_APPLICATIONS',
+  COMMERCE_MATHS = 'COMMERCE_MATHS',
+  ARTS_HISTORY = 'ARTS_HISTORY',
+  ARTS_ECONOMICS = 'ARTS_ECONOMICS',
+  VOCATIONAL = 'VOCATIONAL',
 }
 
 // Community
 export enum Community {
   OC = 'OC',
   BC = 'BC',
+  BCM = 'BCM',
   MBC = 'MBC',
   SC = 'SC',
+  SC_A = 'SC_A',
   ST = 'ST',
 }
 
 // Scholarship Type
 export enum ScholarshipType {
-  GOVERNMENT = 'GOVERNMENT',
-  TRUST = 'TRUST',
-  MERIT = 'MERIT',
+  SEVEN_FIVE_PERCENT_GOVERNMENT = '75%_GOVERNMENT',
+  POST_MATRIC_GOVERNMENT = 'POST_MATRIC_GOVERNMENT',
+  TNMM_GOVERNMENT = 'TNMM_GOVERNMENT',
+  CENTRAL_SECTOR_GOVERNMENT = 'CENTRAL_SECTOR_GOVERNMENT',
+  NSP_GOVERNMENT = 'NSP_GOVERNMENT',
+  STATE_SCHOLARSHIP = 'STATE_SCHOLARSHIP',
+  MOOVALUR_SCHOLARSHIP = 'MOOVALUR_SCHOLARSHIP',
+  MERIT_SCHOLARSHIP = 'MERIT_SCHOLARSHIP',
+  SPORTS_SCHOLARSHIP = 'SPORTS_SCHOLARSHIP',
+  MINORITY_SCHOLARSHIP = 'MINORITY_SCHOLARSHIP',
+  EWS_SCHOLARSHIP = 'EWS_SCHOLARSHIP',
+  PRIVATE_TRUST = 'PRIVATE_TRUST',
+  COLLEGE_SCHOLARSHIP = 'COLLEGE_SCHOLARSHIP',
   NONE = 'NONE',
+}
+
+// Referral Source
+export enum ReferralSource {
+  FRIENDS_FAMILY = 'FRIENDS_FAMILY',
+  SCHOOL_COLLEGE = 'SCHOOL_COLLEGE',
+  COUNSELOR = 'COUNSELOR',
+  SOCIAL_MEDIA = 'SOCIAL_MEDIA',
+  NEWSPAPER_AD = 'NEWSPAPER_AD',
+  WEBSITE = 'WEBSITE',
+  WHATSAPP = 'WHATSAPP',
+  OTHERS = 'OTHERS',
 }
 
 // Gender
@@ -86,7 +187,9 @@ export interface PersonalDetails {
     pincode: string;
   };
   fatherName: string;
+  fatherMobile: string;
   motherName: string;
+  motherMobile: string;
   guardianName?: string;
   guardianMobile?: string;
 }
@@ -106,7 +209,7 @@ export interface AcademicDetails {
   twelfthPercentage: number;
   twelfthMarks: number;
   twelfthTotalMarks: number;
-  plusTwoGroup: PlusTwoGroup;
+  twelfthGroup: TwelfthGroup;
   
   // Competitive Exam Details (if applicable)
   neetScore?: number;
@@ -120,9 +223,9 @@ export interface AcademicDetails {
 // Course Preferences
 export interface CoursePreference {
   preferredCourse: CourseType;
-  alternativeCourse?: CourseType;
-  preferredColleges: string[];
   courseSpecialization?: string;
+  preferredColleges: string[];
+  additionalFreeCourses?: string[];
 }
 
 // Community & Scholarship Details
@@ -132,6 +235,19 @@ export interface CommunityScholarshipDetails {
   scholarshipDetails?: string;
   annualFamilyIncome: number;
   firstGraduate: boolean;
+}
+
+// Referral Details
+export interface ReferralDetails {
+  source: ReferralSource;
+  referrerName?: string;
+  referrerMobile?: string;
+  referrerDetails?: string;
+  followedSocialMedia: {
+    instagram: boolean;
+    facebook: boolean;
+    youtube: boolean;
+  };
 }
 
 // Documents
@@ -155,6 +271,7 @@ export interface StudentApplication {
   academicDetails: AcademicDetails;
   coursePreference: CoursePreference;
   communityScholarship: CommunityScholarshipDetails;
+  referralDetails: ReferralDetails;
   documents?: Documents;
   status: ApplicationStatus;
   tags: string[];
@@ -179,7 +296,7 @@ export interface AdminUser {
 // Filter Options for Admin Dashboard
 export interface FilterOptions {
   courses?: CourseType[];
-  plusTwoGroups?: PlusTwoGroup[];
+  twelfthGroups?: TwelfthGroup[];
   districts?: string[];
   communities?: Community[];
   scholarshipTypes?: ScholarshipType[];

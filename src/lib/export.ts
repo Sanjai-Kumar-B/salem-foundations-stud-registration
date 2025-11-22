@@ -31,7 +31,7 @@ export function exportToExcel(applications: StudentApplication[], filename: stri
     '12th Year': app.academicDetails.twelfthYearOfPassing,
     '12th %': app.academicDetails.twelfthPercentage,
     '12th Marks': `${app.academicDetails.twelfthMarks}/${app.academicDetails.twelfthTotalMarks}`,
-    '+2 Group': app.academicDetails.plusTwoGroup,
+    '12th Group': app.academicDetails.twelfthGroup,
     'NEET Score': app.academicDetails.neetScore || '-',
     'NEET Rank': app.academicDetails.neetRank || '-',
     'JEE Score': app.academicDetails.jeeScore || '-',
@@ -74,7 +74,7 @@ export function exportToCSV(applications: StudentApplication[], filename: string
     'District': app.personalDetails.address.district,
     '10th %': app.academicDetails.tenthPercentage,
     '12th %': app.academicDetails.twelfthPercentage,
-    '+2 Group': app.academicDetails.plusTwoGroup,
+    '12th Group': app.academicDetails.twelfthGroup,
     'Preferred Course': app.coursePreference.preferredCourse,
     'Community': app.communityScholarship.community,
     'Status': app.status,
@@ -208,7 +208,7 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
     ['12th Year', application.academicDetails.twelfthYearOfPassing],
     ['12th Percentage', `${application.academicDetails.twelfthPercentage}%`],
     ['12th Marks', `${application.academicDetails.twelfthMarks}/${application.academicDetails.twelfthTotalMarks}`],
-    ['+2 Group', application.academicDetails.plusTwoGroup],
+    ['12th Group', application.academicDetails.twelfthGroup],
   ];
 
   if (application.academicDetails.neetScore) {

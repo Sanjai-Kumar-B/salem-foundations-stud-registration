@@ -6,7 +6,7 @@ import { Toaster } from 'react-hot-toast';
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Salem Foundations - Student Application Portal",
+  title: "Salem Foundations Registration Form",
   description: "Digital admission automation and student management system for Salem Foundations",
 };
 

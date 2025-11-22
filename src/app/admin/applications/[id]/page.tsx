@@ -342,8 +342,8 @@ export default function ApplicationDetailPage() {
                   <p className="text-gray-900 mt-1">{application.academicDetails.twelfthYearOfPassing}</p>
                 </div>
                 <div>
-                  <label className="text-sm font-medium text-gray-600">+2 Group</label>
-                  <p className="text-gray-900 mt-1">{application.academicDetails.plusTwoGroup}</p>
+                  <label className="text-sm font-medium text-gray-600">12th Group</label>
+                  <p className="text-gray-900 mt-1">{application.academicDetails.twelfthGroup.replace(/_/g, ' ')}</p>
                 </div>
                 <div>
                   <label className="text-sm font-medium text-gray-600">Percentage</label>

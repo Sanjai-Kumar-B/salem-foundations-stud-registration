@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import AdminLayout from '@/components/AdminLayout';
 import { getApplications } from '@/lib/firestore';
-import { StudentApplication, FilterOptions, ApplicationStatus, CourseType, Community, PlusTwoGroup } from '@/types';
+import { StudentApplication, FilterOptions, ApplicationStatus, CourseType, Community, TwelfthGroup } from '@/types';
 import { Search, Filter, Download, Eye, FileSpreadsheet, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -24,7 +24,7 @@ export default function ApplicationsPage() {
     courses: [],
     status: [],
     communities: [],
-    plusTwoGroups: [],
+    twelfthGroups: [],
     districts: [],
   });
 
@@ -98,9 +98,9 @@ export default function ApplicationsPage() {
     }
 
     // +2 Group filter
-    if (filters.plusTwoGroups && filters.plusTwoGroups.length > 0) {
+    if (filters.twelfthGroups && filters.twelfthGroups.length > 0) {
       filtered = filtered.filter((app) =>
-        filters.plusTwoGroups!.includes(app.academicDetails.plusTwoGroup)
+        filters.twelfthGroups!.includes(app.academicDetails.twelfthGroup)
       );
     }
 
@@ -125,7 +125,7 @@ export default function ApplicationsPage() {
       courses: [],
       status: [],
       communities: [],
-      plusTwoGroups: [],
+      twelfthGroups: [],
       districts: [],
     });
     setSearchQuery('');
@@ -284,19 +284,19 @@ export default function ApplicationsPage() {
                   </div>
                 </div>
 
-                {/* +2 Group Filter */}
+                {/* 12th Group Filter */}
                 <div>
-                  <h4 className="text-sm font-semibold text-gray-900 mb-3">+2 Group</h4>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">12th Group</h4>
                   <div className="space-y-2">
-                    {Object.values(PlusTwoGroup).map((group) => (
+                    {Object.values(TwelfthGroup).map((group) => (
                       <label key={group} className="flex items-center">
                         <input
                           type="checkbox"
-                          checked={filters.plusTwoGroups?.includes(group)}
-                          onChange={() => toggleFilter('plusTwoGroups', group)}
+                          checked={filters.twelfthGroups?.includes(group)}
+                          onChange={() => toggleFilter('twelfthGroups', group)}
                           className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                         />
-                        <span className="ml-2 text-sm text-gray-700">{group}</span>
+                        <span className="ml-2 text-sm text-gray-700">{group.replace(/_/g, ' ')}</span>
                       </label>
                     ))}
                   </div>

@@ -109,8 +109,8 @@ export async function getApplications(
         q = query(q, where('communityScholarship.community', 'in', filters.communities));
       }
 
-      if (filters.plusTwoGroups && filters.plusTwoGroups.length > 0) {
-        q = query(q, where('academicDetails.plusTwoGroup', 'in', filters.plusTwoGroups));
+      if (filters.twelfthGroups && filters.twelfthGroups.length > 0) {
+        q = query(q, where('academicDetails.twelfthGroup', 'in', filters.twelfthGroups));
       }
 
       if (filters.districts && filters.districts.length > 0) {
@@ -193,7 +193,7 @@ function generateAutoTags(application: Omit<StudentApplication, 'id' | 'applicat
   const tags: string[] = [];
 
   // Add group tag
-  tags.push(application.academicDetails.plusTwoGroup);
+  tags.push(application.academicDetails.twelfthGroup);
 
   // Add high scorer tags
   if (application.academicDetails.twelfthPercentage >= 90) {
@@ -274,5 +274,43 @@ export async function getApplicationStatistics() {
   } catch (error) {
     console.error('Error getting statistics:', error);
     throw new Error('Failed to get statistics');
+  }
+}
+
+// Store student rating feedback
+export async function storeStudentRating(
+  ratingData: {
+    rating: number;
+    comment?: string;
+    userId?: string;
+  }
+): Promise<string> {
+  try {
+    const now = Timestamp.now();
+    
+    // Clean up the data - remove undefined values
+    const rating: any = {
+      rating: ratingData.rating,
+      timestamp: now,
+      createdAt: now,
+    };
+
+    // Only add optional fields if they exist
+    if (ratingData.comment) {
+      rating.comment = ratingData.comment;
+    }
+    if (ratingData.userId) {
+      rating.userId = ratingData.userId;
+    }
+
+    console.log('Attempting to store rating:', rating);
+    const docRef = await addDoc(collection(db, 'ratings'), rating);
+    console.log('Rating stored successfully with ID:', docRef.id);
+    return docRef.id;
+  } catch (error: any) {
+    console.error('Error storing rating:', error);
+    console.error('Error code:', error?.code);
+    console.error('Error message:', error?.message);
+    throw error; // Throw the original error instead of wrapping it
   }
 }
