@@ -53,17 +53,17 @@ export default function AnalyticsPage() {
   // Prepare data for charts
   const courseData = Object.entries(stats?.courseWiseCount || {}).map(([name, value]) => ({
     name,
-    students: value,
+    students: value as number,
   }));
 
   const districtData = Object.entries(stats?.districtWiseCount || {})
-    .map(([name, value]) => ({ name, students: value }))
+    .map(([name, value]) => ({ name, students: value as number }))
     .sort((a, b) => b.students - a.students)
     .slice(0, 10);
 
   const communityData = Object.entries(stats?.communityWiseCount || {}).map(([name, value]) => ({
     name,
-    value,
+    value: value as number,
   }));
 
   const statusData = [
