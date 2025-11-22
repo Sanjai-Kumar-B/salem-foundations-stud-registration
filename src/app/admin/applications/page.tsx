@@ -107,9 +107,9 @@ export default function ApplicationsPage() {
     setFilteredApplications(filtered);
   };
 
-  const toggleFilter = <T extends keyof FilterOptions>(
-    category: T,
-    value: FilterOptions[T] extends (infer U)[] ? U : never
+  const toggleFilter = (
+    category: keyof FilterOptions,
+    value: any
   ) => {
     setFilters((prev) => {
       const current = (prev[category] as any[]) || [];
