@@ -34,6 +34,7 @@ import {
   Documents,
   SPECIALIZED_COURSES,
   FREE_COURSES,
+  EntranceExam,
 } from '@/types';
 import {
   personalDetailsSchema,
@@ -99,9 +100,49 @@ const SCHOLARSHIP_TYPES = [
   { value: ScholarshipType.SPORTS_SCHOLARSHIP, label: 'Sports Scholarship' },
   { value: ScholarshipType.MINORITY_SCHOLARSHIP, label: 'Minority Scholarship' },
   { value: ScholarshipType.EWS_SCHOLARSHIP, label: 'EWS Scholarship' },
+  { value: ScholarshipType.WELFARE_SCHOLARSHIP, label: 'Welfare Scholarship' },
+  { value: ScholarshipType.SALEM_FOUNDATIONS_SCHOLARSHIP, label: 'Salem Foundations Scholarship' },
+  { value: ScholarshipType.TAMIL_PUTHALVAN, label: 'Tamil Puthalvan' },
+  { value: ScholarshipType.PUDUMAIPEN, label: 'Pudumaipen' },
   { value: ScholarshipType.PRIVATE_TRUST, label: 'Private Trust' },
   { value: ScholarshipType.COLLEGE_SCHOLARSHIP, label: 'College Scholarship' },
   { value: ScholarshipType.NONE, label: 'None' },
+];
+
+const ENTRANCE_EXAMS = [
+  { value: EntranceExam.JEE_MAIN_ADVANCED, label: 'JEE Main / Advanced' },
+  { value: EntranceExam.VITEEE, label: 'VITEEE' },
+  { value: EntranceExam.SRMJEEE, label: 'SRMJEEE' },
+  { value: EntranceExam.BITSAT, label: 'BITSAT' },
+  { value: EntranceExam.AMRITA_AEEE, label: 'AMRITA AEEE' },
+  { value: EntranceExam.KIITEE, label: 'KIITEE' },
+  { value: EntranceExam.MANIPAL_MET, label: 'Manipal MET' },
+  { value: EntranceExam.NEET_UG, label: 'NEET UG' },
+  { value: EntranceExam.AIIMS_NURSING, label: 'AIIMS/Nursing' },
+  { value: EntranceExam.JIPMER_AHS, label: 'JIPMER AHS' },
+  { value: EntranceExam.CLAT, label: 'CLAT' },
+  { value: EntranceExam.AILET, label: 'AILET' },
+  { value: EntranceExam.LSAT_INDIA, label: 'LSAT-India' },
+  { value: EntranceExam.NATA, label: 'NATA' },
+  { value: EntranceExam.JEE_PAPER_2, label: 'JEE Paper 2' },
+  { value: EntranceExam.CUET_UG, label: 'CUET UG' },
+  { value: EntranceExam.IPMAT, label: 'IPMAT' },
+  { value: EntranceExam.SET_SYMBIOSIS, label: 'SET (Symbiosis)' },
+  { value: EntranceExam.CHRIST_ENTRANCE, label: 'Christ Entrance' },
+  { value: EntranceExam.XAVIERS_ENTRANCE, label: "Xavier's Entrance" },
+  { value: EntranceExam.NID_DAT, label: 'NID DAT' },
+  { value: EntranceExam.NIFT, label: 'NIFT' },
+  { value: EntranceExam.UCEED_CEED, label: 'UCEED / CEED' },
+  { value: EntranceExam.NCHM_JEE, label: 'NCHM JEE' },
+  { value: EntranceExam.IMU_CET, label: 'IMU CET' },
+  { value: EntranceExam.TMI_ENTRANCE, label: 'TMI Entrance' },
+  { value: EntranceExam.AMET_ENTRANCE, label: 'AMET Entrance' },
+  { value: EntranceExam.ICAR_AIEEA, label: 'ICAR AIEEA' },
+  { value: EntranceExam.TANUVAS_ENTRANCE, label: 'TANUVAS Entrance' },
+  { value: EntranceExam.NDA, label: 'NDA' },
+  { value: EntranceExam.AIR_FORCE_AGNIVEER, label: 'Air Force Agniveer' },
+  { value: EntranceExam.NAVY_SSR_AA, label: 'Navy SSR/AA' },
+  { value: EntranceExam.COAST_GUARD, label: 'Coast Guard' },
 ];
 
 const REFERRAL_SOURCES = [
@@ -176,6 +217,7 @@ export default function ApplyPage() {
     jeeScore: '' as any,
     jeeRank: '' as any,
     jeeYear: '',
+    preparingForExam: '',
 
     // Course Preference
     preferredCourse: '' as CourseType,
@@ -308,6 +350,7 @@ export default function ApplyPage() {
         jeeScore: values.jeeScore ? Number(values.jeeScore) : undefined,
         jeeRank: values.jeeRank ? Number(values.jeeRank) : undefined,
         jeeYear: values.jeeYear,
+        preparingForExam: values.preparingForExam,
       });
 
       const coursePreference: CoursePreference = removeUndefined({
@@ -773,6 +816,16 @@ export default function ApplyPage() {
                       label="JEE Year"
                       name="jeeYear"
                       placeholder="YYYY"
+                    />
+                  </div>
+
+                  {/* Entrance Exam Preparation */}
+                  <div className="mt-6">
+                    <FormSelect
+                      label="Which Entrance Exam are you preparing for?"
+                      name="preparingForExam"
+                      options={ENTRANCE_EXAMS}
+                      placeholder="Select entrance exam (optional)"
                     />
                   </div>
                 </FormStep>
