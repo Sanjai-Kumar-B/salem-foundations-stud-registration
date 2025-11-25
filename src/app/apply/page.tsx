@@ -69,9 +69,9 @@ const BOARDS = [
 ];
 
 const TWELFTH_GROUPS = [
-  { value: TwelfthGroup.PHYSICS_CHEMISTRY_BIOLOGY, label: 'Physics, Chemistry, Biology' },
-  { value: TwelfthGroup.PHYSICS_CHEMISTRY_MATHS, label: 'Physics, Chemistry, Maths' },
-  { value: TwelfthGroup.PHYSICS_CHEMISTRY_COMPUTER_SCIENCE, label: 'Physics, Chemistry, Computer Science' },
+  { value: TwelfthGroup.MATHS_BIOLOGY, label: 'Maths, Biology' },
+  { value: TwelfthGroup.MATHS_COMPUTER_SCIENCE, label: 'Maths, Computer Science' },
+  { value: TwelfthGroup.COMPUTER_SCIENCE_BIOLOGY, label: 'Computer Science, Biology' },
   { value: TwelfthGroup.COMMERCE_ACCOUNTANCY, label: 'Commerce with Accountancy' },
   { value: TwelfthGroup.COMMERCE_COMPUTER_APPLICATIONS, label: 'Commerce with Computer Applications' },
   { value: TwelfthGroup.COMMERCE_MATHS, label: 'Commerce with Maths' },
@@ -85,6 +85,13 @@ const COURSE_TYPES = [
   { value: CourseType.MEDICAL_HEALTH, label: 'Medical & Health Sciences' },
   { value: CourseType.ARTS_SCIENCE, label: 'Arts & Science' },
   { value: CourseType.LAW_CIVIL, label: 'Law & Civil Services' },
+  { value: CourseType.AGRICULTURE, label: 'Agriculture' },
+  { value: CourseType.ARCHITECTURE, label: 'Architecture' },
+  { value: CourseType.MARINE, label: 'Marine' },
+  { value: CourseType.AVIATION, label: 'Aviation' },
+  { value: CourseType.HOTEL_MANAGEMENT, label: 'Hotel Management' },
+  { value: CourseType.VETERINARY, label: 'Veterinary' },
+  { value: CourseType.FISHERIES, label: 'Fisheries' },
   { value: CourseType.OTHERS, label: 'Others' },
 ];
 
@@ -218,6 +225,7 @@ export default function ApplyPage() {
     jeeRank: '' as any,
     jeeYear: '',
     preparingForExam: '',
+    studiedInTamilMedium: false,
 
     // Course Preference
     preferredCourse: '' as CourseType,
@@ -227,10 +235,11 @@ export default function ApplyPage() {
 
     // Community & Scholarship
     community: '' as Community,
-    scholarshipType: '' as ScholarshipType,
+    scholarshipType: [] as ScholarshipType[],
     scholarshipDetails: '',
     annualFamilyIncome: '' as any,
     firstGraduate: false,
+    needsEducationalLoan: false,
 
     // Referral Details
     source: '' as ReferralSource,
@@ -351,6 +360,7 @@ export default function ApplyPage() {
         jeeRank: values.jeeRank ? Number(values.jeeRank) : undefined,
         jeeYear: values.jeeYear,
         preparingForExam: values.preparingForExam,
+        studiedInTamilMedium: values.studiedInTamilMedium,
       });
 
       const coursePreference: CoursePreference = removeUndefined({
@@ -366,6 +376,7 @@ export default function ApplyPage() {
         scholarshipDetails: values.scholarshipDetails,
         annualFamilyIncome: Number(values.annualFamilyIncome),
         firstGraduate: values.firstGraduate,
+        needsEducationalLoan: values.needsEducationalLoan,
       });
 
       const referralDetails: ReferralDetails = removeUndefined({
@@ -828,6 +839,37 @@ export default function ApplyPage() {
                       placeholder="Select entrance exam (optional)"
                     />
                   </div>
+
+                  {/* Tamil Medium */}
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      From 6th to 12th have you Studied in Tamil Medium? <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-6">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="studiedInTamilMedium"
+                          value="true"
+                          checked={values.studiedInTamilMedium === true}
+                          onChange={() => setFieldValue('studiedInTamilMedium', true)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">Yes</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="studiedInTamilMedium"
+                          value="false"
+                          checked={values.studiedInTamilMedium === false}
+                          onChange={() => setFieldValue('studiedInTamilMedium', false)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">No</span>
+                      </label>
+                    </div>
+                  </div>
                 </FormStep>
 
                 {/* Step 3: Course Preference */}
@@ -954,19 +996,6 @@ export default function ApplyPage() {
                       options={Object.values(Community).map((c) => ({ value: c, label: c.replace('_', '(') + (c.includes('_') ? ')' : '') }))}
                       required
                     />
-                    <FormSelect
-                      label="Scholarship Type"
-                      name="scholarshipType"
-                      options={SCHOLARSHIP_TYPES}
-                      required
-                    />
-                    <div className="md:col-span-2">
-                      <FormInput
-                        label="Scholarship Details (if applicable)"
-                        name="scholarshipDetails"
-                        placeholder="Enter scholarship name or details"
-                      />
-                    </div>
                     <FormInput
                       label="Annual Family Income (₹)"
                       name="annualFamilyIncome"
@@ -974,13 +1003,95 @@ export default function ApplyPage() {
                       placeholder="Enter annual income"
                       required
                     />
-                    <div className="md:col-span-2">
-                      <FormCheckbox
-                        label="I am a first graduate in my family"
-                        name="firstGraduate"
-                        description="Check this if you are the first person in your family to pursue higher education"
-                      />
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      Scholarship Type <span className="text-red-500">*</span>
+                    </label>
+                    <p className="text-sm text-gray-600 mb-3">
+                      Select all scholarships that apply to you
+                    </p>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                      {SCHOLARSHIP_TYPES.map((scholarship) => (
+                        <div key={scholarship.value} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                          <input
+                            type="checkbox"
+                            id={`scholarship-${scholarship.value}`}
+                            checked={values.scholarshipType.includes(scholarship.value)}
+                            onChange={(e) => {
+                              if (e.target.checked) {
+                                setFieldValue('scholarshipType', [
+                                  ...values.scholarshipType,
+                                  scholarship.value,
+                                ]);
+                              } else {
+                                setFieldValue(
+                                  'scholarshipType',
+                                  values.scholarshipType.filter((s) => s !== scholarship.value)
+                                );
+                              }
+                            }}
+                            className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                          />
+                          <label
+                            htmlFor={`scholarship-${scholarship.value}`}
+                            className="ml-3 text-sm text-gray-700 cursor-pointer"
+                          >
+                            {scholarship.label}
+                          </label>
+                        </div>
+                      ))}
                     </div>
+                    {touched.scholarshipType && errors.scholarshipType && (
+                      <p className="error-text mt-2">{errors.scholarshipType as string}</p>
+                    )}
+                  </div>
+
+                  <div className="mt-6">
+                    <FormInput
+                      label="Scholarship Details (if applicable)"
+                      name="scholarshipDetails"
+                      placeholder="Enter scholarship name or details"
+                    />
+                  </div>
+
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      You need a Educational loan? <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-6">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="needsEducationalLoan"
+                          value="true"
+                          checked={values.needsEducationalLoan === true}
+                          onChange={() => setFieldValue('needsEducationalLoan', true)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">Yes</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="needsEducationalLoan"
+                          value="false"
+                          checked={values.needsEducationalLoan === false}
+                          onChange={() => setFieldValue('needsEducationalLoan', false)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">No</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className="mt-6">
+                    <FormCheckbox
+                      label="I am a first graduate in my family"
+                      name="firstGraduate"
+                      description="Check this if you are the first person in your family to pursue higher education"
+                    />
                   </div>
                 </FormStep>
 
@@ -1032,23 +1143,6 @@ export default function ApplyPage() {
                         />
                       </div>
                     )}
-                  </div>
-
-                  <div className="mt-8">
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4">
-                      Rate Your Experience ⭐
-                    </h3>
-                    <p className="text-sm text-gray-600 mb-4">
-                      Help us improve! Share your experience with Salem Foundations.
-                    </p>
-                    <button
-                      type="button"
-                      onClick={() => setShowRatingModal(true)}
-                      className="w-full md:w-auto px-6 py-3 bg-gradient-to-r from-yellow-400 to-orange-500 text-white font-semibold rounded-lg hover:from-yellow-500 hover:to-orange-600 transition-all duration-200 flex items-center justify-center gap-2 shadow-md"
-                    >
-                      <Star className="w-5 h-5 fill-current" />
-                      Rate Your Experience
-                    </button>
                   </div>
 
                   <div className="mt-8">

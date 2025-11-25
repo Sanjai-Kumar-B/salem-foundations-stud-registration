@@ -139,6 +139,9 @@ export const academicDetailsSchema = Yup.object().shape({
       return /^\d{4}$/.test(value);
     })
     .nullable(),
+  
+  preparingForExam: Yup.string().nullable(),
+  studiedInTamilMedium: Yup.boolean().required('Please select if you studied in Tamil medium'),
 });
 
 // Course Preference Validation
@@ -161,9 +164,10 @@ export const communityScholarshipSchema = Yup.object().shape({
     .required('Community is required')
     .oneOf(Object.values(Community), 'Invalid community'),
   
-  scholarshipType: Yup.string()
-    .required('Scholarship type is required')
-    .oneOf(Object.values(ScholarshipType), 'Invalid scholarship type'),
+  scholarshipType: Yup.array()
+    .of(Yup.string().oneOf(Object.values(ScholarshipType), 'Invalid scholarship type'))
+    .min(1, 'Please select at least one scholarship type')
+    .required('Scholarship type is required'),
   
   scholarshipDetails: Yup.string().nullable(),
   
@@ -172,6 +176,8 @@ export const communityScholarshipSchema = Yup.object().shape({
     .min(0, 'Income must be positive'),
   
   firstGraduate: Yup.boolean().required(),
+  
+  needsEducationalLoan: Yup.boolean().required('Please select if you need an educational loan'),
 });
 
 // Referral Details Validation

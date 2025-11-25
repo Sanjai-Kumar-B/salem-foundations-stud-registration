@@ -218,7 +218,9 @@ function generateAutoTags(application: Omit<StudentApplication, 'id' | 'applicat
   }
 
   // Add scholarship tag
-  if (application.communityScholarship.scholarshipType !== 'NONE') {
+  if (application.communityScholarship.scholarshipType && 
+      application.communityScholarship.scholarshipType.length > 0 && 
+      !application.communityScholarship.scholarshipType.includes('NONE' as any)) {
     tags.push('Scholarship Eligible');
   }
 
@@ -247,7 +249,9 @@ export async function getApplicationStatistics() {
       districtWiseCount: {} as Record<string, number>,
       communityWiseCount: {} as Record<string, number>,
       scholarshipEligible: applications.filter(
-        (app) => app.communityScholarship.scholarshipType !== 'NONE'
+        (app) => Array.isArray(app.communityScholarship.scholarshipType) && 
+                 app.communityScholarship.scholarshipType.length > 0 && 
+                 !app.communityScholarship.scholarshipType.includes('NONE' as any)
       ).length,
       highScorers: applications.filter((app) => app.academicDetails.twelfthPercentage >= 90).length,
     };

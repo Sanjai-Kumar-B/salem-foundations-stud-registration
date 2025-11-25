@@ -40,7 +40,7 @@ export function exportToExcel(applications: StudentApplication[], filename: stri
     'Specialization': app.coursePreference.courseSpecialization || '-',
     'Additional Free Courses': app.coursePreference.additionalFreeCourses?.join(', ') || '-',
     'Community': app.communityScholarship.community,
-    'Scholarship Type': app.communityScholarship.scholarshipType,
+    'Scholarship Type': Array.isArray(app.communityScholarship.scholarshipType) ? app.communityScholarship.scholarshipType.join(', ') : app.communityScholarship.scholarshipType,
     'Annual Income': app.communityScholarship.annualFamilyIncome,
     'First Graduate': app.communityScholarship.firstGraduate ? 'Yes' : 'No',
     'Status': app.status,
@@ -278,7 +278,7 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
 
   const communityDetails = [
     ['Community', application.communityScholarship.community],
-    ['Scholarship Type', application.communityScholarship.scholarshipType],
+    ['Scholarship Type', Array.isArray(application.communityScholarship.scholarshipType) ? application.communityScholarship.scholarshipType.join(', ') : application.communityScholarship.scholarshipType],
     ['Annual Family Income', `₹${application.communityScholarship.annualFamilyIncome.toLocaleString()}`],
     ['First Graduate', application.communityScholarship.firstGraduate ? 'Yes' : 'No'],
   ];

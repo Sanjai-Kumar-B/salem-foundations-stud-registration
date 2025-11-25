@@ -59,6 +59,13 @@ export enum CourseType {
   MEDICAL_HEALTH = 'MEDICAL_HEALTH',
   ARTS_SCIENCE = 'ARTS_SCIENCE',
   LAW_CIVIL = 'LAW_CIVIL',
+  AGRICULTURE = 'AGRICULTURE',
+  ARCHITECTURE = 'ARCHITECTURE',
+  MARINE = 'MARINE',
+  AVIATION = 'AVIATION',
+  HOTEL_MANAGEMENT = 'HOTEL_MANAGEMENT',
+  VETERINARY = 'VETERINARY',
+  FISHERIES = 'FISHERIES',
   OTHERS = 'OTHERS',
 }
 
@@ -124,6 +131,47 @@ export const SPECIALIZED_COURSES: Record<CourseType, string[]> = {
     'BBA LLB',
     'Civil Services Coaching',
   ],
+  [CourseType.AGRICULTURE]: [
+    'B.Sc Agriculture',
+    'B.Sc Horticulture',
+    'B.Sc Forestry',
+    'Agricultural Engineering',
+  ],
+  [CourseType.ARCHITECTURE]: [
+    'B.Arch',
+    'B.Plan (Planning)',
+    'Interior Design',
+    'Landscape Architecture',
+  ],
+  [CourseType.MARINE]: [
+    'Marine Engineering',
+    'Nautical Science',
+    'B.Sc Maritime Science',
+    'Shipping Management',
+  ],
+  [CourseType.AVIATION]: [
+    'Commercial Pilot License (CPL)',
+    'B.Sc Aviation',
+    'Aircraft Maintenance Engineering',
+    'Air Traffic Control',
+    'Cabin Crew Training',
+  ],
+  [CourseType.HOTEL_MANAGEMENT]: [
+    'B.Sc Hotel Management',
+    'Culinary Arts',
+    'Hospitality Management',
+    'Tourism Management',
+  ],
+  [CourseType.VETERINARY]: [
+    'B.V.Sc & AH (Veterinary Science)',
+    'B.Sc Veterinary Microbiology',
+    'Veterinary Nursing',
+  ],
+  [CourseType.FISHERIES]: [
+    'B.F.Sc (Fisheries Science)',
+    'Aquaculture',
+    'Marine Biology',
+  ],
   [CourseType.OTHERS]: [],
 };
 
@@ -137,9 +185,9 @@ export const FREE_COURSES = [
 
 // 12th Groups (renamed from +2 Groups)
 export enum TwelfthGroup {
-  PHYSICS_CHEMISTRY_BIOLOGY = 'PHYSICS_CHEMISTRY_BIOLOGY',
-  PHYSICS_CHEMISTRY_MATHS = 'PHYSICS_CHEMISTRY_MATHS',
-  PHYSICS_CHEMISTRY_COMPUTER_SCIENCE = 'PHYSICS_CHEMISTRY_COMPUTER_SCIENCE',
+  MATHS_BIOLOGY = 'MATHS_BIOLOGY',
+  MATHS_COMPUTER_SCIENCE = 'MATHS_COMPUTER_SCIENCE',
+  COMPUTER_SCIENCE_BIOLOGY = 'COMPUTER_SCIENCE_BIOLOGY',
   COMMERCE_ACCOUNTANCY = 'COMMERCE_ACCOUNTANCY',
   COMMERCE_COMPUTER_APPLICATIONS = 'COMMERCE_COMPUTER_APPLICATIONS',
   COMMERCE_MATHS = 'COMMERCE_MATHS',
@@ -262,6 +310,9 @@ export interface AcademicDetails {
   
   // Entrance Exam Preparation
   preparingForExam?: string;
+  
+  // Medium of Instruction
+  studiedInTamilMedium: boolean;
 }
 
 // Course Preferences
@@ -275,10 +326,11 @@ export interface CoursePreference {
 // Community & Scholarship Details
 export interface CommunityScholarshipDetails {
   community: Community;
-  scholarshipType: ScholarshipType;
+  scholarshipType: ScholarshipType[];
   scholarshipDetails?: string;
   annualFamilyIncome: number;
   firstGraduate: boolean;
+  needsEducationalLoan: boolean;
 }
 
 // Referral Details

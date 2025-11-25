@@ -446,9 +446,17 @@ export default function ApplicationDetailPage() {
               <p className="text-gray-900 mt-1">{application.communityScholarship.community}</p>
             </div>
 
-            <div>
+            <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-600">Scholarship Type</label>
-              <p className="text-gray-900 mt-1">{application.communityScholarship.scholarshipType}</p>
+              {Array.isArray(application.communityScholarship.scholarshipType) ? (
+                <ul className="list-disc list-inside text-gray-900 mt-1 space-y-1">
+                  {application.communityScholarship.scholarshipType.map((scholarship, index) => (
+                    <li key={index}>{scholarship}</li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-900 mt-1">{application.communityScholarship.scholarshipType}</p>
+              )}
             </div>
 
             <div>
@@ -464,6 +472,15 @@ export default function ApplicationDetailPage() {
                 {application.communityScholarship.firstGraduate ? 'Yes' : 'No'}
               </p>
             </div>
+
+            {application.communityScholarship.needsEducationalLoan !== undefined && (
+              <div>
+                <label className="text-sm font-medium text-gray-600">Educational Loan Required</label>
+                <p className="text-gray-900 mt-1">
+                  {application.communityScholarship.needsEducationalLoan ? 'Yes' : 'No'}
+                </p>
+              </div>
+            )}
 
             {application.communityScholarship.scholarshipDetails && (
               <div className="md:col-span-2">
