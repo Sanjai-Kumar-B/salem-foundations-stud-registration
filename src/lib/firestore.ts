@@ -22,7 +22,7 @@ const APPLICATIONS_COLLECTION = 'applications';
 // Create new application
 export async function createApplication(
   applicationData: Omit<StudentApplication, 'id' | 'applicationNumber' | 'createdAt' | 'updatedAt' | 'submittedAt' | 'tags' | 'documents'>
-): Promise<string> {
+): Promise<{ id: string; applicationNumber: string }> {
   try {
     const applicationNumber = generateApplicationNumber();
     const now = Timestamp.now();
@@ -37,7 +37,7 @@ export async function createApplication(
     };
 
     const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), application);
-    return docRef.id;
+    return { id: docRef.id, applicationNumber };
   } catch (error) {
     console.error('Error creating application:', error);
     throw error;

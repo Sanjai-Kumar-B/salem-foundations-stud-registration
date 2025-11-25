@@ -45,7 +45,6 @@ import {
 } from '@/lib/validations';
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
 import { createApplication, storeStudentRating } from '@/lib/firestore';
-import { generateApplicationNumber } from '@/lib/utils';
 
 const TOTAL_STEPS = 5;
 
@@ -304,8 +303,6 @@ export default function ApplyPage() {
     setIsSubmitting(true);
 
     try {
-      const applicationNumber = generateApplicationNumber();
-
       // Helper function to remove undefined values
       const removeUndefined = (obj: any): any => {
         return Object.entries(obj).reduce((acc, [key, value]) => {
@@ -388,7 +385,7 @@ export default function ApplyPage() {
       });
 
       // Create application
-      const applicationId = await createApplication({
+      const { id: applicationId, applicationNumber } = await createApplication({
         personalDetails,
         academicDetails,
         coursePreference,
