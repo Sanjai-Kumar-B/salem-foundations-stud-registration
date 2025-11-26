@@ -25,10 +25,18 @@ export function formatDateTime(date: Date | string): string {
   });
 }
 
-export function generateApplicationNumber(): string {
+export function generateApplicationNumber(uniqueId?: string): string {
   const date = new Date();
   const year = date.getFullYear().toString().slice(-2);
   const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  
+  if (uniqueId) {
+    // Use last 6 characters of Firestore document ID for guaranteed uniqueness
+    const uniquePart = uniqueId.slice(-6).toUpperCase();
+    return `SF${year}${month}${uniquePart}`;
+  }
+  
+  // Fallback to random (used only for testing)
   const random = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
   return `SF${year}${month}${random}`;
 }

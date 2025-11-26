@@ -24,19 +24,26 @@ export async function createApplication(
   applicationData: Omit<StudentApplication, 'id' | 'applicationNumber' | 'createdAt' | 'updatedAt' | 'submittedAt' | 'tags' | 'documents'>
 ): Promise<{ id: string; applicationNumber: string }> {
   try {
-    const applicationNumber = generateApplicationNumber();
     const now = Timestamp.now();
     
-    const application = {
+    // First create document without application number to get unique ID
+    const tempApplication = {
       ...applicationData,
-      applicationNumber,
+      applicationNumber: 'TEMP', // Temporary placeholder
       tags: generateAutoTags(applicationData),
       createdAt: now,
       updatedAt: now,
       submittedAt: now,
     };
 
-    const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), application);
+    const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), tempApplication);
+    
+    // Generate unique application number using the document ID
+    const applicationNumber = generateApplicationNumber(docRef.id);
+    
+    // Update the document with the actual application number
+    await updateDoc(docRef, { applicationNumber });
+    
     return { id: docRef.id, applicationNumber };
   } catch (error) {
     console.error('Error creating application:', error);
