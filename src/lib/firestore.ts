@@ -26,23 +26,20 @@ export async function createApplication(
   try {
     const now = Timestamp.now();
     
-    // First create document without application number to get unique ID
-    const tempApplication = {
+    // Generate a unique temporary ID to create application number
+    const tempId = Date.now().toString(36) + Math.random().toString(36).substring(2);
+    const applicationNumber = generateApplicationNumber(tempId);
+    
+    const application = {
       ...applicationData,
-      applicationNumber: 'TEMP', // Temporary placeholder
+      applicationNumber,
       tags: generateAutoTags(applicationData),
       createdAt: now,
       updatedAt: now,
       submittedAt: now,
     };
 
-    const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), tempApplication);
-    
-    // Generate unique application number using the document ID
-    const applicationNumber = generateApplicationNumber(docRef.id);
-    
-    // Update the document with the actual application number
-    await updateDoc(docRef, { applicationNumber });
+    const docRef = await addDoc(collection(db, APPLICATIONS_COLLECTION), application);
     
     return { id: docRef.id, applicationNumber };
   } catch (error) {

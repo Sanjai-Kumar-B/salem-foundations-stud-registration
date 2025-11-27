@@ -31,6 +31,7 @@
 - [Firebase Setup](#-firebase-setup)
 - [Deployment](#-deployment)
 - [Security](#-security)
+- [Latest Updates](#-latest-updates)
 - [Contributing](#-contributing)
 - [License](#-license)
 
@@ -42,9 +43,9 @@
 
 ### Purpose
 
-- **For Students**: Submit applications online with ease, upload documents securely, and track application status
-- **For Administrators**: Manage applications efficiently with advanced filtering, sorting, analytics, and export capabilities
-- **For the Organization**: Reduce manual work, eliminate paperwork, enable data-driven decisions
+- **For Students**: Submit applications online with ease, track application status, and receive instant confirmation with unique application number
+- **For Administrators**: Manage applications efficiently with advanced filtering, multi-select scholarships, analytics, and export capabilities
+- **For the Organization**: Reduce manual work, eliminate paperwork, enable data-driven decisions with real-time insights
 
 ---
 
@@ -52,25 +53,50 @@
 
 ### 🎓 Student Module
 
-- **Multi-Step Application Form**
-  - Personal details with address validation
-  - Academic records (10th & 12th with competitive exam scores)
-  - Course preferences with college selection
-  - Community and scholarship information
+- **5-Step Application Form**
+  - **Step 1 - Personal Details**: Complete family information with mandatory parent mobile numbers, state dropdown (6 states), 38 Tamil Nadu districts
+  - **Step 2 - Academic Details**: 
+    - 10th & 12th records with board dropdown (CBSE, Matric, State Board, ICSE)
+    - 12th Group options: Maths-Biology, Maths-Computer Science, Computer Science-Biology
+    - NEET/JEE scores (optional)
+    - 33 Entrance exam preparation options (JEE, NEET, CLAT, NATA, etc.)
+    - Tamil medium education tracking (6th-12th)
+  - **Step 3 - Course Preferences**: 
+    - 12 course categories with specialized options:
+      - Engineering & Technology (17 specializations)
+      - Medical & Health Sciences (15 specializations)
+      - Arts & Science (17 specializations)
+      - Law & Civil Services
+      - Agriculture (4 specializations)
+      - Architecture (4 specializations)
+      - Marine (4 specializations)
+      - Aviation (5 specializations)
+      - Hotel Management (4 specializations)
+      - Veterinary (3 specializations)
+      - Fisheries (3 specializations)
+      - Others (custom input)
+    - Multiple college type selection (up to 3)
+    - 4 additional free courses: Spoken English, Coding, Abroad Courses, Soft Skills
+  - **Step 4 - Community & Scholarship**:
+    - 7 community options (including BCM, SC(A))
+    - **Multi-select scholarships** (18 types):
+      - Government scholarships (7 types)
+      - Salem Foundations Scholarship
+      - Tamil Puthalvan, Pudumaipen
+      - Welfare Scholarship, and more
+    - Educational loan requirement
+    - First graduate status
+  - **Step 5 - Referral Tracking**:
+    - Counselor referral option with mobile number
+    - Social media follow integration (Instagram, Facebook, YouTube)
+    - Source tracking
+
+- **Auto-Validation & Smart Features**
+  - WhatsApp number mandatory with validation
+  - Conditional course specialization dropdowns
+  - Real-time percentage calculation
+  - Unique application number generation (format: SF{YY}{MM}{UNIQUE6})
   - Progress indicator with step validation
-
-- **Document Management**
-  - Secure file upload (photos, certificates, marksheets)
-  - Support for PDF, JPG, PNG formats
-  - File size and type validation
-  - Drag-and-drop interface
-  - Real-time upload progress
-
-- **Auto-Validation**
-  - Aadhar number validation
-  - Email and mobile number verification
-  - Percentage calculation
-  - Mandatory field checks
 
 ### 🔐 Admin Module
 
@@ -82,34 +108,43 @@
 - **Comprehensive Dashboard**
   - Real-time statistics and metrics
   - Application status overview
-  - Recent applications list
+  - Recent applications list with application numbers
   - Course and community distribution charts
+  - Scholarship eligibility tracking
 
-- **Advanced Filtering**
-  - Filter by course type, district, community
-  - +2 group and scholarship type filters
+- **Advanced Filtering & Search**
+  - Filter by 12 course types
+  - District-wise filtering (38 TN districts)
+  - Community-based filtering (7 options)
+  - Multi-scholarship type filtering
   - Mark range filtering (80+, 90+, etc.)
   - Status-based filtering
-  - Real-time search
+  - Real-time search across all fields
 
 - **Application Management**
   - Detailed student profile view
+  - Display of multiple selected scholarships
+  - Educational loan status
+  - Tamil medium education status
+  - Entrance exam preparation details
+  - Custom course inputs for "Others" category
   - Document preview and download
-  - Status updates (New, Shortlisted, Follow-up, Completed)
-  - Notes and comments
+  - Status updates with notes
 
 - **Analytics & Reports**
-  - Course-wise distribution
+  - Course-wise distribution (12 categories)
   - District-wise statistics
   - Community demographics
-  - Scholarship eligibility tracking
-  - High scorer identification
+  - Multi-scholarship analysis
+  - High scorer identification (90%+ tracking)
+  - Entrance exam preparation trends
 
 - **Data Export**
-  - Export to Excel (.xlsx)
+  - Export to Excel (.xlsx) with all fields including multiple scholarships
   - Export to CSV
-  - PDF generation with auto-filled forms
+  - PDF generation with complete application details
   - Filtered data export
+  - Application-wise PDF download
 
 ---
 
@@ -124,10 +159,10 @@
 - **Notifications**: React Hot Toast 2.4
 
 ### Backend (Serverless)
-- **Database**: Firebase Firestore
+- **Database**: Firebase Firestore (with updated security rules)
 - **Storage**: Firebase Cloud Storage
 - **Authentication**: Firebase Authentication
-- **Hosting**: Firebase Hosting / Vercel
+- **Hosting**: Vercel / Firebase Hosting
 
 ### Additional Libraries
 - **Charts**: Recharts 2.12
@@ -394,20 +429,22 @@ firebase deploy
 
 - ✅ Firebase Authentication for admin access
 - ✅ Role-based access control (RBAC)
-- ✅ Firestore security rules
+- ✅ Firestore security rules (updated for ratings and multi-field access)
 - ✅ Storage security rules
-- ✅ Input validation (client & server)
+- ✅ Input validation (client & server with Yup schemas)
 - ✅ File type and size validation
 - ✅ XSS protection
 - ✅ CSRF protection (Next.js built-in)
+- ✅ Unique application number generation (Firestore ID-based)
 
 ### Security Rules
 
-- Students can only create applications (no login required)
+- Students can create applications and submit ratings (no login required)
 - Admins must authenticate to access dashboard
 - Only authorized admins can view/modify applications
 - File uploads are validated for type and size
 - Sensitive data is protected in Firestore
+- Public write access for ratings collection with timestamp tracking
 
 ---
 
@@ -418,35 +455,89 @@ firebase deploy
 ```typescript
 {
   id: string,
-  applicationNumber: string,
+  applicationNumber: string, // Format: SF{YY}{MM}{UNIQUE6}
   personalDetails: {
     firstName, lastName, dateOfBirth, gender,
-    email, mobile, aadharNumber, address, ...
+    email, mobile, whatsappNumber (mandatory),
+    aadharNumber, address (with district & state dropdown),
+    fatherName, fatherMobile (mandatory),
+    motherName, motherMobile (mandatory),
+    guardianName, guardianMobile
   },
   academicDetails: {
-    tenthSchool, tenthMarks, tenthPercentage,
-    twelfthSchool, twelfthMarks, twelfthPercentage,
-    plusTwoGroup, neetScore, jeeScore, ...
+    tenthSchool, tenthBoard (dropdown), tenthMarks, tenthPercentage,
+    twelfthSchool, twelfthBoard (dropdown), twelfthMarks, twelfthPercentage,
+    twelfthGroup (Maths-Biology, Maths-CS, CS-Biology, Commerce, Arts, Vocational),
+    neetScore, neetRank, neetYear,
+    jeeScore, jeeRank, jeeYear,
+    preparingForExam (33 entrance exam options),
+    studiedInTamilMedium (boolean)
   },
   coursePreference: {
-    preferredCourse, alternativeCourse,
-    preferredColleges, courseSpecialization
+    preferredCourse (12 categories),
+    courseSpecialization (conditional dropdown or custom input),
+    preferredColleges (array, max 3),
+    additionalFreeCourses (array of 4 options)
   },
   communityScholarship: {
-    community, scholarshipType,
-    annualFamilyIncome, firstGraduate
+    community (7 options including BCM, SC(A)),
+    scholarshipType (array - multi-select from 18 types),
+    scholarshipDetails,
+    annualFamilyIncome,
+    firstGraduate (boolean),
+    needsEducationalLoan (boolean)
   },
-  documents: {
-    photo, aadharCard, tenthMarksheet,
-    twelfthMarksheet, communityCertificate, ...
+  referralDetails: {
+    source (Counselor, Friends/Family, Social Media, etc.),
+    referrerName, referrerMobile,
+    followedSocialMedia: { instagram, facebook, youtube }
   },
-  status: "NEW" | "SHORTLISTED" | "FOLLOW_UP" | "COMPLETED",
+  status: "NEW" | "SHORTLISTED" | "FOLLOW_UP" | "COMPLETED" | "REJECTED",
   tags: string[],
   createdAt: Timestamp,
   updatedAt: Timestamp,
   submittedAt: Timestamp
 }
 ```
+
+---
+
+## 🆕 Latest Updates
+
+### November 2025 - Major Feature Enhancements
+
+#### Form Enhancements
+- ✅ **Extended Course Categories**: Added 7 new course types (Agriculture, Architecture, Marine, Aviation, Hotel Management, Veterinary, Fisheries)
+- ✅ **Specialized Course Dropdowns**: 49 total specialization options across all categories
+- ✅ **Multi-Select Scholarships**: Students can now select multiple scholarships (18 types available)
+- ✅ **Educational Loan Field**: New required field for loan requirement tracking
+- ✅ **33 Entrance Exams**: Comprehensive entrance exam preparation dropdown
+- ✅ **Tamil Medium Tracking**: Dedicated field for Tamil medium education (6th-12th)
+- ✅ **Additional Free Courses**: 4 optional free course selections
+
+#### New Scholarship Types
+- Salem Foundations Scholarship
+- Welfare Scholarship
+- Tamil Puthalvan
+- Pudumaipen
+- (Total 18 scholarship options)
+
+#### Application Number System
+- ✅ **Truly Unique Generation**: Uses Firestore document ID for guaranteed uniqueness
+- ✅ **Format**: SF{YY}{MM}{UNIQUE6} (e.g., SF2511A3F2D9)
+- ✅ **Sync Fix**: Student and admin now see the same application number
+
+#### Admin Dashboard Updates
+- ✅ **Multi-Scholarship Display**: Shows all selected scholarships as bulleted list
+- ✅ **Educational Loan Status**: Displays loan requirement
+- ✅ **Extended Filters**: Support for 12 course types and 18 scholarship types
+- ✅ **Enhanced Export**: Excel/PDF exports include all new fields
+
+#### Technical Improvements
+- ✅ **Updated Firestore Rules**: Public write access for ratings collection
+- ✅ **Array Handling**: Proper handling of multi-select scholarship arrays
+- ✅ **Type Safety**: Comprehensive TypeScript updates for new fields
+- ✅ **Validation Schemas**: Updated Yup validations for all new fields
 
 ---
 
@@ -472,23 +563,44 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 
 For support and queries:
 
-- **Email**: info@salemfoundations.org
-- **Phone**: +91 98765 43210
+- **Email**: admin@salemfoundations.com
+- **Phone**: +91 88385 03547
 - **Website**: [www.salemfoundations.org](https://www.salemfoundations.org)
+- **GitHub**: [salem-foundations-stud-registration](https://github.com/Sanjai-Kumar-B/salem-foundations-stud-registration)
 
 ---
 
 ## 🙏 Acknowledgments
 
 - Salem Foundations team for requirements and feedback
-- Firebase for backend infrastructure
-- Next.js team for the amazing framework
-- Open source community for the libraries used
+- Firebase for backend infrastructure and serverless capabilities
+- Next.js team for the amazing framework and developer experience
+- Vercel for seamless deployment platform
+- Open source community for the excellent libraries used
+
+---
+
+## 📈 Future Enhancements
+
+- [ ] SMS notifications for application status updates
+- [ ] Email notifications with application confirmation
+- [ ] Student portal for application tracking
+- [ ] Document verification system
+- [ ] Interview scheduling module
+- [ ] Payment gateway integration for fees
+- [ ] Mobile app for students
+- [ ] Advanced analytics dashboard with charts
+- [ ] Bulk operations for admin
+- [ ] Application comparison feature
 
 ---
 
 <div align="center">
 
-**Built with ❤️ by Salem Foundations Development Team**
+**Built with ❤️ by SANJAI KUMAR**
+
+**Version 2.0** | Last Updated: November 2025
+
+[⬆ Back to Top](#salem-foundations---student-application-automation-system)
 
 </div>
