@@ -75,7 +75,12 @@
       - Veterinary (3 specializations)
       - Fisheries (3 specializations)
       - Others (custom input)
-    - Multiple college type selection (up to 3)
+    - **Engineering Students - Location Preferences**:
+      - District selection: Choose from 36 Tamil Nadu districts
+      - College selection: Browse 600+ engineering colleges organized by district
+      - Select up to 3 preferred colleges from chosen districts
+      - Smart filtering: Colleges automatically filtered by selected districts
+    - Multiple college type selection (up to 3) for non-engineering courses
     - 4 additional free courses: Spoken English, Coding, Abroad Courses, Soft Skills
   - **Step 4 - Community & Scholarship**:
     - 7 community options (including BCM, SC(A))
@@ -128,6 +133,10 @@
   - Tamil medium education status
   - Entrance exam preparation details
   - Custom course inputs for "Others" category
+  - **Engineering Applications - Location Preferences**:
+    - View preferred districts as visual badges
+    - Display selected colleges from each district
+    - Export district/college preferences in Excel and PDF reports
   - Document preview and download
   - Status updates with notes
 
@@ -193,11 +202,14 @@ Registration_tool/
 │   │   ├── FormComponents.tsx        # Form input components
 │   │   ├── FileUpload.tsx            # File upload component
 │   │   └── AdminLayout.tsx           # Admin layout wrapper
+│   ├── data/                         # Data files
+│   │   └── collegesByDistrict.ts     # Engineering colleges by district (600+)
 │   ├── lib/                          # Utility libraries
 │   │   ├── firebase.ts               # Firebase configuration
 │   │   ├── firestore.ts              # Firestore operations
 │   │   ├── storage.ts                # Storage operations
 │   │   ├── validations.ts            # Yup validation schemas
+│   │   ├── export.ts                 # Export utilities (Excel/PDF)
 │   │   └── utils.ts                  # Helper functions
 │   ├── hooks/                        # Custom React hooks
 │   │   └── useAuth.ts                # Authentication hook
@@ -476,6 +488,7 @@ firebase deploy
   coursePreference: {
     preferredCourse (12 categories),
     courseSpecialization (conditional dropdown or custom input),
+    preferredDistricts (array - for Engineering students),
     preferredColleges (array, max 3),
     additionalFreeCourses (array of 4 options)
   },
@@ -514,6 +527,11 @@ firebase deploy
 - ✅ **33 Entrance Exams**: Comprehensive entrance exam preparation dropdown
 - ✅ **Tamil Medium Tracking**: Dedicated field for Tamil medium education (6th-12th)
 - ✅ **Additional Free Courses**: 4 optional free course selections
+- ✅ **Engineering Location Preferences**: 
+  - District-wise college selection system
+  - 600+ engineering colleges organized by 36 TN districts
+  - Smart cascading selection (Districts → Colleges)
+  - Maximum 3 college selections per student
 
 #### New Scholarship Types
 - Salem Foundations Scholarship
@@ -532,12 +550,22 @@ firebase deploy
 - ✅ **Educational Loan Status**: Displays loan requirement
 - ✅ **Extended Filters**: Support for 12 course types and 18 scholarship types
 - ✅ **Enhanced Export**: Excel/PDF exports include all new fields
+- ✅ **Engineering Preferences Display**:
+  - Visual badge display for preferred districts
+  - Organized college list by district
+  - Export includes district and college preferences
+  - Dedicated columns in Excel/PDF reports
 
 #### Technical Improvements
 - ✅ **Updated Firestore Rules**: Public write access for ratings collection
 - ✅ **Array Handling**: Proper handling of multi-select scholarship arrays
 - ✅ **Type Safety**: Comprehensive TypeScript updates for new fields
 - ✅ **Validation Schemas**: Updated Yup validations for all new fields
+- ✅ **Data Management**:
+  - New `collegesByDistrict.ts` data file with 600+ colleges
+  - Conditional validation for Engineering course preferences
+  - Optimized college filtering by district selection
+  - Git ignore setup for CSV source files
 
 ---
 
