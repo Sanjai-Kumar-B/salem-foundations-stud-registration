@@ -319,6 +319,7 @@ export interface AcademicDetails {
 export interface CoursePreference {
   preferredCourse: CourseType;
   courseSpecialization?: string;
+  preferredDistricts?: string[]; // For Engineering courses - districts where student wants to study
   preferredColleges: string[];
   additionalFreeCourses?: string[];
 }

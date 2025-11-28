@@ -150,6 +150,14 @@ export const coursePreferenceSchema = Yup.object().shape({
     .required('Preferred course is required')
     .oneOf(Object.values(CourseType), 'Invalid course type'),
   
+  preferredDistricts: Yup.array()
+    .of(Yup.string())
+    .when('preferredCourse', {
+      is: (val: string) => val === CourseType.ENGINEERING_TECHNOLOGY,
+      then: (schema) => schema.min(1, 'Please select at least one preferred district'),
+      otherwise: (schema) => schema.nullable(),
+    }),
+  
   preferredColleges: Yup.array()
     .of(Yup.string())
     .min(1, 'Please select at least one preferred college')

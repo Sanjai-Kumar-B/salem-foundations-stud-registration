@@ -411,6 +411,22 @@ export default function ApplicationDetailPage() {
               <p className="text-gray-900 mt-1">{application.coursePreference.courseSpecialization || '-'}</p>
             </div>
 
+            {application.coursePreference.preferredDistricts && application.coursePreference.preferredDistricts.length > 0 && (
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-600">Preferred Districts (Location)</label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {application.coursePreference.preferredDistricts.map((district, index) => (
+                    <span
+                      key={index}
+                      className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800"
+                    >
+                      {district}
+                    </span>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-600">Preferred Colleges</label>
               <ul className="list-disc list-inside text-gray-900 mt-1 space-y-1">

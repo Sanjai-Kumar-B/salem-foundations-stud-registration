@@ -38,6 +38,8 @@ export function exportToExcel(applications: StudentApplication[], filename: stri
     'JEE Rank': app.academicDetails.jeeRank || '-',
     'Preferred Course': app.coursePreference.preferredCourse,
     'Specialization': app.coursePreference.courseSpecialization || '-',
+    'Preferred Districts': app.coursePreference.preferredDistricts?.join(', ') || '-',
+    'Preferred Colleges': app.coursePreference.preferredColleges?.join(', ') || '-',
     'Additional Free Courses': app.coursePreference.additionalFreeCourses?.join(', ') || '-',
     'Community': app.communityScholarship.community,
     'Scholarship Type': Array.isArray(app.communityScholarship.scholarshipType) ? app.communityScholarship.scholarshipType.join(', ') : app.communityScholarship.scholarshipType,
@@ -253,6 +255,7 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   const courseDetails = [
     ['Preferred Course', application.coursePreference.preferredCourse],
     ['Specialization', application.coursePreference.courseSpecialization || '-'],
+    ['Preferred Districts', application.coursePreference.preferredDistricts?.join(', ') || '-'],
     ['Preferred Colleges', application.coursePreference.preferredColleges.join(', ')],
     ['Additional Free Courses', application.coursePreference.additionalFreeCourses?.join(', ') || '-'],
   ];

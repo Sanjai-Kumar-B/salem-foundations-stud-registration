@@ -45,6 +45,7 @@ import {
 } from '@/lib/validations';
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
 import { createApplication, storeStudentRating } from '@/lib/firestore';
+import { TN_DISTRICTS, ENGINEERING_COLLEGES_BY_DISTRICT } from '@/data/collegesByDistrict';
 
 const TOTAL_STEPS = 5;
 
@@ -229,6 +230,7 @@ export default function ApplyPage() {
     // Course Preference
     preferredCourse: '' as CourseType,
     courseSpecialization: '',
+    preferredDistricts: [] as string[],
     preferredColleges: [] as string[],
     additionalFreeCourses: [] as string[],
 
@@ -363,6 +365,7 @@ export default function ApplyPage() {
       const coursePreference: CoursePreference = removeUndefined({
         preferredCourse: values.preferredCourse,
         courseSpecialization: values.courseSpecialization,
+        preferredDistricts: values.preferredDistricts,
         preferredColleges: values.preferredColleges,
         additionalFreeCourses: values.additionalFreeCourses,
       });
@@ -899,46 +902,160 @@ export default function ApplyPage() {
                     )}
                   </div>
 
-                  <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
-                    Preferred College Type (Select up to 3)
-                  </h3>
-                  <div className="space-y-2">
-                    {COLLEGES.map((college) => (
-                      <div key={college} className="flex items-center">
-                        <input
-                          type="checkbox"
-                          id={`college-${college}`}
-                          checked={values.preferredColleges.includes(college)}
-                          onChange={(e) => {
-                            if (e.target.checked) {
-                              if (values.preferredColleges.length < 3) {
-                                setFieldValue('preferredColleges', [
-                                  ...values.preferredColleges,
-                                  college,
-                                ]);
-                              } else {
-                                toast.error('You can select up to 3 options only');
-                              }
-                            } else {
-                              setFieldValue(
-                                'preferredColleges',
-                                values.preferredColleges.filter((c) => c !== college)
-                              );
-                            }
-                          }}
-                          className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
-                        />
-                        <label
-                          htmlFor={`college-${college}`}
-                          className="ml-2 text-sm text-gray-700"
-                        >
-                          {college}
-                        </label>
+                  {/* Engineering-specific location and college selection */}
+                  {values.preferredCourse === CourseType.ENGINEERING_TECHNOLOGY && values.courseSpecialization && (
+                    <>
+                      <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
+                        Preferred Location (Districts)
+                      </h3>
+                      <p className="text-sm text-gray-600 mb-3">
+                        Select the districts where you would like to study
+                      </p>
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3 max-h-96 overflow-y-auto p-4 border border-gray-200 rounded-lg bg-gray-50">
+                        {TN_DISTRICTS.map((district) => (
+                          <div key={district} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`district-${district}`}
+                              checked={values.preferredDistricts.includes(district)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  setFieldValue('preferredDistricts', [
+                                    ...values.preferredDistricts,
+                                    district,
+                                  ]);
+                                } else {
+                                  setFieldValue(
+                                    'preferredDistricts',
+                                    values.preferredDistricts.filter((d) => d !== district)
+                                  );
+                                  // Also remove colleges from deselected district
+                                  const collegesToRemove = ENGINEERING_COLLEGES_BY_DISTRICT[district] || [];
+                                  setFieldValue(
+                                    'preferredColleges',
+                                    values.preferredColleges.filter((c) => !collegesToRemove.includes(c))
+                                  );
+                                }
+                              }}
+                              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                            />
+                            <label
+                              htmlFor={`district-${district}`}
+                              className="ml-2 text-sm text-gray-700 cursor-pointer"
+                            >
+                              {district}
+                            </label>
+                          </div>
+                        ))}
                       </div>
-                    ))}
-                  </div>
-                  {touched.preferredColleges && errors.preferredColleges && (
-                    <p className="error-text">{errors.preferredColleges as string}</p>
+                      {touched.preferredDistricts && errors.preferredDistricts && (
+                        <p className="error-text mt-2">{errors.preferredDistricts as string}</p>
+                      )}
+
+                      {/* Show college selection only when districts are selected */}
+                      {values.preferredDistricts.length > 0 && (
+                        <>
+                          <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
+                            Preferred Colleges (Select up to 3)
+                          </h3>
+                          <p className="text-sm text-gray-600 mb-3">
+                            Select up to 3 colleges from your preferred districts
+                          </p>
+                          <div className="space-y-4 max-h-96 overflow-y-auto p-4 border border-gray-200 rounded-lg bg-gray-50">
+                            {values.preferredDistricts.map((district) => (
+                              <div key={district} className="border-b border-gray-300 pb-3 last:border-b-0">
+                                <h4 className="font-semibold text-gray-800 mb-2">{district}</h4>
+                                <div className="space-y-2 pl-4">
+                                  {(ENGINEERING_COLLEGES_BY_DISTRICT[district] || []).map((college) => (
+                                    <div key={college} className="flex items-start">
+                                      <input
+                                        type="checkbox"
+                                        id={`college-${college}`}
+                                        checked={values.preferredColleges.includes(college)}
+                                        onChange={(e) => {
+                                          if (e.target.checked) {
+                                            if (values.preferredColleges.length < 3) {
+                                              setFieldValue('preferredColleges', [
+                                                ...values.preferredColleges,
+                                                college,
+                                              ]);
+                                            } else {
+                                              toast.error('You can select up to 3 colleges only');
+                                            }
+                                          } else {
+                                            setFieldValue(
+                                              'preferredColleges',
+                                              values.preferredColleges.filter((c) => c !== college)
+                                            );
+                                          }
+                                        }}
+                                        className="w-4 h-4 mt-0.5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                                      />
+                                      <label
+                                        htmlFor={`college-${college}`}
+                                        className="ml-2 text-sm text-gray-700 cursor-pointer"
+                                      >
+                                        {college}
+                                      </label>
+                                    </div>
+                                  ))}
+                                </div>
+                              </div>
+                            ))}
+                          </div>
+                          {touched.preferredColleges && errors.preferredColleges && (
+                            <p className="error-text mt-2">{errors.preferredColleges as string}</p>
+                          )}
+                        </>
+                      )}
+                    </>
+                  )}
+
+                  {/* For non-engineering courses, show the original college type selection */}
+                  {values.preferredCourse && values.preferredCourse !== CourseType.ENGINEERING_TECHNOLOGY && (
+                    <>
+                      <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
+                        Preferred College Type (Select up to 3)
+                      </h3>
+                      <div className="space-y-2">
+                        {COLLEGES.map((college) => (
+                          <div key={college} className="flex items-center">
+                            <input
+                              type="checkbox"
+                              id={`college-${college}`}
+                              checked={values.preferredColleges.includes(college)}
+                              onChange={(e) => {
+                                if (e.target.checked) {
+                                  if (values.preferredColleges.length < 3) {
+                                    setFieldValue('preferredColleges', [
+                                      ...values.preferredColleges,
+                                      college,
+                                    ]);
+                                  } else {
+                                    toast.error('You can select up to 3 options only');
+                                  }
+                                } else {
+                                  setFieldValue(
+                                    'preferredColleges',
+                                    values.preferredColleges.filter((c) => c !== college)
+                                  );
+                                }
+                              }}
+                              className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                            />
+                            <label
+                              htmlFor={`college-${college}`}
+                              className="ml-2 text-sm text-gray-700"
+                            >
+                              {college}
+                            </label>
+                          </div>
+                        ))}
+                      </div>
+                      {touched.preferredColleges && errors.preferredColleges && (
+                        <p className="error-text">{errors.preferredColleges as string}</p>
+                      )}
+                    </>
                   )}
 
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
