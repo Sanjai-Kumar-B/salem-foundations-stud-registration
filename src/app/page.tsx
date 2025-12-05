@@ -1,5 +1,6 @@
 import Link from 'next/link';
-import { GraduationCap, UserCircle, FileText } from 'lucide-react';
+import Image from 'next/image';
+import { UserCircle, FileText } from 'lucide-react';
 
 export default function Home() {
   return (
@@ -9,7 +10,16 @@ export default function Home() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-3">
-              <GraduationCap className="w-8 h-8 text-primary-600" />
+              <div className="relative w-8 h-8">
+                <Image 
+                  src="/logo.jpg" 
+                  alt="Salem Foundations Logo" 
+                  width={32} 
+                  height={32} 
+                  className="object-contain" 
+                  priority
+                />
+              </div>
               <h1 className="text-2xl font-bold text-gray-900">Salem Foundations</h1>
             </div>
           </div>
