@@ -74,8 +74,9 @@ export default function AdminLoginPage() {
           <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
             <GraduationCap className="w-10 h-10 text-white" />
           </div>
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">Admin Portal</h1>
-          <p className="text-gray-600">Salem Foundations</p>
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">Admin Portal</h1>
+          <p className="text-gray-600 mb-1">Salem Foundations</p>
+          <p className="text-sm text-gray-500 font-medium">Govt. Registered</p>
         </div>
 
         {/* Login Card */}

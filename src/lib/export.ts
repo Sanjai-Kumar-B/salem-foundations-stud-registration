@@ -102,14 +102,35 @@ export function exportToCSV(applications: StudentApplication[], filename: string
 export function exportToPDF(applications: StudentApplication[], filename: string = 'applications') {
   const doc = new jsPDF();
 
-  // Add title
-  doc.setFontSize(18);
-  doc.text('Salem Foundations - Student Applications', 14, 22);
+  // Enhanced Header with better design
+  // Blue header background
+  doc.setFillColor(37, 99, 235);
+  doc.rect(0, 0, 210, 38, 'F');
 
-  // Add date
-  doc.setFontSize(10);
-  doc.text(`Generated on: ${formatDate(new Date())}`, 14, 30);
-  doc.text(`Total Applications: ${applications.length}`, 14, 36);
+  // Organization Name
+  doc.setFontSize(20);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SALEM FOUNDATIONS', 105, 15, { align: 'center' });
+
+  // Govt. Registered
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Govt. Registered', 105, 21, { align: 'center' });
+
+  // Document Title
+  doc.setFontSize(13);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Student Applications Report', 105, 28, { align: 'center' });
+
+  // Report Info
+  doc.setFontSize(9);
+  doc.setFont('helvetica', 'normal');
+  doc.text(`Generated: ${formatDate(new Date())} | Total: ${applications.length}`, 105, 34, { align: 'center' });
+
+  // Reset colors for content
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
 
   // Prepare table data
   const tableData = applications.map((app) => [
@@ -128,7 +149,7 @@ export function exportToPDF(applications: StudentApplication[], filename: string
     body: tableData,
     startY: 42,
     styles: { fontSize: 8, cellPadding: 2 },
-    headStyles: { fillColor: [37, 99, 235], textColor: 255 },
+    headStyles: { fillColor: [37, 99, 235], textColor: 255, fontStyle: 'bold' },
     alternateRowStyles: { fillColor: [245, 245, 245] },
     margin: { top: 42 },
   });
@@ -140,26 +161,46 @@ export function exportToPDF(applications: StudentApplication[], filename: string
 export function exportSingleApplicationPDF(application: StudentApplication) {
   const doc = new jsPDF();
 
-  // Header
-  doc.setFontSize(20);
-  doc.setTextColor(37, 99, 235);
-  doc.text('SALEM FOUNDATIONS', 105, 20, { align: 'center' });
+  // Enhanced Header with better design
+  // Blue header background
+  doc.setFillColor(37, 99, 235);
+  doc.rect(0, 0, 210, 45, 'F');
 
+  // Organization Name
+  doc.setFontSize(24);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SALEM FOUNDATIONS', 105, 18, { align: 'center' });
+
+  // Govt. Registered
+  doc.setFontSize(10);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Govt. Registered', 105, 25, { align: 'center' });
+
+  // Document Title
   doc.setFontSize(14);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Student Application Form', 105, 33, { align: 'center' });
+
+  // Application Number with background
+  doc.setFillColor(255, 255, 255);
+  doc.roundedRect(70, 37, 70, 6, 1, 1, 'F');
+  doc.setFontSize(11);
+  doc.setTextColor(37, 99, 235);
+  doc.text(`Application No: ${application.applicationNumber}`, 105, 41, { align: 'center' });
+
+  // Reset colors for content
   doc.setTextColor(0, 0, 0);
-  doc.text('Student Application Form', 105, 28, { align: 'center' });
+  doc.setFont('helvetica', 'normal');
 
-  // Application Number
-  doc.setFontSize(12);
-  doc.setTextColor(100, 100, 100);
-  doc.text(`Application No: ${application.applicationNumber}`, 105, 35, { align: 'center' });
-
-  let yPos = 45;
+  let yPos = 55;
 
   // Personal Details Section
   doc.setFontSize(14);
   doc.setTextColor(37, 99, 235);
+  doc.setFont('helvetica', 'bold');
   doc.text('Personal Details', 14, yPos);
+  doc.setFont('helvetica', 'normal');
   yPos += 8;
 
   doc.setFontSize(10);

@@ -493,9 +493,12 @@ export default function ApplyPage() {
             </div>
           </div>
           
-          <h1 className="text-3xl font-bold text-gray-900 mb-2">
+          <h1 className="text-3xl font-bold text-gray-900 mb-1">
             Salem Foundations Registration Form
           </h1>
+          <p className="text-sm text-gray-600 font-medium">
+            Govt. Registered
+          </p>
         </div>
 
         {/* Progress Steps */}
