@@ -133,7 +133,15 @@ export default function Home() {
               © {new Date().getFullYear()} Salem Foundations. All rights reserved.
             </p>
             <p className="text-gray-500 text-sm mt-2">
-              Developed by Sanjai Kumar B
+              Developed by{' '}
+              <a 
+                href="https://www.linkedin.com/in/sanjaikumarb" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-400 hover:text-blue-300 transition-colors"
+              >
+                Sanjai Kumar B
+              </a>
             </p>
           </div>
         </div>
