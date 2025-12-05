@@ -132,6 +132,9 @@ export default function Home() {
             <p className="text-gray-400">
               © {new Date().getFullYear()} Salem Foundations. All rights reserved.
             </p>
+            <p className="text-gray-500 text-sm mt-2">
+              Developed by Sanjai Kumar B
+            </p>
           </div>
         </div>
       </footer>
