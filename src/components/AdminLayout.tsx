@@ -10,13 +10,13 @@ import {
   LogOut,
   Menu,
   X,
-  GraduationCap,
 } from 'lucide-react';
 import { useState } from 'react';
 import { AdminUser } from '@/types';
 import { logout } from '@/hooks/useAuth';
 import { useRouter } from 'next/navigation';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 
 interface AdminLayoutProps {
   children: React.ReactNode;
@@ -65,7 +65,15 @@ export default function AdminLayout({ children, user }: AdminLayoutProps) {
           {/* Logo */}
           <div className="flex items-center justify-between h-16 px-6 border-b border-gray-200">
             <div className="flex items-center space-x-2">
-              <GraduationCap className="w-8 h-8 text-primary-600" />
+              <div className="relative w-8 h-8">
+                <Image
+                  src="/logo.jpg"
+                  alt="Salem Foundations Logo"
+                  width={32}
+                  height={32}
+                  className="object-contain"
+                />
+              </div>
               <span className="text-xl font-bold text-gray-900">Salem F.</span>
             </div>
             <button
