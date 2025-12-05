@@ -107,6 +107,15 @@ export function exportToPDF(applications: StudentApplication[], filename: string
   doc.setFillColor(37, 99, 235);
   doc.rect(0, 0, 210, 38, 'F');
 
+  // Add Logo (left side)
+  try {
+    const logoImg = document.createElement('img');
+    logoImg.src = '/logo.jpg';
+    doc.addImage(logoImg, 'JPEG', 10, 8, 22, 22);
+  } catch (error) {
+    console.log('Logo not loaded in PDF');
+  }
+
   // Organization Name
   doc.setFontSize(20);
   doc.setTextColor(255, 255, 255);
@@ -165,6 +174,15 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   // Blue header background
   doc.setFillColor(37, 99, 235);
   doc.rect(0, 0, 210, 45, 'F');
+
+  // Add Logo (left side)
+  try {
+    const logoImg = document.createElement('img');
+    logoImg.src = '/logo.jpg';
+    doc.addImage(logoImg, 'JPEG', 10, 10, 25, 25);
+  } catch (error) {
+    console.log('Logo not loaded in PDF');
+  }
 
   // Organization Name
   doc.setFontSize(24);
