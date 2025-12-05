@@ -7,7 +7,8 @@ import { doc, getDoc } from 'firebase/firestore';
 import { auth, db } from '@/lib/firebase';
 import { AdminUser } from '@/types';
 import toast from 'react-hot-toast';
-import { Lock, Mail, LogIn, GraduationCap } from 'lucide-react';
+import { Lock, Mail, LogIn } from 'lucide-react';
+import Image from 'next/image';
 
 export default function AdminLoginPage() {
   const router = useRouter();
@@ -71,8 +72,17 @@ export default function AdminLoginPage() {
       <div className="max-w-md w-full">
         {/* Logo/Header */}
         <div className="text-center mb-8">
-          <div className="w-16 h-16 bg-primary-600 rounded-full flex items-center justify-center mx-auto mb-4">
-            <GraduationCap className="w-10 h-10 text-white" />
+          <div className="flex justify-center mb-4">
+            <div className="relative w-24 h-24">
+              <Image
+                src="/logo.jpg"
+                alt="Salem Foundations Logo"
+                width={96}
+                height={96}
+                className="object-contain"
+                priority
+              />
+            </div>
           </div>
           <h1 className="text-3xl font-bold text-gray-900 mb-1">Admin Portal</h1>
           <p className="text-gray-600 mb-1">Salem Foundations</p>
