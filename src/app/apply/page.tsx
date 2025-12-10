@@ -210,13 +210,13 @@ export default function ApplyPage() {
     tenthYearOfPassing: '',
     tenthPercentage: '' as any,
     tenthMarks: '' as any,
-    tenthTotalMarks: '' as any,
+    tenthTotalMarks: 500 as any,
     twelfthSchool: '',
     twelfthBoard: '',
     twelfthYearOfPassing: '',
     twelfthPercentage: '' as any,
     twelfthMarks: '' as any,
-    twelfthTotalMarks: '' as any,
+    twelfthTotalMarks: 600 as any,
     twelfthGroup: '' as TwelfthGroup,
     neetScore: '' as any,
     neetRank: '' as any,
@@ -721,27 +721,72 @@ export default function ApplyPage() {
                       placeholder="YYYY"
                       required
                     />
-                    <FormInput
-                      label="Percentage"
-                      name="tenthPercentage"
-                      type="number"
-                      placeholder="Enter percentage"
-                      required
-                    />
-                    <FormInput
-                      label="Marks Obtained"
-                      name="tenthMarks"
-                      type="number"
-                      placeholder="Marks obtained"
-                      required
-                    />
-                    <FormInput
-                      label="Total Marks"
-                      name="tenthTotalMarks"
-                      type="number"
-                      placeholder="Total marks"
-                      required
-                    />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Marks Obtained <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="tenthMarks"
+                        value={values.tenthMarks}
+                        onChange={(e) => {
+                          const marks = Number(e.target.value);
+                          setFieldValue('tenthMarks', marks);
+                          // Auto-calculate percentage
+                          if (marks && values.tenthTotalMarks) {
+                            const percentage = ((marks / values.tenthTotalMarks) * 100).toFixed(2);
+                            setFieldValue('tenthPercentage', Number(percentage));
+                          }
+                        }}
+                        placeholder="Marks obtained"
+                        className="input"
+                        max="500"
+                      />
+                      {touched.tenthMarks && errors.tenthMarks && (
+                        <p className="text-red-500 text-xs mt-1">{errors.tenthMarks}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Total Marks <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="tenthTotalMarks"
+                        value={values.tenthTotalMarks || 500}
+                        onChange={(e) => {
+                          const total = Number(e.target.value);
+                          setFieldValue('tenthTotalMarks', total);
+                          // Auto-calculate percentage
+                          if (values.tenthMarks && total) {
+                            const percentage = ((values.tenthMarks / total) * 100).toFixed(2);
+                            setFieldValue('tenthPercentage', Number(percentage));
+                          }
+                        }}
+                        placeholder="Total marks (usually 500)"
+                        className="input"
+                        readOnly
+                      />
+                      {touched.tenthTotalMarks && errors.tenthTotalMarks && (
+                        <p className="text-red-500 text-xs mt-1">{errors.tenthTotalMarks}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Percentage <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="tenthPercentage"
+                        value={values.tenthPercentage}
+                        placeholder="Auto-calculated"
+                        className="input bg-gray-50"
+                        readOnly
+                      />
+                      {touched.tenthPercentage && errors.tenthPercentage && (
+                        <p className="text-red-500 text-xs mt-1">{errors.tenthPercentage}</p>
+                      )}
+                    </div>
                   </div>
 
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">12th Standard</h3>
@@ -770,27 +815,73 @@ export default function ApplyPage() {
                       options={TWELFTH_GROUPS}
                       required
                     />
-                    <FormInput
-                      label="Percentage"
-                      name="twelfthPercentage"
-                      type="number"
-                      placeholder="Enter percentage"
-                      required
-                    />
-                    <FormInput
-                      label="Marks Obtained"
-                      name="twelfthMarks"
-                      type="number"
-                      placeholder="Marks obtained"
-                      required
-                    />
-                    <FormInput
-                      label="Total Marks"
-                      name="twelfthTotalMarks"
-                      type="number"
-                      placeholder="Total marks"
-                      required
-                    />
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Marks Obtained <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="twelfthMarks"
+                        value={values.twelfthMarks}
+                        onChange={(e) => {
+                          const marks = Number(e.target.value);
+                          setFieldValue('twelfthMarks', marks);
+                          // Auto-calculate percentage
+                          if (marks && values.twelfthTotalMarks) {
+                            const percentage = ((marks / values.twelfthTotalMarks) * 100).toFixed(2);
+                            setFieldValue('twelfthPercentage', Number(percentage));
+                          }
+                        }}
+                        placeholder="Marks obtained"
+                        className="input"
+                        max={values.twelfthTotalMarks || 600}
+                      />
+                      {touched.twelfthMarks && errors.twelfthMarks && (
+                        <p className="text-red-500 text-xs mt-1">{errors.twelfthMarks}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Total Marks <span className="text-red-500">*</span>
+                      </label>
+                      <select
+                        name="twelfthTotalMarks"
+                        value={values.twelfthTotalMarks || 600}
+                        onChange={(e) => {
+                          const total = Number(e.target.value);
+                          setFieldValue('twelfthTotalMarks', total);
+                          // Auto-calculate percentage
+                          if (values.twelfthMarks && total) {
+                            const percentage = ((values.twelfthMarks / total) * 100).toFixed(2);
+                            setFieldValue('twelfthPercentage', Number(percentage));
+                          }
+                        }}
+                        className="input"
+                      >
+                        <option value="">Select total marks</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                      </select>
+                      {touched.twelfthTotalMarks && errors.twelfthTotalMarks && (
+                        <p className="text-red-500 text-xs mt-1">{errors.twelfthTotalMarks}</p>
+                      )}
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">
+                        Percentage <span className="text-red-500">*</span>
+                      </label>
+                      <input
+                        type="number"
+                        name="twelfthPercentage"
+                        value={values.twelfthPercentage}
+                        placeholder="Auto-calculated"
+                        className="input bg-gray-50"
+                        readOnly
+                      />
+                      {touched.twelfthPercentage && errors.twelfthPercentage && (
+                        <p className="text-red-500 text-xs mt-1">{errors.twelfthPercentage}</p>
+                      )}
+                    </div>
                   </div>
 
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">
