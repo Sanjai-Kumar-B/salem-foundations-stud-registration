@@ -743,7 +743,7 @@ export default function ApplyPage() {
                         max="500"
                       />
                       {touched.tenthMarks && errors.tenthMarks && (
-                        <p className="text-red-500 text-xs mt-1">{errors.tenthMarks}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.tenthMarks)}</p>
                       )}
                     </div>
                     <div>
@@ -768,7 +768,7 @@ export default function ApplyPage() {
                         readOnly
                       />
                       {touched.tenthTotalMarks && errors.tenthTotalMarks && (
-                        <p className="text-red-500 text-xs mt-1">{errors.tenthTotalMarks}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.tenthTotalMarks)}</p>
                       )}
                     </div>
                     <div>
@@ -784,7 +784,7 @@ export default function ApplyPage() {
                         readOnly
                       />
                       {touched.tenthPercentage && errors.tenthPercentage && (
-                        <p className="text-red-500 text-xs mt-1">{errors.tenthPercentage}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.tenthPercentage)}</p>
                       )}
                     </div>
                   </div>
@@ -837,7 +837,7 @@ export default function ApplyPage() {
                         max={values.twelfthTotalMarks || 600}
                       />
                       {touched.twelfthMarks && errors.twelfthMarks && (
-                        <p className="text-red-500 text-xs mt-1">{errors.twelfthMarks}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.twelfthMarks)}</p>
                       )}
                     </div>
                     <div>
@@ -863,7 +863,7 @@ export default function ApplyPage() {
                         <option value="600">600</option>
                       </select>
                       {touched.twelfthTotalMarks && errors.twelfthTotalMarks && (
-                        <p className="text-red-500 text-xs mt-1">{errors.twelfthTotalMarks}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.twelfthTotalMarks)}</p>
                       )}
                     </div>
                     <div>
@@ -879,7 +879,7 @@ export default function ApplyPage() {
                         readOnly
                       />
                       {touched.twelfthPercentage && errors.twelfthPercentage && (
-                        <p className="text-red-500 text-xs mt-1">{errors.twelfthPercentage}</p>
+                        <p className="text-red-500 text-xs mt-1">{String(errors.twelfthPercentage)}</p>
                       )}
                     </div>
                   </div>

@@ -396,8 +396,20 @@ export default function ApplicationsPage() {
                 </div>
               </div>
 
-              <div className="mt-4 flex justify-end">
-                <button onClick={clearFilters} className="text-sm text-primary-600 hover:text-primary-700">
+              <div className="mt-6 flex justify-between items-center border-t border-gray-200 pt-4">
+                <p className="text-sm text-gray-600">
+                  {(filters.courses?.length || 0) + 
+                   (filters.status?.length || 0) + 
+                   (filters.communities?.length || 0) + 
+                   (filters.twelfthGroups?.length || 0) + 
+                   (filters.scholarshipTypes?.length || 0) + 
+                   (filters.minMarks ? 1 : 0) + 
+                   (filters.maxMarks ? 1 : 0)} filter(s) active
+                </p>
+                <button 
+                  onClick={clearFilters} 
+                  className="btn btn-secondary text-sm"
+                >
                   Clear all filters
                 </button>
               </div>
