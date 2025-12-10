@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import { useAuth } from '@/hooks/useAuth';
 import AdminLayout from '@/components/AdminLayout';
 import { getApplications } from '@/lib/firestore';
-import { StudentApplication, FilterOptions, ApplicationStatus, CourseType, Community, TwelfthGroup } from '@/types';
+import { StudentApplication, FilterOptions, ApplicationStatus, CourseType, Community, TwelfthGroup, ScholarshipType } from '@/types';
 import { Search, Filter, Download, Eye, FileSpreadsheet, FileText } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -26,6 +26,7 @@ export default function ApplicationsPage() {
     communities: [],
     twelfthGroups: [],
     districts: [],
+    scholarshipTypes: [],
   });
 
   useEffect(() => {
@@ -104,6 +105,32 @@ export default function ApplicationsPage() {
       );
     }
 
+    // Scholarship filter
+    if (filters.scholarshipTypes && filters.scholarshipTypes.length > 0) {
+      filtered = filtered.filter((app) =>
+        Array.isArray(app.communityScholarship.scholarshipType)
+          ? app.communityScholarship.scholarshipType.some((scholarship) =>
+              filters.scholarshipTypes!.includes(scholarship)
+            )
+          : filters.scholarshipTypes!.includes(app.communityScholarship.scholarshipType as any)
+      );
+    }
+
+    // Entrance exam filter (NEET/JEE)
+    if (filters.minMarks !== undefined) {
+      filtered = filtered.filter((app) => {
+        const hasNEET = app.academicDetails.neetScore && app.academicDetails.neetScore >= filters.minMarks!;
+        const hasJEE = app.academicDetails.jeeScore && app.academicDetails.jeeScore >= filters.minMarks!;
+        return hasNEET || hasJEE || app.academicDetails.twelfthMarks >= filters.minMarks!;
+      });
+    }
+
+    if (filters.maxMarks !== undefined) {
+      filtered = filtered.filter((app) =>
+        app.academicDetails.twelfthMarks <= filters.maxMarks!
+      );
+    }
+
     setFilteredApplications(filtered);
   };
 
@@ -127,6 +154,9 @@ export default function ApplicationsPage() {
       communities: [],
       twelfthGroups: [],
       districts: [],
+      scholarshipTypes: [],
+      minMarks: undefined,
+      maxMarks: undefined,
     });
     setSearchQuery('');
   };
@@ -247,12 +277,39 @@ export default function ApplicationsPage() {
           {/* Filter Panel */}
           {showFilters && (
             <div className="mt-6 pt-6 border-t border-gray-200">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+              {/* Marks Range Filter */}
+              <div className="mb-6 p-4 bg-gray-50 rounded-lg">
+                <h4 className="text-sm font-semibold text-gray-900 mb-3">Marks Range Filter</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Minimum Marks</label>
+                    <input
+                      type="number"
+                      placeholder="e.g., 400"
+                      value={filters.minMarks || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, minMarks: e.target.value ? Number(e.target.value) : undefined }))}
+                      className="input text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">Maximum Marks</label>
+                    <input
+                      type="number"
+                      placeholder="e.g., 600"
+                      value={filters.maxMarks || ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, maxMarks: e.target.value ? Number(e.target.value) : undefined }))}
+                      className="input text-sm"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Filter by 12th marks, NEET score, or JEE score</p>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-6">
                 {/* Status Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Status</h4>
-                  <div className="space-y-2">
-                    {Object.values(ApplicationStatus).map((status) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(ApplicationStatus).map((status) => (
                       <label key={status} className="flex items-center">
                         <input
                           type="checkbox"
@@ -269,8 +326,7 @@ export default function ApplicationsPage() {
                 {/* Course Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Course</h4>
-                  <div className="space-y-2">
-                    {Object.values(CourseType).map((course) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(CourseType).map((course) => (
                       <label key={course} className="flex items-center">
                         <input
                           type="checkbox"
@@ -287,8 +343,7 @@ export default function ApplicationsPage() {
                 {/* 12th Group Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">12th Group</h4>
-                  <div className="space-y-2">
-                    {Object.values(TwelfthGroup).map((group) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(TwelfthGroup).map((group) => (
                       <label key={group} className="flex items-center">
                         <input
                           type="checkbox"
@@ -305,7 +360,7 @@ export default function ApplicationsPage() {
                 {/* Community Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Community</h4>
-                  <div className="space-y-2">
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
                     {Object.values(Community).map((community) => (
                       <label key={community} className="flex items-center">
                         <input
@@ -315,6 +370,26 @@ export default function ApplicationsPage() {
                           className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
                         />
                         <span className="ml-2 text-sm text-gray-700">{community}</span>
+                      </label>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Scholarship Filter */}
+                <div>
+                  <h4 className="text-sm font-semibold text-gray-900 mb-3">Scholarship Type</h4>
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {Object.values(ScholarshipType).filter(s => s !== ScholarshipType.NONE).map((scholarship) => (
+                      <label key={scholarship} className="flex items-center">
+                        <input
+                          type="checkbox"
+                          checked={filters.scholarshipTypes?.includes(scholarship)}
+                          onChange={() => toggleFilter('scholarshipTypes', scholarship)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-sm text-gray-700">
+                          {scholarship.replace(/_/g, ' ').replace('GOVERNMENT', 'Govt').replace('SCHOLARSHIP', '')}
+                        </span>
                       </label>
                     ))}
                   </div>
