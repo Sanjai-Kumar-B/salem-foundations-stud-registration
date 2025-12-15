@@ -203,53 +203,65 @@ export default function DashboardPage() {
             <table className="min-w-full divide-y divide-gray-200">
               <thead>
                 <tr>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Application No.
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Student Name
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Course
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     District
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Status
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Reference
                   </th>
-                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                    Date
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Status
                   </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {recentApplications.length === 0 ? (
                   <tr>
-                    <td colSpan={6} className="px-6 py-8 text-center text-gray-500">
+                    <td colSpan={6} className="px-4 py-6 text-center text-gray-500 text-sm">
                       No applications found
                     </td>
                   </tr>
                 ) : (
                   recentApplications.map((application) => (
-                    <tr key={application.id} className="hover:bg-gray-50">
-                      <td className="px-6 py-4 whitespace-nowrap text-sm font-medium text-primary-600">
-                        <Link href={`/admin/applications/${application.id}`}>
-                          {application.applicationNumber}
-                        </Link>
+                    <tr 
+                      key={application.id} 
+                      onClick={() => window.location.href = `/admin/applications/${application.id}`}
+                      className="hover:bg-gray-50 cursor-pointer transition-colors"
+                    >
+                      <td className="px-4 py-3 whitespace-nowrap text-xs font-medium text-primary-600">
+                        {application.applicationNumber}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <td className="px-4 py-3 text-xs text-gray-900">
                         {application.personalDetails.firstName} {application.personalDetails.lastName}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {application.coursePreference.preferredCourse}
+                      <td className="px-4 py-3 text-xs text-gray-600">
+                        {application.coursePreference.preferredCourse.replace(/_/g, ' ')}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
+                      <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">
                         {application.personalDetails.address.district}
                       </td>
-                      <td className="px-6 py-4 whitespace-nowrap">
+                      <td className="px-4 py-3">
+                        <div className="text-xs text-gray-900 font-medium">
+                          {application.referralDetails?.source?.replace(/_/g, ' ') || '-'}
+                        </div>
+                        {application.referralDetails?.referrerName && (
+                          <div className="text-xs text-gray-500">
+                            {application.referralDetails.referrerName}
+                          </div>
+                        )}
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap">
                         <span
-                          className={`inline-flex px-2 py-1 text-xs font-semibold rounded-full ${
+                          className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
                             application.status === ApplicationStatus.NEW
                               ? 'bg-yellow-100 text-yellow-800'
                               : application.status === ApplicationStatus.SHORTLISTED
@@ -261,9 +273,6 @@ export default function DashboardPage() {
                         >
                           {application.status}
                         </span>
-                      </td>
-                      <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-600">
-                        {formatDate(application.submittedAt.toDate())}
                       </td>
                     </tr>
                   ))

@@ -12,7 +12,7 @@ export default function Home() {
             <div className="flex items-center space-x-3">
               <div className="relative w-8 h-8">
                 <Image 
-                  src="/logo.jpg" 
+                  src="/logo_eng.jpg" 
                   alt="Salem Foundations Logo" 
                   width={32} 
                   height={32} 

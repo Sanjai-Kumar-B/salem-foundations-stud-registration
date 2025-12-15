@@ -9,9 +9,9 @@ export const metadata: Metadata = {
   title: "Salem Foundations Registration Form",
   description: "Digital admission automation and student management system for Salem Foundations",
   icons: {
-    icon: '/logo.jpg',
-    shortcut: '/logo.jpg',
-    apple: '/logo.jpg',
+    icon: '/logo_eng.jpg',
+    shortcut: '/logo_eng.jpg',
+    apple: '/logo_eng.jpg',
   },
 };
 

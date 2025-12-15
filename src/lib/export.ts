@@ -110,7 +110,7 @@ export function exportToPDF(applications: StudentApplication[], filename: string
   // Add Logo (left side)
   try {
     const logoImg = document.createElement('img');
-    logoImg.src = '/logo.jpg';
+    logoImg.src = '/logo_eng.jpg';
     doc.addImage(logoImg, 'JPEG', 10, 8, 22, 22);
   } catch (error) {
     console.log('Logo not loaded in PDF');
@@ -178,7 +178,7 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   // Add Logo (left side)
   try {
     const logoImg = document.createElement('img');
-    logoImg.src = '/logo.jpg';
+    logoImg.src = '/logo_eng.jpg';
     doc.addImage(logoImg, 'JPEG', 10, 10, 25, 25);
   } catch (error) {
     console.log('Logo not loaded in PDF');

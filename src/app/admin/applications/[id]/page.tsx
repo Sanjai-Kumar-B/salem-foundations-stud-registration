@@ -261,6 +261,18 @@ export default function ApplicationDetailPage() {
               </p>
             </div>
 
+            <div>
+              <label className="text-sm font-medium text-gray-600 flex items-center">
+                <Phone className="w-4 h-4 mr-1" />
+                WhatsApp Number
+              </label>
+              <p className="text-gray-900 mt-1">
+                <a href={`https://wa.me/91${application.personalDetails.whatsappNumber}`} target="_blank" rel="noopener noreferrer" className="text-primary-600 hover:underline">
+                  {application.personalDetails.whatsappNumber}
+                </a>
+              </p>
+            </div>
+
             <div className="md:col-span-2">
               <label className="text-sm font-medium text-gray-600 flex items-center">
                 <MapPin className="w-4 h-4 mr-1" />
@@ -282,9 +294,80 @@ export default function ApplicationDetailPage() {
             </div>
 
             <div>
+              <label className="text-sm font-medium text-gray-600">Father's Occupation</label>
+              <p className="text-gray-900 mt-1">{application.personalDetails.fatherOccupation}</p>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-600 flex items-center">
+                <Phone className="w-4 h-4 mr-1" />
+                Father's Mobile
+              </label>
+              <p className="text-gray-900 mt-1">
+                <a href={`tel:${application.personalDetails.fatherMobile}`} className="text-primary-600 hover:underline">
+                  {application.personalDetails.fatherMobile}
+                </a>
+              </p>
+            </div>
+
+            <div>
               <label className="text-sm font-medium text-gray-600">Mother's Name</label>
               <p className="text-gray-900 mt-1">{application.personalDetails.motherName}</p>
             </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-600">Mother's Occupation</label>
+              <p className="text-gray-900 mt-1">{application.personalDetails.motherOccupation}</p>
+            </div>
+
+            <div>
+              <label className="text-sm font-medium text-gray-600 flex items-center">
+                <Phone className="w-4 h-4 mr-1" />
+                Mother's Mobile
+              </label>
+              <p className="text-gray-900 mt-1">
+                <a href={`tel:${application.personalDetails.motherMobile}`} className="text-primary-600 hover:underline">
+                  {application.personalDetails.motherMobile}
+                </a>
+              </p>
+            </div>
+
+            {application.personalDetails.guardianName && (
+              <>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Guardian's Name</label>
+                  <p className="text-gray-900 mt-1">{application.personalDetails.guardianName}</p>
+                </div>
+
+                {application.personalDetails.guardianMobile && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 flex items-center">
+                      <Phone className="w-4 h-4 mr-1" />
+                      Guardian's Mobile
+                    </label>
+                    <p className="text-gray-900 mt-1">
+                      <a href={`tel:${application.personalDetails.guardianMobile}`} className="text-primary-600 hover:underline">
+                        {application.personalDetails.guardianMobile}
+                      </a>
+                    </p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {application.personalDetails.siblings && application.personalDetails.siblings.length > 0 && (
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-600">Siblings</label>
+                <div className="mt-2 space-y-2">
+                  {application.personalDetails.siblings.map((sibling, index) => (
+                    <div key={index} className="flex items-center gap-4 p-2 bg-gray-50 rounded">
+                      <span className="text-gray-900 font-medium">{sibling.name}</span>
+                      <span className="text-gray-600 text-sm">- {sibling.education}</span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         </div>
 
@@ -390,6 +473,46 @@ export default function ApplicationDetailPage() {
                 </div>
               </div>
             )}
+
+            {/* Entrance Exam Preparation */}
+            {application.academicDetails.preparingForExam && (
+              <div>
+                <h4 className="font-semibold text-gray-900 mb-3">Entrance Exam Preparation</h4>
+                <div className="grid grid-cols-1 gap-4">
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">Preparing For</label>
+                    <p className="text-gray-900 mt-1 font-medium">{application.academicDetails.preparingForExam.replace(/_/g, ' ')}</p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Government School Questions */}
+            <div>
+              <h4 className="font-semibold text-gray-900 mb-3">School Background</h4>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Studied in Government School (6th-12th)</label>
+                  <p className="text-gray-900 mt-1 font-medium">
+                    {application.academicDetails.studiedInGovtSchool ? (
+                      <span className="text-green-600">Yes</span>
+                    ) : (
+                      <span className="text-gray-600">No</span>
+                    )}
+                  </p>
+                </div>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Studied in Govt/Aided Tamil Medium (6th-12th)</label>
+                  <p className="text-gray-900 mt-1 font-medium">
+                    {application.academicDetails.studiedInGovtAidedTamilMedium ? (
+                      <span className="text-green-600">Yes</span>
+                    ) : (
+                      <span className="text-gray-600">No</span>
+                    )}
+                  </p>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
 
@@ -502,6 +625,76 @@ export default function ApplicationDetailPage() {
               <div className="md:col-span-2">
                 <label className="text-sm font-medium text-gray-600">Scholarship Details</label>
                 <p className="text-gray-900 mt-1">{application.communityScholarship.scholarshipDetails}</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* Referral Details */}
+        <div className="card">
+          <div className="flex items-center mb-6">
+            <User className="w-6 h-6 text-primary-600 mr-2" />
+            <h3 className="text-lg font-semibold text-gray-900">Referral Details</h3>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label className="text-sm font-medium text-gray-600">How did you know about us?</label>
+              <p className="text-gray-900 mt-1 font-medium">
+                {application.referralDetails?.source?.replace(/_/g, ' ') || '-'}
+              </p>
+            </div>
+
+            {application.referralDetails?.referrerName && (
+              <>
+                <div>
+                  <label className="text-sm font-medium text-gray-600">Referrer Name</label>
+                  <p className="text-gray-900 mt-1">{application.referralDetails.referrerName}</p>
+                </div>
+
+                {application.referralDetails.referrerMobile && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-600 flex items-center">
+                      <Phone className="w-4 h-4 mr-1" />
+                      Referrer Mobile
+                    </label>
+                    <p className="text-gray-900 mt-1">
+                      <a href={`tel:${application.referralDetails.referrerMobile}`} className="text-primary-600 hover:underline">
+                        {application.referralDetails.referrerMobile}
+                      </a>
+                    </p>
+                  </div>
+                )}
+
+                {application.referralDetails.referrerDetails && (
+                  <div className="md:col-span-2">
+                    <label className="text-sm font-medium text-gray-600">Referrer Details</label>
+                    <p className="text-gray-900 mt-1">{application.referralDetails.referrerDetails}</p>
+                  </div>
+                )}
+              </>
+            )}
+
+            {application.referralDetails?.followedSocialMedia && (
+              <div className="md:col-span-2">
+                <label className="text-sm font-medium text-gray-600">Followed Social Media</label>
+                <div className="flex flex-wrap gap-2 mt-2">
+                  {application.referralDetails.followedSocialMedia.instagram && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-pink-100 text-pink-800">
+                      Instagram
+                    </span>
+                  )}
+                  {application.referralDetails.followedSocialMedia.facebook && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-blue-100 text-blue-800">
+                      Facebook
+                    </span>
+                  )}
+                  {application.referralDetails.followedSocialMedia.youtube && (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                      YouTube
+                    </span>
+                  )}
+                </div>
               </div>
             )}
           </div>

@@ -55,10 +55,12 @@ export const personalDetailsSchema = Yup.object().shape({
   }),
   
   fatherName: Yup.string().required('Father\'s name is required'),
+  fatherOccupation: Yup.string().required('Father\'s occupation is required'),
   fatherMobile: Yup.string()
     .required('Father\'s mobile number is required')
     .matches(/^[6-9]\d{9}$/, 'Invalid mobile number'),
   motherName: Yup.string().required('Mother\'s name is required'),
+  motherOccupation: Yup.string().required('Mother\'s occupation is required'),
   motherMobile: Yup.string()
     .required('Mother\'s mobile number is required')
     .matches(/^[6-9]\d{9}$/, 'Invalid mobile number'),
@@ -69,6 +71,12 @@ export const personalDetailsSchema = Yup.object().shape({
       return /^[6-9]\d{9}$/.test(value);
     })
     .nullable(),
+  siblings: Yup.array().of(
+    Yup.object().shape({
+      name: Yup.string().required('Sibling name is required'),
+      education: Yup.string().required('Education status is required'),
+    })
+  ).nullable(),
 });
 
 // Academic Details Validation
@@ -141,7 +149,8 @@ export const academicDetailsSchema = Yup.object().shape({
     .nullable(),
   
   preparingForExam: Yup.string().nullable(),
-  studiedInTamilMedium: Yup.boolean().required('Please select if you studied in Tamil medium'),
+  studiedInGovtSchool: Yup.boolean().required('Please select if you studied in Government School'),
+  studiedInGovtAidedTamilMedium: Yup.boolean().required('Please select if you studied in Government/Aided Tamil Medium School'),
 });
 
 // Course Preference Validation

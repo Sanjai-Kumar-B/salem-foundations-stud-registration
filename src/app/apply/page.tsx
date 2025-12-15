@@ -78,6 +78,10 @@ const TWELFTH_GROUPS = [
   { value: TwelfthGroup.ARTS_HISTORY, label: 'Arts with History' },
   { value: TwelfthGroup.ARTS_ECONOMICS, label: 'Arts with Economics' },
   { value: TwelfthGroup.VOCATIONAL, label: 'Vocational' },
+  { value: TwelfthGroup.PURE_SCIENCE, label: 'Pure Science' },
+  { value: TwelfthGroup.AGRICULTURE, label: 'Agriculture' },
+  { value: TwelfthGroup.HOME_SCIENCE, label: 'Home Science' },
+  { value: TwelfthGroup.NURSING, label: 'Nursing' },
 ];
 
 const COURSE_TYPES = [
@@ -198,11 +202,14 @@ export default function ApplyPage() {
       pincode: '',
     },
     fatherName: '',
+    fatherOccupation: '',
     fatherMobile: '',
     motherName: '',
+    motherOccupation: '',
     motherMobile: '',
     guardianName: '',
     guardianMobile: '',
+    siblings: [] as { name: string; education: string }[],
 
     // Academic Details
     tenthSchool: '',
@@ -225,7 +232,8 @@ export default function ApplyPage() {
     jeeRank: '' as any,
     jeeYear: '',
     preparingForExam: '',
-    studiedInTamilMedium: false,
+    studiedInGovtSchool: false,
+    studiedInGovtAidedTamilMedium: false,
 
     // Course Preference
     preferredCourse: '' as CourseType,
@@ -331,11 +339,14 @@ export default function ApplyPage() {
         aadharNumber: values.aadharNumber,
         address: values.address,
         fatherName: values.fatherName,
+        fatherOccupation: values.fatherOccupation,
         fatherMobile: values.fatherMobile,
         motherName: values.motherName,
+        motherOccupation: values.motherOccupation,
         motherMobile: values.motherMobile,
         guardianName: values.guardianName,
         guardianMobile: values.guardianMobile,
+        siblings: values.siblings?.filter((s: any) => s.name && s.education) || [],
       });
 
       const academicDetails: AcademicDetails = removeUndefined({
@@ -483,7 +494,7 @@ export default function ApplyPage() {
           <div className="flex justify-center mb-4">
             <div className="relative w-32 h-32">
               <Image
-                src="/logo.jpg"
+                src="/logo_eng.jpg"
                 alt="Salem Foundations Logo"
                 width={128}
                 height={128}
@@ -657,11 +668,19 @@ export default function ApplyPage() {
                   </div>
 
                   <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">Family Details</h3>
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Father&apos;s Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <FormInput
                       label="Father's Name"
                       name="fatherName"
                       placeholder="Enter father's name"
+                      required
+                    />
+                    <FormInput
+                      label="Father's Occupation"
+                      name="fatherOccupation"
+                      placeholder="Enter father's occupation"
                       required
                     />
                     <FormInput
@@ -670,10 +689,20 @@ export default function ApplyPage() {
                       placeholder="10-digit mobile number"
                       required
                     />
+                  </div>
+
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Mother&apos;s Details</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
                     <FormInput
                       label="Mother's Name"
                       name="motherName"
                       placeholder="Enter mother's name"
+                      required
+                    />
+                    <FormInput
+                      label="Mother's Occupation"
+                      name="motherOccupation"
+                      placeholder="Enter mother's occupation"
                       required
                     />
                     <FormInput
@@ -682,16 +711,82 @@ export default function ApplyPage() {
                       placeholder="10-digit mobile number"
                       required
                     />
+                  </div>
+
+                  <h4 className="text-md font-medium text-gray-800 mb-3">Guardian Details (if applicable)</h4>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <FormInput
-                      label="Guardian's Name (if applicable)"
+                      label="Guardian's Name"
                       name="guardianName"
                       placeholder="Enter guardian's name"
                     />
                     <FormInput
-                      label="Guardian's Mobile (if applicable)"
+                      label="Guardian's Mobile"
                       name="guardianMobile"
                       placeholder="10-digit mobile number"
                     />
+                  </div>
+
+                  <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">Sibling Details (if applicable)</h3>
+                  <div className="space-y-4">
+                    {values.siblings.map((sibling, index) => (
+                      <div key={index} className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end p-4 bg-gray-50 rounded-lg">
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Sibling Name
+                          </label>
+                          <input
+                            type="text"
+                            value={sibling.name}
+                            onChange={(e) => {
+                              const newSiblings = [...values.siblings];
+                              newSiblings[index].name = e.target.value;
+                              setFieldValue('siblings', newSiblings);
+                            }}
+                            placeholder="Enter sibling name"
+                            className="input"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">
+                            Education Status
+                          </label>
+                          <select
+                            value={sibling.education}
+                            onChange={(e) => {
+                              const newSiblings = [...values.siblings];
+                              newSiblings[index].education = e.target.value;
+                              setFieldValue('siblings', newSiblings);
+                            }}
+                            className="input"
+                          >
+                            <option value="">Select education status</option>
+                            <option value="School">School</option>
+                            <option value="College">College</option>
+                            <option value="Graduate">Graduate</option>
+                          </select>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newSiblings = values.siblings.filter((_, i) => i !== index);
+                            setFieldValue('siblings', newSiblings);
+                          }}
+                          className="btn btn-secondary text-sm"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setFieldValue('siblings', [...values.siblings, { name: '', education: '' }]);
+                      }}
+                      className="btn btn-primary text-sm"
+                    >
+                      + Add Sibling
+                    </button>
                   </div>
                 </FormStep>
 
@@ -740,7 +835,7 @@ export default function ApplyPage() {
                         }}
                         placeholder="Marks obtained"
                         className="input"
-                        max="500"
+                        max={values.tenthTotalMarks || 500}
                       />
                       {touched.tenthMarks && errors.tenthMarks && (
                         <p className="text-red-500 text-xs mt-1">{String(errors.tenthMarks)}</p>
@@ -750,10 +845,9 @@ export default function ApplyPage() {
                       <label className="block text-sm font-medium text-gray-700 mb-1">
                         Total Marks <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        type="number"
+                      <select
                         name="tenthTotalMarks"
-                        value={values.tenthTotalMarks || 500}
+                        value={values.tenthTotalMarks}
                         onChange={(e) => {
                           const total = Number(e.target.value);
                           setFieldValue('tenthTotalMarks', total);
@@ -763,10 +857,12 @@ export default function ApplyPage() {
                             setFieldValue('tenthPercentage', Number(percentage));
                           }
                         }}
-                        placeholder="Total marks (usually 500)"
                         className="input"
-                        readOnly
-                      />
+                      >
+                        <option value="">Select total marks</option>
+                        <option value="500">500</option>
+                        <option value="600">600</option>
+                      </select>
                       {touched.tenthTotalMarks && errors.tenthTotalMarks && (
                         <p className="text-red-500 text-xs mt-1">{String(errors.tenthTotalMarks)}</p>
                       )}
@@ -934,19 +1030,19 @@ export default function ApplyPage() {
                     />
                   </div>
 
-                  {/* Tamil Medium */}
+                  {/* Government School Question */}
                   <div className="mt-6">
                     <label className="block text-sm font-medium text-gray-700 mb-3">
-                      From 6th to 12th have you Studied in Tamil Medium? <span className="text-red-500">*</span>
+                      From 6th to 12th have you studied in Government School? <span className="text-red-500">*</span>
                     </label>
                     <div className="flex gap-6">
                       <label className="flex items-center cursor-pointer">
                         <input
                           type="radio"
-                          name="studiedInTamilMedium"
+                          name="studiedInGovtSchool"
                           value="true"
-                          checked={values.studiedInTamilMedium === true}
-                          onChange={() => setFieldValue('studiedInTamilMedium', true)}
+                          checked={values.studiedInGovtSchool === true}
+                          onChange={() => setFieldValue('studiedInGovtSchool', true)}
                           className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
                         />
                         <span className="ml-2 text-gray-700">Yes</span>
@@ -954,10 +1050,41 @@ export default function ApplyPage() {
                       <label className="flex items-center cursor-pointer">
                         <input
                           type="radio"
-                          name="studiedInTamilMedium"
+                          name="studiedInGovtSchool"
                           value="false"
-                          checked={values.studiedInTamilMedium === false}
-                          onChange={() => setFieldValue('studiedInTamilMedium', false)}
+                          checked={values.studiedInGovtSchool === false}
+                          onChange={() => setFieldValue('studiedInGovtSchool', false)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">No</span>
+                      </label>
+                    </div>
+                  </div>
+
+                  {/* Government/Aided Tamil Medium Question */}
+                  <div className="mt-6">
+                    <label className="block text-sm font-medium text-gray-700 mb-3">
+                      From 6th to 12th have you studied in Government/Aided Tamil Medium School? <span className="text-red-500">*</span>
+                    </label>
+                    <div className="flex gap-6">
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="studiedInGovtAidedTamilMedium"
+                          value="true"
+                          checked={values.studiedInGovtAidedTamilMedium === true}
+                          onChange={() => setFieldValue('studiedInGovtAidedTamilMedium', true)}
+                          className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
+                        />
+                        <span className="ml-2 text-gray-700">Yes</span>
+                      </label>
+                      <label className="flex items-center cursor-pointer">
+                        <input
+                          type="radio"
+                          name="studiedInGovtAidedTamilMedium"
+                          value="false"
+                          checked={values.studiedInGovtAidedTamilMedium === false}
+                          onChange={() => setFieldValue('studiedInGovtAidedTamilMedium', false)}
                           className="w-4 h-4 text-primary-600 border-gray-300 focus:ring-primary-500"
                         />
                         <span className="ml-2 text-gray-700">No</span>
@@ -1221,7 +1348,17 @@ export default function ApplyPage() {
                       Select all scholarships that apply to you
                     </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                      {SCHOLARSHIP_TYPES.map((scholarship) => (
+                      {SCHOLARSHIP_TYPES.filter((scholarship) => {
+                        // Filter scholarships based on government school and tamil medium
+                        if (scholarship.value === ScholarshipType.SEVEN_FIVE_PERCENT_GOVERNMENT) {
+                          return values.studiedInGovtSchool === true;
+                        }
+                        if (scholarship.value === ScholarshipType.TAMIL_PUTHALVAN || 
+                            scholarship.value === ScholarshipType.PUDUMAIPEN) {
+                          return values.studiedInGovtAidedTamilMedium === true;
+                        }
+                        return true;
+                      }).map((scholarship) => (
                         <div key={scholarship.value} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
                           <input
                             type="checkbox"

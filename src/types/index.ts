@@ -212,12 +212,17 @@ export enum TwelfthGroup {
   ARTS_HISTORY = 'ARTS_HISTORY',
   ARTS_ECONOMICS = 'ARTS_ECONOMICS',
   VOCATIONAL = 'VOCATIONAL',
+  PURE_SCIENCE = 'PURE_SCIENCE',
+  AGRICULTURE = 'AGRICULTURE',
+  HOME_SCIENCE = 'HOME_SCIENCE',
+  NURSING = 'NURSING',
 }
 
 // Community
 export enum Community {
   OC = 'OC',
   BC = 'BC',
+  BC_CC = 'BC_CC',
   BCM = 'BCM',
   MBC = 'MBC',
   SC = 'SC',
@@ -275,6 +280,12 @@ export interface DocumentFile {
   type: string;
 }
 
+// Sibling Details
+export interface SiblingDetails {
+  name: string;
+  education: string; // School, College, or Graduate
+}
+
 // Personal Details
 export interface PersonalDetails {
   firstName: string;
@@ -294,11 +305,14 @@ export interface PersonalDetails {
     pincode: string;
   };
   fatherName: string;
+  fatherOccupation: string;
   fatherMobile: string;
   motherName: string;
+  motherOccupation: string;
   motherMobile: string;
   guardianName?: string;
   guardianMobile?: string;
+  siblings?: SiblingDetails[];
 }
 
 // Academic Details
@@ -329,8 +343,9 @@ export interface AcademicDetails {
   // Entrance Exam Preparation
   preparingForExam?: string;
   
-  // Medium of Instruction
-  studiedInTamilMedium: boolean;
+  // Government School/Tamil Medium Questions
+  studiedInGovtSchool: boolean;
+  studiedInGovtAidedTamilMedium: boolean;
 }
 
 // Course Preferences

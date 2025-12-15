@@ -75,7 +75,7 @@ export default function AdminLoginPage() {
           <div className="flex justify-center mb-4">
             <div className="relative w-24 h-24">
               <Image
-                src="/logo.jpg"
+                src="/logo_eng.jpg"
                 alt="Salem Foundations Logo"
                 width={96}
                 height={96}
