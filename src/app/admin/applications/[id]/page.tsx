@@ -18,6 +18,7 @@ import {
   Award,
   User,
   Save,
+  Edit,
 } from 'lucide-react';
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
@@ -126,10 +127,19 @@ export default function ApplicationDetailPage() {
             </div>
           </div>
 
-          <button onClick={handleDownloadPDF} className="btn btn-primary flex items-center">
-            <Download className="w-4 h-4 mr-2" />
-            Download PDF
-          </button>
+          <div className="flex gap-3">
+            <Link
+              href={`/apply/edit/${application.id}`}
+              className="btn btn-secondary flex items-center"
+            >
+              <Edit className="w-4 h-4 mr-2" />
+              Edit Application
+            </Link>
+            <button onClick={handleDownloadPDF} className="btn btn-primary flex items-center">
+              <Download className="w-4 h-4 mr-2" />
+              Download PDF
+            </button>
+          </div>
         </div>
 
         {/* Status and Tags */}
