@@ -23,7 +23,7 @@ import {
 import Link from 'next/link';
 import { formatDate } from '@/lib/utils';
 import toast from 'react-hot-toast';
-import { exportSingleApplicationPDF } from '@/lib/export';
+import { exportSingleApplicationPDF, exportStudentCertificatePDF } from '@/lib/export';
 
 export default function ApplicationDetailPage() {
   const params = useParams();
@@ -84,6 +84,13 @@ export default function ApplicationDetailPage() {
     }
   };
 
+  const handleDownloadStudentCertificate = () => {
+    if (application) {
+      exportStudentCertificatePDF(application);
+      toast.success('Student certificate downloaded successfully');
+    }
+  };
+
   if (loading || !user) {
     return (
       <div className="min-h-screen flex items-center justify-center">
@@ -135,6 +142,10 @@ export default function ApplicationDetailPage() {
               <Edit className="w-4 h-4 mr-2" />
               Edit Application
             </Link>
+            <button onClick={handleDownloadStudentCertificate} className="btn btn-success flex items-center">
+              <Download className="w-4 h-4 mr-2" />
+              Student PDF
+            </button>
             <button onClick={handleDownloadPDF} className="btn btn-primary flex items-center">
               <Download className="w-4 h-4 mr-2" />
               Download PDF

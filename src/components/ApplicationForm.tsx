@@ -14,6 +14,7 @@ import {
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
 import { TN_DISTRICTS, ENGINEERING_COLLEGES_BY_DISTRICT } from '@/data/collegesByDistrict';
 import { SCHOOLS_BY_DISTRICT, TN_DISTRICTS_FOR_SCHOOLS } from '@/data/schoolsByDistrict';
+import { MBBS_COLLEGES_BY_DISTRICT, TN_DISTRICTS_FOR_COLLEGES } from '@/data/collegesByDistrict';
 import { Plus, Trash2 } from 'lucide-react';
 
 const DISTRICTS = [
@@ -53,6 +54,7 @@ const TWELFTH_GROUPS = [
 
 const COURSE_TYPES = [
   { value: CourseType.ENGINEERING_TECHNOLOGY, label: 'Engineering & Technology' },
+  { value: CourseType.MBBS, label: 'MBBS' },
   { value: CourseType.MEDICAL_HEALTH, label: 'Medical & Health Sciences' },
   { value: CourseType.ARTS_SCIENCE, label: 'Arts & Science' },
   { value: CourseType.LAW_CIVIL, label: 'Law & Civil Services' },
@@ -717,7 +719,43 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
             options={COURSE_TYPES}
             required
           />
-          {values.preferredCourse && values.preferredCourse !== CourseType.OTHERS && (
+          
+          {/* For MBBS - Show District Dropdown */}
+          {values.preferredCourse === CourseType.MBBS && (
+            <>
+              <FormSelect
+                label="College District"
+                name="collegeDistrict"
+                options={TN_DISTRICTS_FOR_COLLEGES.map((d: string) => ({ value: d, label: d }))}
+                placeholder="Select district"
+              />
+              
+              {values.collegeDistrict && (
+                <>
+                  <FormSelect
+                    label="College Name"
+                    name="collegeName"
+                    options={[
+                      ...(MBBS_COLLEGES_BY_DISTRICT[values.collegeDistrict] || []).map((c: string) => ({ value: c, label: c })),
+                      { value: 'Other', label: 'Other (Not in list)' }
+                    ]}
+                    placeholder="Select college"
+                  />
+                  
+                  {values.collegeName === 'Other' && (
+                    <FormInput
+                      label="Specify College Name"
+                      name="collegeNameOther"
+                      placeholder="Enter college name"
+                    />
+                  )}
+                </>
+              )}
+            </>
+          )}
+          
+          {/* For other courses - Show Course Specialization */}
+          {values.preferredCourse && values.preferredCourse !== CourseType.OTHERS && values.preferredCourse !== CourseType.MBBS && (
             <FormSelect
               label="Course Specialization"
               name="courseSpecialization"
@@ -725,6 +763,7 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
               placeholder="Select specialization"
             />
           )}
+          
           {values.preferredCourse === CourseType.OTHERS && (
             <FormInput
               label="Specify Course"
@@ -1172,6 +1211,26 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
               </a>
             </div>
           </div>
+        </div>
+
+        {/* Declaration */}
+        <div className="mt-8 p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
+          <div className="flex items-start">
+            <input
+              type="checkbox"
+              id="declaration"
+              checked={values.declaration}
+              onChange={(e) => setFieldValue('declaration', e.target.checked)}
+              className="w-5 h-5 mt-0.5 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+            />
+            <label htmlFor="declaration" className="ml-3 text-sm font-medium text-gray-900">
+              ☐ I declare that the information submitted is true and correct to the best of my knowledge.
+              <span className="text-red-600">*</span>
+            </label>
+          </div>
+          {touched.declaration && errors.declaration && (
+            <p className="error-text mt-2 ml-8">{errors.declaration as string}</p>
+          )}
         </div>
       </FormStep>
     </>

@@ -56,6 +56,7 @@ export enum ApplicationStatus {
 // Courses
 export enum CourseType {
   ENGINEERING_TECHNOLOGY = 'ENGINEERING_TECHNOLOGY',
+  MBBS = 'MBBS',
   MEDICAL_HEALTH = 'MEDICAL_HEALTH',
   ARTS_SCIENCE = 'ARTS_SCIENCE',
   LAW_CIVIL = 'LAW_CIVIL',
@@ -96,9 +97,48 @@ export const SPECIALIZED_COURSES: Record<CourseType, string[]> = {
     'Fashion Technology',
     'Agriculture Engineering',
     'Petroleum Engineering',
+    'Agricultural and Irrigation Engg.',
+    'Apparel Technology',
+    'Architecture',
+    'Ceramic Technology',
+    'Computer Science and Communication Engg.',
+    'Electronics and Instrumentation Engg.',
+    'Environmental Engg.',
+    'Electronics and Telecommunication Engg.',
+    'Food Technology',
+    'Geo-Informatics',
+    'Handloom and Textile Technology',
+    'Industrial Bio-Technology',
+    'Instrumentation and Control Engg.',
+    'Industrial Engg.',
+    'Industrial Engineering and Management',
+    'Leather Technology',
+    'Material Science and Engg.',
+    'Mechatronics',
+    'Medical Electronics Engg.',
+    'Mining Engg.',
+    'Manufacturing Engg.',
+    'Metallurgical Engg.',
+    'Mechanical and Automation Engg.',
+    'Nano Science and Technology',
+    'Plastic Technology',
+    'Petro Chemical Technology',
+    'Petrochemical Engg.',
+    'Pharmaceutical Technology',
+    'Polymer Technology',
+    'Petroleum Engineering and Technology',
+    'Production Engg.',
+    'Printing Technology',
+    'Rubber and Plastic Technology',
+    'Textile Chemistry',
+    'Textile Technology',
+    'Civil Engg. (Tamil Medium)',
+    'Mechanical Engg. (Tamil Medium)',
+  ],
+  [CourseType.MBBS]: [
+    'MBBS',
   ],
   [CourseType.MEDICAL_HEALTH]: [
-    'MBBS',
     'BDS (Dentistry)',
     'BAMS (Ayurveda)',
     'BHMS (Homeopathy)',
@@ -356,6 +396,9 @@ export interface AcademicDetails {
 export interface CoursePreference {
   preferredCourse: CourseType;
   courseSpecialization?: string;
+  collegeDistrict?: string; // For MBBS - district where student wants to study
+  collegeName?: string; // For MBBS - selected college name
+  collegeNameOther?: string; // For MBBS - if college not in list
   preferredDistricts?: string[]; // For Engineering courses - districts where student wants to study
   preferredColleges: string[];
   additionalFreeCourses?: string[];
@@ -407,6 +450,7 @@ export interface StudentApplication {
   communityScholarship: CommunityScholarshipDetails;
   referralDetails: ReferralDetails;
   documents?: Documents;
+  declaration: boolean; // Declaration that information is true and correct
   status: ApplicationStatus;
   tags: string[];
   assignedTo?: string;

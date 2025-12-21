@@ -1,0 +1,416 @@
+// Auto-generated from engineering college data
+// Generated on 2025-12-21T06:24:22.373Z
+
+export const ENGINEERING_COLLEGES_BY_DISTRICT: Record<string, string[]> = {
+  "ARIYALUR": [
+    "? KKC College of Engineering & Technology - Ariyalur.",
+    "? Meenakshi Ramasamy Engineering College - Ariyalur.",
+    "? Nelliandavar Institute of Technology - Ariyalur."
+  ],
+  "CHENGALPATTU": [
+    "Chengalpattu"
+  ],
+  "CHENNAI": [
+    "A.C. Tech (Alagappa College of Technology) – Anna University",
+    "Aalim Muhammed Salegh College of Engineering",
+    "Agni College of Technology",
+    "Alpha College of Engineering",
+    "Apollo Engineering College",
+    "Asan Memorial College of Engineering & Technology",
+    "B.S. Abdur Rahman Crescent Institute of Science & Technology",
+    "Balaji Institute of Engineering and Technology",
+    "Bhajarang Engineering College",
+    "College of Engineering",
+    "DMI College of Engineering",
+    "GKM College of Engineering and Technology",
+    "Gopal Ramalingam Memorial Engineering College",
+    "Hindustan Institute of Technology & Science (HITS) – OMR",
+    "Indian Institute of Technology",
+    "Jaya College of Engineering and Technology",
+    "Jaya Engineering College",
+    "Jaya Institute of Technology",
+    "Jeppiaar Engineering College",
+    "Jeppiaar SRR Engineering College",
+    "Jerusalem College of Engineering",
+    "KCG College of Technology",
+    "Loyola-ICAM College of Engineering and Technology (LICET)",
+    "Madras Institute of Technology (MIT)",
+    "Meenakshi Sundararajan Engineering College",
+    "NIELIT Chennai (Engineering / IT)",
+    "New Prince Shri Bhavani College of Engineering & Technology",
+    "PERI Institute of Technology",
+    "Prince Dr. K. Vasudevan College of Engineering",
+    "Prince Shri Venkateshwara Padmavathy Engineering College",
+    "Rajalakshmi Engineering College (OMR Region)",
+    "Rajalakshmi Institute of Technology",
+    "SRM University – Vadapalani Campus",
+    "SSN College of Engineering (Chennai region)",
+    "Sathyabama Institute of Science and Technology",
+    "School of Architecture & Planning (SAP) – Anna University",
+    "Sree Sastha Institute of Engineering & Technology",
+    "Sri Muthukumaran Institute of Technology",
+    "Sri Sairam Engineering College (Chennai Region)",
+    "Sri Sairam Institute of Technology",
+    "Tagore Engineering College",
+    "Vels Institute of Science"
+  ],
+  "COIMBATORE": [
+    "Adithya Institute of Technology",
+    "Akshaya College of Engineering & Technology",
+    "Akshaya Institute of Management Studies (Stand Alone)",
+    "Arjun College of Technology",
+    "Asian College of Engineering and Technology",
+    "C M S College of Engineering and Technology",
+    "Christ The King Engineering College",
+    "Coimbatore Institute of Engineering and Technology (Autonomous)",
+    "Coimbatore Institute of Technology (Autonomous)",
+    "Dhaanish Ahmed Institute of Technology",
+    "Dhanalakshmi Srinivasan College of Engineering",
+    "Dr. Mahalingam College of Engineering & Technology (Autonomous)",
+    "Dr. N G P Institute of Technology (Autonomous)",
+    "Easa College of Engineering and Technology",
+    "Government College of Technology",
+    "Happy Valley Business School",
+    "Hindusthan College of Engineering and Technology (Autonomous)",
+    "Hindusthan Institute of Technology (Autonomous)",
+    "Hindusthan School of Architecture",
+    "INFO Institute of Engineering",
+    "J C T College of Engineering and Technology",
+    "Jansons Institute of Technology",
+    "K P R Institute of Engineering and Technology (Autonomous)",
+    "KGISL Institute of Technology",
+    "KIT – Kalaignarkarunanidhi Institute of Technology (Autonomous)",
+    "KV Institute of Management & Information Studies",
+    "Karpagam College of Engineering (Autonomous)",
+    "Karpagam Institute of Technology",
+    "Kathir College of Engineering",
+    "Kumaraguru College of Technology (Autonomous)",
+    "Nehru Institute of Engineering and Technology",
+    "Nehru Institute of Information Technology and Management",
+    "Nehru Institute of Technology (Autonomous)",
+    "Nehru School of Architecture",
+    "P A College of Engineering and Technology (Autonomous)",
+    "P.S.G. College of Technology (Autonomous)",
+    "PPG Business School",
+    "PPG Institute of Technology",
+    "PSG Institute of Architecture and Planning",
+    "PSG Institute of Technology and Applied Research",
+    "Park College of Engineering and Technology",
+    "Park College of Technology",
+    "Park Institute of Architecture",
+    "Pollachi Institute of Engineering and Technology",
+    "R V S College of Engineering and Technology",
+    "R.V.S Technical Campus Coimbatore",
+    "R.V.S. School of Architecture",
+    "RVS Institute of Management Studies",
+    "Ranganathan Architecture College",
+    "Rathinam School of Architecture",
+    "Rathinam School of Architecture and Design (formerly Tips School of Architecture)",
+    "Rathinam School of Business at Tips Global (formerly TIPS School of Management)",
+    "Rathinam Technical Campus",
+    "SAN International Business School",
+    "SNS College of Engineering (Autonomous)",
+    "SNS College of Technology (Autonomous)",
+    "Sakthi Institute of Information & Management Studies",
+    "San Academy of Architecture",
+    "Sardar Vallabhbhai Patel International School of Textiles and Management",
+    "Sasi Creative School of Architecture",
+    "School of Architecture Coimbatore Institute of Engineering and Technology",
+    "Sree Sakthi Engineering College",
+    "Sri Eshwar College of Engineering (Autonomous)",
+    "Sri Krishna College of Engineering & Technology (Autonomous)",
+    "Sri Krishna College of Technology (Autonomous)",
+    "Sri Ramakrishna Engineering College (Autonomous)",
+    "Sri Ramakrishna Institute of Technology (Autonomous)",
+    "Sri Ranganathar Institute of Engineering and Technology",
+    "Sri Sai Ranganathan Engineering College",
+    "Sri Shakthi Institute of Engineering and Technology (Autonomous)",
+    "Sri Venkateswara College of Computer Applications & Management",
+    "Sri Venkateswara Institute of Information Technology and Management",
+    "Studyworld College of Engineering",
+    "Suguna College of Engineering",
+    "Tamilnadu College of Engineering",
+    "Tamilnadu School of Architecture",
+    "United Institute of Technology",
+    "V.S.B. College of Engineering Technical Campus",
+    "Vishnu Lakshmi College of Engineering and Technology",
+    "Vivekananda Institute of Management Studies",
+    "🏫 Coimbatore District – Colleges"
+  ],
+  "DHARMAPURI": [
+    "? Jayalakshmi Institute of Technology. (Anna University)",
+    "? Jayam College of Engineering and Technology. (dharmapuri.nic.in)",
+    "? Shreenivasa Engineering College. (Anna University)",
+    "? Varuvan Vadivelan Institute of Technology. (Collegedunia)"
+  ],
+  "DINDIGUL": [
+    "Arulmigu Palaniandavar College of Engineering",
+    "Christian College of Engineering & Technology",
+    "Gandhigram Rural Institute – Faculty of Engineering & Technology",
+    "Government College of Engineering",
+    "PSNA College of Engineering and Technology (Autonomous)",
+    "RVS College of Engineering & Technology",
+    "Sri Subramanya College of Engineering & Technology"
+  ],
+  "ERODE": [
+    "? Al-Ameen Engineering College (Autonomous) (Anna University)",
+    "? Bannari Amman Institute of Technology (Autonomous) (Anna University)",
+    "? Erode Sengunthar Engineering College (Autonomous) (Anna University)",
+    "? Government College of Engineering",
+    "? J K K Munirajah College of Technology (Anna University)",
+    "? Kongu Engineering College (Autonomous) (Anna University)",
+    "? M.P. Nachimuthu M. Jaganathan Engineering College (Anna University)",
+    "? Nandha College of Technology (Anna University)",
+    "? Nandha Engineering College (Autonomous) (Anna University)",
+    "? Shree Venkateshwara Hi-tech Engineering College (Anna University)",
+    "? Surya Engineering College (Anna University)",
+    "? Velalar College of Engineering and Technology (Autonomous) (Anna University)"
+  ],
+  "KADALUR": [
+    "? Dr. Navalar Nedunchezhiyan College of Engineering",
+    "? Krishnasamy College of Engineering & Technology",
+    "? M R K Institute of Technology",
+    "? St. Anne's College of Engineering & Technology"
+  ],
+  "KALLAKURICHI": [
+    "Kallakurichi"
+  ],
+  "KANCHIPURAM": [
+    "Kanchipuram"
+  ],
+  "KANYAKUMARI": [
+    "Kanyakumari"
+  ],
+  "KARUR": [
+    "Chettinad College of Engineering and Technology",
+    "Christian College of Engineering (Karur Region)",
+    "Kongu Engineering College (Karur Region)",
+    "M. Kumarasamy College of Engineering (Autonomous)",
+    "VRS College of Engineering and Technology (Region)",
+    "VSB Engineering College"
+  ],
+  "KRISHNAGIRI": [
+    "? Archana Institute of Technology - Krishnagiri. (Collegedunia)",
+    "? ER. Perumal Manimekalai College of Engineering - Hosur. (Anna University)",
+    "? Government College of Engineering",
+    "? Hosur Institute of Technology & Science - Krishnagiri. (Collegedunia)",
+    "? P.S.V. College of Engineering & Technology - Krishnagiri. (Anna University)"
+  ],
+  "MADURAI": [
+    "Agricultural Engineering College & Research Institute (TNAU) – Madurai Region",
+    "K.L.N. College of Engineering (Madurai Zone)",
+    "K.L.N. College of Information Technology (Madurai Zone)",
+    "Kalasalingam Academy of Research and Education (KARE)",
+    "Latha Mathavan Engineering College",
+    "Madurai Kamaraj University – Engineering Extension Center",
+    "Nadar Saraswathi College of Engineering and Technology (Madurai Zone)",
+    "P.T.R. College of Engineering and Technology (Madurai Region)",
+    "Pannai College of Engineering and Technology (Madurai Zone)",
+    "SACS M.A.V.M.M. Engineering College",
+    "Solamalai College of Engineering (formerly Raja College of Engineering)",
+    "Thiagarajar College of Engineering (Autonomous)",
+    "Thiagarajar Polytechnic College",
+    "Ultra College of Architecture",
+    "Ultra College of Engineering and Technology for Women",
+    "Vaigai College of Engineering",
+    "Velammal College of Engineering and Technology (Autonomous)",
+    "Velammal School of Architecture"
+  ],
+  "MAYILADUTHURAI_ENGINEERING_COLLEGES": [
+    "Mayiladuthurai"
+  ],
+  "NAGAPATTINAM": [
+    "Nagapattinam"
+  ],
+  "NAMAKKAL": [
+    "CMS College of Engineering (Anna University)",
+    "Excel Engineering College (Autonomous) (Anna University)",
+    "Gnanamani College of Technology (Anna University)",
+    "J.K.K. Nataraja College of Engineering & Technology (Anna University)",
+    "K.S.R. College of Engineering (Autonomous) (Anna University)",
+    "K.S.R. Institute for Engineering & Technology (Autonomous) (Anna University)",
+    "Mahendra Engineering College (Autonomous) (Anna University)",
+    "Mahendra Engineering College for Women (Anna University)",
+    "Mahendra Institute of Technology (Autonomous) (Anna University)",
+    "Muthayammal College of Engineering (Anna University)",
+    "Muthayammal Engineering College (Autonomous) (Anna University)",
+    "P.G.P. College of Engineering and Technology (Anna University)",
+    "Paavai College of Engineering (Anna University)",
+    "Paavai Engineering College (Autonomous) (Anna University)",
+    "S.S.M. College of Engineering (Anna University)",
+    "SRG Engineering College (Anna University)",
+    "Selvam College of Technology (Anna University)",
+    "Sengunthar Engineering College (Autonomous) (Anna University)",
+    "Vidyaa Vikas College of Engineering & Technology (Anna University)",
+    "Vivekanandha College of Engineering for Women (Autonomous) (Anna University)",
+    "Vivekanandha College of Technology for Women (Anna University)"
+  ],
+  "PERAMBALUR": [
+    "Dhanalakshmi Srinivasan College of Engineering",
+    "Dhanalakshmi Srinivasan Engineering College (Autonomous)",
+    "Dhanalakshmi Srinivasan Institute of Research and Technology"
+  ],
+  "PUDUKKOTTAI": [
+    "Pudukkottai"
+  ],
+  "RANIPET": [
+    "Arunai Engineering College (Ranipet / Vellore Zone Mapping)",
+    "C. Abdul Hakeem College of Engineering & Technology",
+    "Kingston Engineering College (Ranipet Region)"
+  ],
+  "SALEM": [
+    "A V S Engineering College",
+    "AVS College of Technology",
+    "Annapoorana Engineering College (Autonomous)",
+    "Bharathiyar Institute of Engineering for Women",
+    "Dhirajlal Gandhi College of Technology",
+    "Ganesh College of Engineering",
+    "Government College of Engineering",
+    "Indian Institute of Handloom Technology",
+    "Knowledge Institute of Technology (Autonomous)",
+    "Mahendra College of Engineering",
+    "R P Sarathy Institute of Technology",
+    "Salem College of Engineering and Technology",
+    "Shree Sathyam College of Engineering and Technology",
+    "Sona College of Technology (Autonomous)",
+    "Sri Shanmugha College of Engineering and Technology",
+    "Tagore Institute of Engineering and Technology",
+    "The Kavery Engineering College",
+    "V S A Group of Institutions"
+  ],
+  "SIVAGANGAI": [
+    "Alagappa Chettiar Government College of Engineering & Technology (ACGCET)",
+    "Annai Teresa College of Engineering",
+    "CECRI - Central Electrochemical Research Institute (Engineering Division)",
+    "Mount Zion College of Engineering & Technology",
+    "Pannai College of Engineering and Technology (Region)",
+    "St. Michael College of Engineering & Technology",
+    "Vickram College of Engineering"
+  ],
+  "TENKASI": [
+    "Einstein College of Engineering",
+    "JP College of Engineering",
+    "Joe Suresh Engineering College",
+    "PET Engineering College (Region)",
+    "Sardar Raja College of Engineering",
+    "Sri Ramakrishna Engineering College (Tenkasi Region)",
+    "Sun College of Engineering and Technology (Region)"
+  ],
+  "THANJAVUR": [
+    "Anjalai Ammal Mahalingam Engineering College (AAMEC)",
+    "Government College of Engineering",
+    "Kings College of Engineering (Region Based)",
+    "P.R. Engineering College",
+    "PRIST University – Faculty of Engineering",
+    "Parisutham Institute of Technology & Science (PITS)",
+    "SASTRA Deemed University – School of Engineering",
+    "St. Joseph’s College of Engineering & Technology (SJET)",
+    "University College of Engineering"
+  ],
+  "THENI": [
+    "Nadar Saraswathi College of Engineering & Technology (NSCET)",
+    "Narayanaguru College of Engineering (Region Based)",
+    "Odaiyappa College of Engineering & Technology",
+    "Theni Kammavar Sangam College of Technology (TKSCT)"
+  ],
+  "THIRUVALLUR": [
+    "Thiruvallur"
+  ],
+  "THIRUVARUR_ENGINEERING_COLLEGES": [
+    "A.R.J. College of Engineering & Technology",
+    "Central University of Tamil Nadu (CUTN) – B.Tech / Engineering Wing",
+    "Government College of Engineering"
+  ],
+  "THOOTHUKUDI": [
+    "Thoothukudi"
+  ],
+  "TIRUNELVELI": [
+    "Tirunelveli"
+  ],
+  "TIRUPATHUR": [
+    "Adhiparasakthi Engineering College (Region Based)",
+    "Don Bosco College of Engineering",
+    "Kanchi Pallavan Engineering College (Zone-Based)",
+    "Mohamed Sathak A.J. College of Engineering (Region)"
+  ],
+  "TIRUPPUR": [
+    "? Builders Engineering College",
+    "? Cherraan College of Technology",
+    "? Jai Shriram Engineering College",
+    "? Jairupaa College of Engineering",
+    "? Sasurie College of Engineering"
+  ],
+  "TIRUVANNAMALAI": [
+    "Tiruvannamalai"
+  ],
+  "TRICHY": [
+    "Tiruchirappalli"
+  ],
+  "VELLORE": [
+    "Adhiparasakthi Engineering College (Region)",
+    "C. Abdul Hakeem College of Engineering & Technology",
+    "Dhanvantri College of Engineering",
+    "Global Institute of Engineering & Technology",
+    "Kingston Engineering College (Autonomous)",
+    "Priyadarshini Engineering College",
+    "Sri Krishna College of Engineering (Region)",
+    "Sri Venkateswara Engineering College (Region)",
+    "Sun College of Engineering (Region-based)",
+    "Thanthai Periyar Government Institute of Technology (TPGIT)",
+    "Vellore Institute of Technology (VIT University)"
+  ],
+  "VILLUPURAM": [
+    "Aarupadai Veedu Institute of Technology (AVIT) ? VMU (Region)",
+    "Annai Teresa College of Engineering",
+    "E.S. College of Engineering & Technology",
+    "Idhaya Engineering College for Women",
+    "Mailam Engineering College",
+    "Sri Aravindar Engineering College",
+    "Sri Rangapoopathi College of Engineering",
+    "Surya Engineering College / Surya Group of Institutions",
+    "University College of Engineering Tindivanam (UCET)",
+    "University College of Engineering Villupuram (UCEV)"
+  ],
+  "VIRUDHUNAGAR": [
+    "Virudhunagar"
+  ]
+};
+
+export const TN_DISTRICTS = [
+  "ARIYALUR",
+  "CHENGALPATTU",
+  "CHENNAI",
+  "COIMBATORE",
+  "DHARMAPURI",
+  "DINDIGUL",
+  "ERODE",
+  "KADALUR",
+  "KALLAKURICHI",
+  "KANCHIPURAM",
+  "KANYAKUMARI",
+  "KARUR",
+  "KRISHNAGIRI",
+  "MADURAI",
+  "MAYILADUTHURAI_ENGINEERING_COLLEGES",
+  "NAGAPATTINAM",
+  "NAMAKKAL",
+  "PERAMBALUR",
+  "PUDUKKOTTAI",
+  "RANIPET",
+  "SALEM",
+  "SIVAGANGAI",
+  "TENKASI",
+  "THANJAVUR",
+  "THENI",
+  "THIRUVALLUR",
+  "THIRUVARUR_ENGINEERING_COLLEGES",
+  "THOOTHUKUDI",
+  "TIRUNELVELI",
+  "TIRUPATHUR",
+  "TIRUPPUR",
+  "TIRUVANNAMALAI",
+  "TRICHY",
+  "VELLORE",
+  "VILLUPURAM",
+  "VIRUDHUNAGAR"
+];

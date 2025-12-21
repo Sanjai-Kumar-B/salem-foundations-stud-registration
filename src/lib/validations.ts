@@ -224,4 +224,8 @@ export const referralDetailsSchema = Yup.object().shape({
     facebook: Yup.boolean(),
     youtube: Yup.boolean(),
   }),
+
+  declaration: Yup.boolean()
+    .oneOf([true], 'You must accept the declaration to submit the application')
+    .required('You must accept the declaration to submit the application'),
 });

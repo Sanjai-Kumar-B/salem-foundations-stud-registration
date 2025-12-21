@@ -87,6 +87,7 @@ const TWELFTH_GROUPS = [
 
 const COURSE_TYPES = [
   { value: CourseType.ENGINEERING_TECHNOLOGY, label: 'Engineering & Technology' },
+  { value: CourseType.MBBS, label: 'MBBS' },
   { value: CourseType.MEDICAL_HEALTH, label: 'Medical & Health Sciences' },
   { value: CourseType.ARTS_SCIENCE, label: 'Arts & Science' },
   { value: CourseType.LAW_CIVIL, label: 'Law & Civil Services' },
@@ -243,6 +244,9 @@ export default function ApplyPage() {
     // Course Preference
     preferredCourse: '' as CourseType,
     courseSpecialization: '',
+    collegeDistrict: '',
+    collegeName: '',
+    collegeNameOther: '',
     preferredDistricts: [] as string[],
     preferredColleges: [] as string[],
     additionalFreeCourses: [] as string[],
@@ -265,6 +269,9 @@ export default function ApplyPage() {
       facebook: false,
       youtube: false,
     },
+
+    // Declaration
+    declaration: false,
   };
 
   const getCurrentValidationSchema = () => {
@@ -386,6 +393,9 @@ export default function ApplyPage() {
       const coursePreference: CoursePreference = removeUndefined({
         preferredCourse: values.preferredCourse,
         courseSpecialization: values.courseSpecialization,
+        collegeDistrict: values.collegeDistrict,
+        collegeName: values.collegeName === 'Other' ? values.collegeNameOther : values.collegeName,
+        collegeNameOther: values.collegeName === 'Other' ? values.collegeNameOther : undefined,
         preferredDistricts: values.preferredDistricts,
         preferredColleges: values.preferredColleges,
         additionalFreeCourses: values.additionalFreeCourses,
@@ -415,6 +425,7 @@ export default function ApplyPage() {
         coursePreference,
         communityScholarship,
         referralDetails,
+        declaration: values.declaration,
         status: ApplicationStatus.NEW,
       });
 
