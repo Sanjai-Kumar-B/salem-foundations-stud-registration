@@ -227,13 +227,17 @@ export default function EditApplicationPage() {
         siblings: app.personalDetails.siblings || [],
 
         // Academic Details
+        tenthSchoolDistrict: app.academicDetails.tenthSchoolDistrict || '',
         tenthSchool: app.academicDetails.tenthSchool || '',
+        tenthSchoolOther: app.academicDetails.tenthSchoolOther || '',
         tenthBoard: app.academicDetails.tenthBoard || '',
         tenthYearOfPassing: app.academicDetails.tenthYearOfPassing || '',
         tenthPercentage: app.academicDetails.tenthPercentage || '',
         tenthMarks: app.academicDetails.tenthMarks || '',
         tenthTotalMarks: app.academicDetails.tenthTotalMarks || 500,
+        twelfthSchoolDistrict: app.academicDetails.twelfthSchoolDistrict || '',
         twelfthSchool: app.academicDetails.twelfthSchool || '',
+        twelfthSchoolOther: app.academicDetails.twelfthSchoolOther || '',
         twelfthBoard: app.academicDetails.twelfthBoard || '',
         twelfthYearOfPassing: app.academicDetails.twelfthYearOfPassing || '',
         twelfthPercentage: app.academicDetails.twelfthPercentage || '',
@@ -369,13 +373,17 @@ export default function EditApplicationPage() {
       });
 
       const academicDetails: AcademicDetails = removeUndefined({
-        tenthSchool: values.tenthSchool,
+        tenthSchoolDistrict: values.tenthSchoolDistrict,
+        tenthSchool: values.tenthSchool === 'Other' ? values.tenthSchoolOther : values.tenthSchool,
+        tenthSchoolOther: values.tenthSchool === 'Other' ? values.tenthSchoolOther : undefined,
         tenthBoard: values.tenthBoard,
         tenthYearOfPassing: values.tenthYearOfPassing,
         tenthPercentage: Number(values.tenthPercentage),
         tenthMarks: Number(values.tenthMarks),
         tenthTotalMarks: Number(values.tenthTotalMarks),
-        twelfthSchool: values.twelfthSchool,
+        twelfthSchoolDistrict: values.twelfthSchoolDistrict,
+        twelfthSchool: values.twelfthSchool === 'Other' ? values.twelfthSchoolOther : values.twelfthSchool,
+        twelfthSchoolOther: values.twelfthSchool === 'Other' ? values.twelfthSchoolOther : undefined,
         twelfthBoard: values.twelfthBoard,
         twelfthYearOfPassing: values.twelfthYearOfPassing,
         twelfthPercentage: Number(values.twelfthPercentage),

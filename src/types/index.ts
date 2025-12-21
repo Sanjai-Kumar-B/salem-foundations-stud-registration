@@ -317,14 +317,18 @@ export interface PersonalDetails {
 
 // Academic Details
 export interface AcademicDetails {
+  tenthSchoolDistrict: string;
   tenthSchool: string;
+  tenthSchoolOther?: string; // For "Other" option
   tenthBoard: string;
   tenthYearOfPassing: string;
   tenthPercentage: number;
   tenthMarks: number;
   tenthTotalMarks: number;
   
+  twelfthSchoolDistrict: string;
   twelfthSchool: string;
+  twelfthSchoolOther?: string; // For "Other" option
   twelfthBoard: string;
   twelfthYearOfPassing: string;
   twelfthPercentage: number;

@@ -393,6 +393,12 @@ export default function ApplicationDetailPage() {
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">10th Standard</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {application.academicDetails.tenthSchoolDistrict && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">District</label>
+                    <p className="text-gray-900 mt-1">{application.academicDetails.tenthSchoolDistrict}</p>
+                  </div>
+                )}
                 <div>
                   <label className="text-sm font-medium text-gray-600">School</label>
                   <p className="text-gray-900 mt-1">{application.academicDetails.tenthSchool}</p>
@@ -422,6 +428,12 @@ export default function ApplicationDetailPage() {
             <div>
               <h4 className="font-semibold text-gray-900 mb-3">12th Standard</h4>
               <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                {application.academicDetails.twelfthSchoolDistrict && (
+                  <div>
+                    <label className="text-sm font-medium text-gray-600">District</label>
+                    <p className="text-gray-900 mt-1">{application.academicDetails.twelfthSchoolDistrict}</p>
+                  </div>
+                )}
                 <div>
                   <label className="text-sm font-medium text-gray-600">School</label>
                   <p className="text-gray-900 mt-1">{application.academicDetails.twelfthSchool}</p>

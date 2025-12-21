@@ -213,13 +213,17 @@ export default function ApplyPage() {
     siblings: [] as { name: string; education: string }[],
 
     // Academic Details
+    tenthSchoolDistrict: '',
     tenthSchool: '',
+    tenthSchoolOther: '',
     tenthBoard: '',
     tenthYearOfPassing: '',
     tenthPercentage: '' as any,
     tenthMarks: '' as any,
     tenthTotalMarks: 500 as any,
+    twelfthSchoolDistrict: '',
     twelfthSchool: '',
+    twelfthSchoolOther: '',
     twelfthBoard: '',
     twelfthYearOfPassing: '',
     twelfthPercentage: '' as any,
@@ -351,13 +355,17 @@ export default function ApplyPage() {
       });
 
       const academicDetails: AcademicDetails = removeUndefined({
-        tenthSchool: values.tenthSchool,
+        tenthSchoolDistrict: values.tenthSchoolDistrict,
+        tenthSchool: values.tenthSchool === 'Other' ? values.tenthSchoolOther : values.tenthSchool,
+        tenthSchoolOther: values.tenthSchool === 'Other' ? values.tenthSchoolOther : undefined,
         tenthBoard: values.tenthBoard,
         tenthYearOfPassing: values.tenthYearOfPassing,
         tenthPercentage: Number(values.tenthPercentage),
         tenthMarks: Number(values.tenthMarks),
         tenthTotalMarks: Number(values.tenthTotalMarks),
-        twelfthSchool: values.twelfthSchool,
+        twelfthSchoolDistrict: values.twelfthSchoolDistrict,
+        twelfthSchool: values.twelfthSchool === 'Other' ? values.twelfthSchoolOther : values.twelfthSchool,
+        twelfthSchoolOther: values.twelfthSchool === 'Other' ? values.twelfthSchoolOther : undefined,
         twelfthBoard: values.twelfthBoard,
         twelfthYearOfPassing: values.twelfthYearOfPassing,
         twelfthPercentage: Number(values.twelfthPercentage),

@@ -13,6 +13,7 @@ import {
 } from '@/types';
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
 import { TN_DISTRICTS, ENGINEERING_COLLEGES_BY_DISTRICT } from '@/data/collegesByDistrict';
+import { SCHOOLS_BY_DISTRICT, TN_DISTRICTS_FOR_SCHOOLS } from '@/data/schoolsByDistrict';
 import { Plus, Trash2 } from 'lucide-react';
 
 const DISTRICTS = [
@@ -361,12 +362,39 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
 
         <h3 className="text-lg font-semibold text-gray-900 mb-4">10th Standard</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInput
-            label="School Name"
-            name="tenthSchool"
-            placeholder="Enter school name"
+          <FormSelect
+            label="School District"
+            name="tenthSchoolDistrict"
+            options={TN_DISTRICTS_FOR_SCHOOLS.map((d) => ({ value: d, label: d }))}
+            placeholder="Select district"
             required
           />
+          
+          {values.tenthSchoolDistrict && (
+            <FormSelect
+              label="School Name"
+              name="tenthSchool"
+              options={[
+                ...(SCHOOLS_BY_DISTRICT[values.tenthSchoolDistrict] || []).map((school) => ({
+                  value: school,
+                  label: school,
+                })),
+                { value: 'Other', label: 'Other (Please specify)' },
+              ]}
+              placeholder="Select school"
+              required
+            />
+          )}
+          
+          {values.tenthSchool === 'Other' && (
+            <FormInput
+              label="Please specify school name"
+              name="tenthSchoolOther"
+              placeholder="Enter your school name"
+              required
+            />
+          )}
+          
           <FormSelect
             label="Board"
             name="tenthBoard"
@@ -448,12 +476,39 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
 
         <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">12th Standard</h3>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <FormInput
-            label="School Name"
-            name="twelfthSchool"
-            placeholder="Enter school name"
+          <FormSelect
+            label="School District"
+            name="twelfthSchoolDistrict"
+            options={TN_DISTRICTS_FOR_SCHOOLS.map((d) => ({ value: d, label: d }))}
+            placeholder="Select district"
             required
           />
+          
+          {values.twelfthSchoolDistrict && (
+            <FormSelect
+              label="School Name"
+              name="twelfthSchool"
+              options={[
+                ...(SCHOOLS_BY_DISTRICT[values.twelfthSchoolDistrict] || []).map((school) => ({
+                  value: school,
+                  label: school,
+                })),
+                { value: 'Other', label: 'Other (Please specify)' },
+              ]}
+              placeholder="Select school"
+              required
+            />
+          )}
+          
+          {values.twelfthSchool === 'Other' && (
+            <FormInput
+              label="Please specify school name"
+              name="twelfthSchoolOther"
+              placeholder="Enter your school name"
+              required
+            />
+          )}
+          
           <FormSelect
             label="Board"
             name="twelfthBoard"
