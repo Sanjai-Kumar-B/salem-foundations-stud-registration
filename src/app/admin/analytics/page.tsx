@@ -68,7 +68,7 @@ export default function AnalyticsPage() {
 
   const statusData = [
     { name: 'New', value: stats?.newApplications || 0, color: '#f59e0b' },
-    { name: 'Shortlisted', value: stats?.shortlisted || 0, color: '#3b82f6' },
+    { name: 'Selected', value: stats?.selected || 0, color: '#3b82f6' },
     { name: 'Completed', value: stats?.completed || 0, color: '#10b981' },
   ];
 

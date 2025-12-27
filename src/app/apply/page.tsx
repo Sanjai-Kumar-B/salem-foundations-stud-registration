@@ -36,6 +36,7 @@ import {
   SPECIALIZED_COURSES,
   FREE_COURSES,
   EntranceExam,
+  SubmittedDocumentType,
 } from '@/types';
 import {
   personalDetailsSchema,
@@ -195,6 +196,7 @@ export default function ApplyPage() {
     mobile: '',
     whatsappNumber: '',
     aadharNumber: '',
+    photoUrl: '', // Optional photo upload
     address: {
       line1: '',
       line2: '',
@@ -258,6 +260,10 @@ export default function ApplyPage() {
     annualFamilyIncome: '' as any,
     firstGraduate: false,
     needsEducationalLoan: false,
+    
+    // Documents Submitted
+    documentsSubmitted: [] as SubmittedDocumentType[],
+    documentsSubmittedOther: '',
 
     // Referral Details
     source: '' as ReferralSource,
@@ -349,6 +355,7 @@ export default function ApplyPage() {
         mobile: values.mobile,
         whatsappNumber: values.whatsappNumber,
         aadharNumber: values.aadharNumber,
+        photoUrl: values.photoUrl, // Include photo URL
         address: values.address,
         fatherName: values.fatherName,
         fatherOccupation: values.fatherOccupation,
@@ -425,6 +432,8 @@ export default function ApplyPage() {
         coursePreference,
         communityScholarship,
         referralDetails,
+        documentsSubmitted: values.documentsSubmitted || [],
+        documentsSubmittedOther: values.documentsSubmittedOther,
         declaration: values.declaration,
         status: ApplicationStatus.NEW,
       });

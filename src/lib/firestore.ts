@@ -247,7 +247,7 @@ export async function getApplicationStatistics() {
     const stats = {
       totalApplications: applications.length,
       newApplications: applications.filter((app) => app.status === ApplicationStatus.NEW).length,
-      shortlisted: applications.filter((app) => app.status === ApplicationStatus.SHORTLISTED).length,
+      selected: applications.filter((app) => app.status === ApplicationStatus.SELECTED).length,
       completed: applications.filter((app) => app.status === ApplicationStatus.COMPLETED).length,
       courseWiseCount: {} as Record<string, number>,
       districtWiseCount: {} as Record<string, number>,

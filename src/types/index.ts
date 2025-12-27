@@ -47,7 +47,7 @@ export enum EntranceExam {
 // Application Status
 export enum ApplicationStatus {
   NEW = 'NEW',
-  SHORTLISTED = 'SHORTLISTED',
+  SELECTED = 'SELECTED',
   FOLLOW_UP = 'FOLLOW_UP',
   COMPLETED = 'COMPLETED',
   REJECTED = 'REJECTED',
@@ -311,6 +311,15 @@ export enum Gender {
   OTHER = 'OTHER',
 }
 
+// Submitted Document Types (original or xerox)
+export enum SubmittedDocumentType {
+  AADHAR = 'AADHAR',
+  MARKSHEET = 'MARKSHEET',
+  INCOME_CERTIFICATE = 'INCOME_CERTIFICATE',
+  COMMUNITY_CERTIFICATE = 'COMMUNITY_CERTIFICATE',
+  OTHER = 'OTHER',
+}
+
 // Document Types
 export interface DocumentFile {
   name: string;
@@ -336,6 +345,7 @@ export interface PersonalDetails {
   mobile: string;
   whatsappNumber?: string;
   aadharNumber: string;
+  photoUrl?: string; // Optional photo upload (max 2MB)
   address: {
     line1: string;
     line2?: string;
@@ -450,6 +460,8 @@ export interface StudentApplication {
   communityScholarship: CommunityScholarshipDetails;
   referralDetails: ReferralDetails;
   documents?: Documents;
+  documentsSubmitted?: SubmittedDocumentType[]; // Which documents were provided (originals or xerox)
+  documentsSubmittedOther?: string; // If OTHER is selected, specify what document
   declaration: boolean; // Declaration that information is true and correct
   status: ApplicationStatus;
   tags: string[];
@@ -490,7 +502,7 @@ export interface FilterOptions {
 export interface DashboardStats {
   totalApplications: number;
   newApplications: number;
-  shortlisted: number;
+  selected: number;
   completed: number;
   courseWiseCount: Record<CourseType, number>;
   districtWiseCount: Record<string, number>;

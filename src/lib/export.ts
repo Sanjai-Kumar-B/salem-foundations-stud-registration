@@ -207,6 +207,18 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   doc.setTextColor(37, 99, 235);
   doc.text(`Application No: ${application.applicationNumber}`, 105, 41, { align: 'center' });
 
+  // Add student photo in top right if available
+  if (application.personalDetails.photoUrl) {
+    try {
+      doc.addImage(application.personalDetails.photoUrl, 'JPEG', 165, 10, 30, 30);
+      // Add border around photo
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(165, 10, 30, 30);
+    } catch (error) {
+      console.log('Photo not loaded in PDF:', error);
+    }
+  }
+
   // Reset colors for content
   doc.setTextColor(0, 0, 0);
   doc.setFont('helvetica', 'normal');
@@ -428,6 +440,18 @@ export function exportStudentCertificatePDF(application: StudentApplication) {
   doc.setFontSize(16);
   doc.setFont('helvetica', 'bold');
   doc.text('SELECTION CERTIFICATE', 105, 43, { align: 'center' });
+
+  // Add student photo in top right if available
+  if (application.personalDetails.photoUrl) {
+    try {
+      doc.addImage(application.personalDetails.photoUrl, 'JPEG', 165, 10, 30, 30);
+      // Add border around photo
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(165, 10, 30, 30);
+    } catch (error) {
+      console.log('Photo not loaded in PDF:', error);
+    }
+  }
 
   // Reset colors for content
   doc.setTextColor(0, 0, 0);

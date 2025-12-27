@@ -12,7 +12,7 @@ import { formatDate } from '@/lib/utils';
 interface DashboardStats {
   totalApplications: number;
   newApplications: number;
-  shortlisted: number;
+  selected: number;
   completed: number;
   courseWiseCount: Record<string, number>;
   districtWiseCount: Record<string, number>;
@@ -99,8 +99,8 @@ export default function DashboardPage() {
       textColor: 'text-warning-600',
     },
     {
-      title: 'Shortlisted',
-      value: stats?.shortlisted || 0,
+      title: 'Selected',
+      value: stats?.selected || 0,
       icon: Users,
       color: 'info',
       bgColor: 'bg-blue-100',
@@ -264,7 +264,7 @@ export default function DashboardPage() {
                           className={`inline-flex px-2 py-0.5 text-xs font-semibold rounded-full ${
                             application.status === ApplicationStatus.NEW
                               ? 'bg-yellow-100 text-yellow-800'
-                              : application.status === ApplicationStatus.SHORTLISTED
+                              : application.status === ApplicationStatus.SELECTED
                               ? 'bg-blue-100 text-blue-800'
                               : application.status === ApplicationStatus.COMPLETED
                               ? 'bg-green-100 text-green-800'

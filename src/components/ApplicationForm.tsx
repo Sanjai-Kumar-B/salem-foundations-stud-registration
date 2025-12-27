@@ -10,6 +10,7 @@ import {
   ReferralSource,
   SPECIALIZED_COURSES,
   FREE_COURSES,
+  SubmittedDocumentType,
 } from '@/types';
 import { FormInput, FormSelect, FormCheckbox, NestedFormInput, NestedFormSelect, FormStep } from '@/components/FormComponents';
 import { TN_DISTRICTS, ENGINEERING_COLLEGES_BY_DISTRICT } from '@/data/collegesByDistrict';
@@ -207,6 +208,46 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
             placeholder="12-digit Aadhar number"
             required
           />
+        </div>
+
+        {/* Photo Upload */}
+        <div className="mt-6">
+          <label className="block text-sm font-medium text-gray-700 mb-2">
+            Upload Photo (Optional)
+          </label>
+          <p className="text-xs text-gray-500 mb-3">
+            Maximum file size: 2MB. Accepted formats: JPG, JPEG, PNG
+          </p>
+          <input
+            type="file"
+            accept="image/jpeg,image/jpg,image/png"
+            onChange={(e) => {
+              const file = e.target.files?.[0];
+              if (file) {
+                if (file.size > 2 * 1024 * 1024) {
+                  alert('File size must be less than 2MB');
+                  e.target.value = '';
+                  return;
+                }
+                // Store file URL temporarily (will be uploaded to Firebase in submit handler)
+                const reader = new FileReader();
+                reader.onloadend = () => {
+                  setFieldValue('photoUrl', reader.result as string);
+                };
+                reader.readAsDataURL(file);
+              }
+            }}
+            className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+          />
+          {values.photoUrl && (
+            <div className="mt-3">
+              <img 
+                src={values.photoUrl} 
+                alt="Preview" 
+                className="h-32 w-32 object-cover rounded-lg border border-gray-300"
+              />
+            </div>
+          )}
         </div>
 
         <h3 className="text-lg font-semibold text-gray-900 mt-6 mb-4">Address</h3>
@@ -1081,6 +1122,62 @@ export function ApplicationFormSteps({ currentStep, values, errors, touched, set
             name="firstGraduate"
             description="Check this if you are the first person in your family to pursue higher education"
           />
+        </div>
+
+        {/* Documents Submitted */}
+        <div className="mt-8">
+          <label className="block text-sm font-medium text-gray-700 mb-3">
+            Whether you have provided any Originals or Xerox?
+          </label>
+          <p className="text-sm text-gray-600 mb-3">
+            If yes, select which documents you have submitted
+          </p>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+            {[
+              { value: 'AADHAR', label: 'Aadhar' },
+              { value: 'MARKSHEET', label: 'Marksheet' },
+              { value: 'INCOME_CERTIFICATE', label: 'Income Certificate' },
+              { value: 'COMMUNITY_CERTIFICATE', label: 'Community Certificate' },
+              { value: 'OTHER', label: 'Other' },
+            ].map((doc) => (
+              <div key={doc.value} className="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <input
+                  type="checkbox"
+                  id={`doc-${doc.value}`}
+                  checked={values.documentsSubmitted?.includes(doc.value as any)}
+                  onChange={(e) => {
+                    const current = values.documentsSubmitted || [];
+                    if (e.target.checked) {
+                      setFieldValue('documentsSubmitted', [...current, doc.value]);
+                    } else {
+                      setFieldValue(
+                        'documentsSubmitted',
+                        current.filter((d: string) => d !== doc.value)
+                      );
+                    }
+                  }}
+                  className="w-4 h-4 text-primary-600 border-gray-300 rounded focus:ring-primary-500"
+                />
+                <label
+                  htmlFor={`doc-${doc.value}`}
+                  className="ml-3 text-sm text-gray-700 cursor-pointer"
+                >
+                  {doc.label}
+                </label>
+              </div>
+            ))}
+          </div>
+          
+          {/* If OTHER is selected, show text input */}
+          {values.documentsSubmitted?.includes('OTHER' as any) && (
+            <div className="mt-4">
+              <FormInput
+                label="Please specify the document"
+                name="documentsSubmittedOther"
+                placeholder="Enter document name"
+              />
+            </div>
+          )}
         </div>
       </FormStep>
 
