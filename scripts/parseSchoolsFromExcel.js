@@ -1,28 +1,6 @@
+const XLSX = require('xlsx');
 const fs = require('fs');
 const path = require('path');
-
-// Proper CSV parser that handles quoted fields with commas
-function parseCSVLine(line) {
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-  
-  for (let i = 0; i < line.length; i++) {
-    const char = line[i];
-    
-    if (char === '"') {
-      inQuotes = !inQuotes;
-    } else if (char === ',' && !inQuotes) {
-      result.push(current.trim());
-      current = '';
-    } else {
-      current += char;
-    }
-  }
-  
-  result.push(current.trim());
-  return result;
-}
 
 // Valid Tamil Nadu districts (38 districts)
 const VALID_DISTRICTS = {
@@ -91,92 +69,80 @@ const VALID_DISTRICTS = {
   'VIRUDHUNA GAR': 'VIRUDHUNAGAR', // Variation
 };
 
-// Directory containing school CSV files
-const csvDir = path.join(__dirname, '../School_list_csv');
-const files = fs.readdirSync(csvDir).filter(f => f.endsWith('.csv'));
+// Directory containing Excel files
+const excelDir = path.join(__dirname, '../School_list_csv/School_list_xl');
+const files = fs.readdirSync(excelDir).filter(f => f.endsWith('.xlsx') || f.endsWith('.xls'));
 
 const schoolsByDistrict = {};
-
+let totalRows = 0;
+let validSchools = 0;
 let skipped = 0;
-let recovered = 0;
 
-console.log(`📁 Found ${files.length} CSV files to process...\n`);
+console.log(`📁 Found ${files.length} Excel files to process...\n`);
 
 files.forEach(fileName => {
-  const csvPath = path.join(csvDir, fileName);
-  const csvContent = fs.readFileSync(csvPath, 'utf-8');
+  console.log(`Processing: ${fileName}`);
+  const filePath = path.join(excelDir, fileName);
   
-  // Parse CSV
-  const lines = csvContent.split('\n');
-  
-  // Process each line
-  for (let i = 0; i < lines.length; i++) {
-    const line = lines[i].trim();
+  try {
+    // Read the Excel file
+    const workbook = XLSX.readFile(filePath);
     
-    if (!line) continue;
+    console.log(`   Found ${workbook.SheetNames.length} sheet(s): ${workbook.SheetNames.join(', ')}`);
     
-    // Parse CSV properly (handles quoted fields)
-    const parts = parseCSVLine(line);
-    
-    if (parts.length < 4) continue;
-    
-    // Check if this is a header row
-    const col0 = parts[0]?.toUpperCase() || '';
-    const col1 = parts[1]?.toUpperCase() || '';
-    const col3 = parts[3]?.toUpperCase() || '';
-    
-    if (col0.includes('SNO') || col0.includes('S NO') ||
-        col1 === 'DISTRICT' || col1.includes('DISTRICT') ||
-        col3 === 'SCHOOL NAME' || col3.includes('SCHOOL')) {
-      continue;
-    }
-    
-    // Extract District (column 2, index 1) and School Name (column 4, index 3)
-    let rawDistrict = parts[1]?.trim().toUpperCase();
-    let schoolName = parts[3]?.trim();
-    
-    // Check if district is valid
-    let normalizedDistrict = VALID_DISTRICTS[rawDistrict];
-    
-    // If district is invalid, try to find the district in other columns (data may be shifted)
-    if (!normalizedDistrict && parts.length > 4) {
-      // Try to find a valid district in columns 2-5
-      for (let col = 2; col <= Math.min(parts.length - 2, 5); col++) {
-        const testDistrict = parts[col]?.trim().toUpperCase();
-        if (VALID_DISTRICTS[testDistrict]) {
-          normalizedDistrict = VALID_DISTRICTS[testDistrict];
-          // School name would be 2 columns after district
-          schoolName = parts[col + 2]?.trim();
-          recovered++;
-          break;
+    // Process each sheet
+    workbook.SheetNames.forEach(sheetName => {
+      const worksheet = workbook.Sheets[sheetName];
+      
+      // Convert to JSON with column headers
+      const data = XLSX.utils.sheet_to_json(worksheet);
+      console.log(`     Sheet "${sheetName}": ${data.length} rows`);
+      
+      // Process each row
+      data.forEach((row) => {
+        totalRows++;
+        
+        // Extract district and school name from columns
+        let rawDistrict = String(row['DISTRICT'] || row['District'] || '').trim().toUpperCase();
+        let schoolName = String(row['SCHOOL NAME'] || row['School Name'] || row['SCHOOL_NAME'] || '').trim();
+        
+        // Skip if missing required fields
+        if (!rawDistrict || !schoolName) {
+          return;
         }
-      }
-    }
-    
-    // Validate
-    if (!rawDistrict || !schoolName || schoolName.length < 5) {
-      continue;
-    }
-    
-    // Skip if still no valid district found
-    if (!normalizedDistrict) {
-      skipped++;
-      continue;
-    }
-    
-    // Initialize district array if it doesn't exist
-    if (!schoolsByDistrict[normalizedDistrict]) {
-      schoolsByDistrict[normalizedDistrict] = [];
-    }
-    
-    // Add school if not already exists (case-insensitive check)
-    const exists = schoolsByDistrict[normalizedDistrict].some(
-      s => s.toUpperCase() === schoolName.toUpperCase()
-    );
-    
-    if (!exists) {
-      schoolsByDistrict[normalizedDistrict].push(schoolName);
-    }
+        
+        // Validate school name length
+        if (schoolName.length < 3) {
+          return;
+        }
+        
+        // Normalize district name
+        let normalizedDistrict = VALID_DISTRICTS[rawDistrict];
+        
+        // Skip if still no valid district found
+        if (!normalizedDistrict) {
+          skipped++;
+          return;
+        }
+        
+        // Initialize district array if it doesn't exist
+        if (!schoolsByDistrict[normalizedDistrict]) {
+          schoolsByDistrict[normalizedDistrict] = [];
+        }
+        
+        // Add school if not already exists (case-insensitive check)
+        const exists = schoolsByDistrict[normalizedDistrict].some(
+          s => s.toUpperCase() === schoolName.toUpperCase()
+        );
+        
+        if (!exists) {
+          schoolsByDistrict[normalizedDistrict].push(schoolName);
+          validSchools++;
+        }
+      });
+    });
+  } catch (error) {
+    console.error(`Error processing ${fileName}:`, error.message);
   }
 });
 
@@ -195,7 +161,7 @@ Object.keys(schoolsByDistrict).sort().forEach(district => {
 const districtList = Object.keys(sortedDistricts).sort();
 
 // Generate TypeScript content
-const tsContent = `// Auto-generated from School_list_csv folder
+const tsContent = `// Auto-generated from School_list_csv/School_list_xl folder
 // Generated on ${new Date().toISOString()}
 // Total districts: ${districtList.length}
 // Total schools: ${Object.values(sortedDistricts).reduce((sum, schools) => sum + schools.length, 0)}
@@ -209,10 +175,10 @@ export const TN_DISTRICTS_FOR_SCHOOLS = ${JSON.stringify(districtList, null, 2)}
 const outputPath = path.join(__dirname, '../src/data/schoolsByDistrict.ts');
 fs.writeFileSync(outputPath, tsContent);
 
-console.log('✅ Schools data generated successfully!');
+console.log('\n✅ Schools data generated successfully!');
 console.log(`📊 Total districts: ${districtList.length}`);
 console.log(`🏫 Total schools: ${Object.values(sortedDistricts).reduce((sum, schools) => sum + schools.length, 0)}`);
-console.log(`🔄 Recovered schools from shifted columns: ${recovered}`);
+console.log(`📝 Total rows processed: ${totalRows}`);
 console.log(`❌ Skipped entries: ${skipped}`);
 console.log('\n📋 District-wise school count:');
 districtList.forEach(district => {

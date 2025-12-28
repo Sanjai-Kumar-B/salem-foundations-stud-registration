@@ -39,3 +39,6 @@ next-env.d.ts
 # college lists
 /college_list
 /College_list_csv
+
+# school lists
+/School_list_csv
