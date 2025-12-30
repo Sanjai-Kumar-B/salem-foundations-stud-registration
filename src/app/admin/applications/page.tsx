@@ -27,6 +27,8 @@ export default function ApplicationsPage() {
     twelfthGroups: [],
     districts: [],
     scholarshipTypes: [],
+    dateFrom: undefined,
+    dateTo: undefined,
   });
 
   useEffect(() => {
@@ -131,6 +133,24 @@ export default function ApplicationsPage() {
       );
     }
 
+    // Date range filter
+    if (filters.dateFrom) {
+      filtered = filtered.filter((app) => {
+        const submittedDate = app.submittedAt?.toDate();
+        return submittedDate && submittedDate >= filters.dateFrom!;
+      });
+    }
+
+    if (filters.dateTo) {
+      filtered = filtered.filter((app) => {
+        const submittedDate = app.submittedAt?.toDate();
+        // Set dateTo to end of day
+        const endOfDay = new Date(filters.dateTo!);
+        endOfDay.setHours(23, 59, 59, 999);
+        return submittedDate && submittedDate <= endOfDay;
+      });
+    }
+
     setFilteredApplications(filtered);
   };
 
@@ -157,6 +177,8 @@ export default function ApplicationsPage() {
       scholarshipTypes: [],
       minMarks: undefined,
       maxMarks: undefined,
+      dateFrom: undefined,
+      dateTo: undefined,
     });
     setSearchQuery('');
   };
@@ -277,6 +299,32 @@ export default function ApplicationsPage() {
           {/* Filter Panel */}
           {showFilters && (
             <div className="mt-6 pt-6 border-t border-gray-200">
+              {/* Date Range Filter */}
+              <div className="mb-6 p-4 bg-blue-50 rounded-lg">
+                <h4 className="text-sm font-semibold text-gray-900 mb-3">Date Range Filter</h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">From Date</label>
+                    <input
+                      type="date"
+                      value={filters.dateFrom ? filters.dateFrom.toISOString().split('T')[0] : ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, dateFrom: e.target.value ? new Date(e.target.value) : undefined }))}
+                      className="input text-sm"
+                    />
+                  </div>
+                  <div>
+                    <label className="block text-xs text-gray-600 mb-1">To Date</label>
+                    <input
+                      type="date"
+                      value={filters.dateTo ? filters.dateTo.toISOString().split('T')[0] : ''}
+                      onChange={(e) => setFilters(prev => ({ ...prev, dateTo: e.target.value ? new Date(e.target.value) : undefined }))}
+                      className="input text-sm"
+                    />
+                  </div>
+                </div>
+                <p className="text-xs text-gray-500 mt-2">Filter applications by submission date</p>
+              </div>
+
               {/* Marks Range Filter */}
               <div className="mb-6 p-4 bg-gray-50 rounded-lg">
                 <h4 className="text-sm font-semibold text-gray-900 mb-3">Marks Range Filter</h4>
@@ -309,7 +357,8 @@ export default function ApplicationsPage() {
                 {/* Status Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Status</h4>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(ApplicationStatus).map((status) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {Object.values(ApplicationStatus).map((status) => (
                       <label key={status} className="flex items-center">
                         <input
                           type="checkbox"
@@ -326,7 +375,8 @@ export default function ApplicationsPage() {
                 {/* Course Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">Course</h4>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(CourseType).map((course) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {Object.values(CourseType).map((course) => (
                       <label key={course} className="flex items-center">
                         <input
                           type="checkbox"
@@ -343,7 +393,8 @@ export default function ApplicationsPage() {
                 {/* 12th Group Filter */}
                 <div>
                   <h4 className="text-sm font-semibold text-gray-900 mb-3">12th Group</h4>
-                  <div className="space-y-2 max-h-60 overflow-y-auto">\n                    {Object.values(TwelfthGroup).map((group) => (
+                  <div className="space-y-2 max-h-60 overflow-y-auto">
+                    {Object.values(TwelfthGroup).map((group) => (
                       <label key={group} className="flex items-center">
                         <input
                           type="checkbox"
@@ -404,7 +455,9 @@ export default function ApplicationsPage() {
                    (filters.twelfthGroups?.length || 0) + 
                    (filters.scholarshipTypes?.length || 0) + 
                    (filters.minMarks ? 1 : 0) + 
-                   (filters.maxMarks ? 1 : 0)} filter(s) active
+                   (filters.maxMarks ? 1 : 0) + 
+                   (filters.dateFrom ? 1 : 0) + 
+                   (filters.dateTo ? 1 : 0)} filter(s) active
                 </p>
                 <button 
                   onClick={clearFilters} 
@@ -444,18 +497,21 @@ export default function ApplicationsPage() {
                   <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                     Status
                   </th>
+                  <th className="px-4 py-2 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date of Submission
+                  </th>
                 </tr>
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {isLoading ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-6 text-center">
+                    <td colSpan={8} className="px-4 py-6 text-center">
                       <div className="w-8 h-8 border-4 border-primary-600 border-t-transparent rounded-full animate-spin mx-auto" />
                     </td>
                   </tr>
                 ) : filteredApplications.length === 0 ? (
                   <tr>
-                    <td colSpan={7} className="px-4 py-6 text-center text-gray-500 text-sm">
+                    <td colSpan={8} className="px-4 py-6 text-center text-gray-500 text-sm">
                       No applications found
                     </td>
                   </tr>
@@ -510,6 +566,13 @@ export default function ApplicationsPage() {
                         >
                           {application.status}
                         </span>
+                      </td>
+                      <td className="px-4 py-3 whitespace-nowrap text-xs text-gray-600">
+                        {application.submittedAt?.toDate().toLocaleDateString('en-IN', {
+                          day: '2-digit',
+                          month: 'short',
+                          year: 'numeric'
+                        })}
                       </td>
                     </tr>
                   ))

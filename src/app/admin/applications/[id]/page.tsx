@@ -218,6 +218,34 @@ export default function ApplicationDetailPage() {
             </div>
 
             <div className="mt-6 pt-6 border-t border-gray-200">
+              <div className="mb-4">
+                <label className="text-sm font-medium text-gray-600">Photo Upload Status</label>
+                <div className="mt-2">
+                  {application.documents?.photo ? (
+                    <div className="flex items-center">
+                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                        ✓ Photo Uploaded
+                      </span>
+                      <a
+                        href={application.documents.photo.url}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="ml-3 text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center"
+                      >
+                        <Download className="w-4 h-4 mr-1" />
+                        View Photo
+                      </a>
+                    </div>
+                  ) : (
+                    <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
+                      ✗ Photo Not Uploaded
+                    </span>
+                  )}
+                </div>
+              </div>
+            </div>
+
+            <div className="mt-4 pt-4 border-t border-gray-200">
               <p className="text-sm text-gray-600">
                 <strong>Submitted:</strong> {formatDate(application.submittedAt.toDate())}
               </p>

@@ -208,9 +208,9 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   doc.text(`Application No: ${application.applicationNumber}`, 105, 41, { align: 'center' });
 
   // Add student photo in top right if available
-  if (application.personalDetails.photoUrl) {
+  if (application.documents?.photo?.url) {
     try {
-      doc.addImage(application.personalDetails.photoUrl, 'JPEG', 165, 10, 30, 30);
+      doc.addImage(application.documents.photo.url, 'JPEG', 165, 10, 30, 30);
       // Add border around photo
       doc.setDrawColor(200, 200, 200);
       doc.rect(165, 10, 30, 30);
@@ -442,9 +442,9 @@ export function exportStudentCertificatePDF(application: StudentApplication) {
   doc.text('SELECTION CERTIFICATE', 105, 43, { align: 'center' });
 
   // Add student photo in top right if available
-  if (application.personalDetails.photoUrl) {
+  if (application.documents?.photo?.url) {
     try {
-      doc.addImage(application.personalDetails.photoUrl, 'JPEG', 165, 10, 30, 30);
+      doc.addImage(application.documents.photo.url, 'JPEG', 165, 10, 30, 30);
       // Add border around photo
       doc.setDrawColor(200, 200, 200);
       doc.rect(165, 10, 30, 30);

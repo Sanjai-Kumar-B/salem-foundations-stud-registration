@@ -216,7 +216,7 @@ export const ENGINEERING_COLLEGES_BY_DISTRICT: Record<string, string[]> = {
     "Velammal College of Engineering and Technology (Autonomous)",
     "Velammal School of Architecture"
   ],
-  "MAYILADUTHURAI_ENGINEERING_COLLEGES": [
+  "MAYILADUTHURAI": [
     "Mayiladuthurai"
   ],
   "NAGAPATTINAM": [
@@ -316,7 +316,7 @@ export const ENGINEERING_COLLEGES_BY_DISTRICT: Record<string, string[]> = {
   "THIRUVALLUR": [
     "Thiruvallur"
   ],
-  "THIRUVARUR_ENGINEERING_COLLEGES": [
+  "THIRUVARUR": [
     "A.R.J. College of Engineering & Technology",
     "Central University of Tamil Nadu (CUTN) – B.Tech / Engineering Wing",
     "Government College of Engineering"
@@ -391,7 +391,7 @@ export const TN_DISTRICTS = [
   "KARUR",
   "KRISHNAGIRI",
   "MADURAI",
-  "MAYILADUTHURAI_ENGINEERING_COLLEGES",
+  "MAYILADUTHURAI",
   "NAGAPATTINAM",
   "NAMAKKAL",
   "PERAMBALUR",
@@ -403,7 +403,7 @@ export const TN_DISTRICTS = [
   "THANJAVUR",
   "THENI",
   "THIRUVALLUR",
-  "THIRUVARUR_ENGINEERING_COLLEGES",
+  "THIRUVARUR",
   "THOOTHUKUDI",
   "TIRUNELVELI",
   "TIRUPATHUR",
