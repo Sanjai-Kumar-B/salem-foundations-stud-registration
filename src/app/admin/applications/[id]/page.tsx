@@ -77,17 +77,27 @@ export default function ApplicationDetailPage() {
     }
   };
 
-  const handleDownloadPDF = () => {
+  const handleDownloadPDF = async () => {
     if (application) {
-      exportSingleApplicationPDF(application);
-      toast.success('PDF downloaded successfully');
+      try {
+        await exportSingleApplicationPDF(application);
+        toast.success('PDF downloaded successfully');
+      } catch (error) {
+        console.error('Error generating PDF:', error);
+        toast.error('Failed to generate PDF');
+      }
     }
   };
 
-  const handleDownloadStudentCertificate = () => {
+  const handleDownloadStudentCertificate = async () => {
     if (application) {
-      exportStudentCertificatePDF(application);
-      toast.success('Student certificate downloaded successfully');
+      try {
+        await exportStudentCertificatePDF(application);
+        toast.success('Student certificate downloaded successfully');
+      } catch (error) {
+        console.error('Error generating certificate:', error);
+        toast.error('Failed to generate certificate');
+      }
     }
   };
 
@@ -221,20 +231,42 @@ export default function ApplicationDetailPage() {
               <div className="mb-4">
                 <label className="text-sm font-medium text-gray-600">Photo Upload Status</label>
                 <div className="mt-2">
-                  {application.documents?.photo ? (
-                    <div className="flex items-center">
-                      <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
-                        ✓ Photo Uploaded
-                      </span>
-                      <a
-                        href={application.documents.photo.url}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="ml-3 text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center"
-                      >
-                        <Download className="w-4 h-4 mr-1" />
-                        View Photo
-                      </a>
+                  {(application.documents?.photo?.url || application.personalDetails.photoUrl) ? (
+                    <div className="flex flex-col gap-2">
+                      <div className="flex items-center">
+                        <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+                          ✓ Photo Uploaded
+                        </span>
+                        <button
+                          onClick={() => {
+                            const photoUrl = application.documents?.photo?.url || application.personalDetails.photoUrl;
+                            if (photoUrl) {
+                              const newWindow = window.open();
+                              if (newWindow) {
+                                newWindow.document.write(`
+                                  <html>
+                                    <head><title>Student Photo</title></head>
+                                    <body style="margin:0;display:flex;justify-content:center;align-items:center;min-height:100vh;background:#f3f4f6;">
+                                      <img src="${photoUrl}" style="max-width:90%;max-height:90vh;border-radius:8px;box-shadow:0 4px 6px rgba(0,0,0,0.1);" />
+                                    </body>
+                                  </html>
+                                `);
+                              }
+                            }
+                          }}
+                          className="ml-3 text-primary-600 hover:text-primary-700 text-sm font-medium flex items-center cursor-pointer"
+                        >
+                          <Download className="w-4 h-4 mr-1" />
+                          View Photo
+                        </button>
+                      </div>
+                      <div className="mt-2">
+                        <img 
+                          src={application.documents?.photo?.url || application.personalDetails.photoUrl} 
+                          alt="Student Photo" 
+                          className="h-32 w-32 object-cover rounded-lg border border-gray-300"
+                        />
+                      </div>
                     </div>
                   ) : (
                     <span className="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">

@@ -4,6 +4,33 @@ import * as XLSX from 'xlsx';
 import { StudentApplication } from '@/types';
 import { formatDate } from './utils';
 
+// Helper function to load image as base64
+async function loadImageAsBase64(url: string): Promise<string> {
+  return new Promise(async (resolve, reject) => {
+    try {
+      // Fetch the image as a blob to avoid CORS issues
+      const response = await fetch(url);
+      if (!response.ok) {
+        throw new Error(`Failed to fetch image: ${response.status}`);
+      }
+      const blob = await response.blob();
+      
+      // Convert blob to base64
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        resolve(reader.result as string);
+      };
+      reader.onerror = () => {
+        reject(new Error('Failed to read image data'));
+      };
+      reader.readAsDataURL(blob);
+    } catch (error) {
+      console.error('Error loading image:', error);
+      reject(error);
+    }
+  });
+}
+
 // Export to Excel
 export function exportToExcel(applications: StudentApplication[], filename: string = 'applications') {
   const data = applications.map((app) => ({
@@ -167,7 +194,7 @@ export function exportToPDF(applications: StudentApplication[], filename: string
 }
 
 // Export single application as PDF
-export function exportSingleApplicationPDF(application: StudentApplication) {
+export async function exportSingleApplicationPDF(application: StudentApplication) {
   const doc = new jsPDF();
 
   // Enhanced Header with better design
@@ -207,16 +234,22 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
   doc.setTextColor(37, 99, 235);
   doc.text(`Application No: ${application.applicationNumber}`, 105, 41, { align: 'center' });
 
-  // Add student photo in top right if available
-  if (application.documents?.photo?.url) {
+  // Add student photo in top right if available (check both locations)
+  const photoUrl = application.documents?.photo?.url || application.personalDetails.photoUrl;
+  if (photoUrl) {
+    console.log('Attempting to load photo from:', photoUrl);
     try {
-      doc.addImage(application.documents.photo.url, 'JPEG', 165, 10, 30, 30);
+      const photoBase64 = await loadImageAsBase64(photoUrl);
+      console.log('Photo loaded successfully as base64');
+      doc.addImage(photoBase64, 'JPEG', 165, 10, 30, 30);
       // Add border around photo
       doc.setDrawColor(200, 200, 200);
       doc.rect(165, 10, 30, 30);
     } catch (error) {
-      console.log('Photo not loaded in PDF:', error);
+      console.error('Failed to load photo in PDF:', error);
     }
+  } else {
+    console.log('No photo URL found');
   }
 
   // Reset colors for content
@@ -411,7 +444,7 @@ export function exportSingleApplicationPDF(application: StudentApplication) {
 }
 
 // Export Student Selection Certificate PDF
-export function exportStudentCertificatePDF(application: StudentApplication) {
+export async function exportStudentCertificatePDF(application: StudentApplication) {
   const doc = new jsPDF();
 
   // Header with logo and title
@@ -441,16 +474,22 @@ export function exportStudentCertificatePDF(application: StudentApplication) {
   doc.setFont('helvetica', 'bold');
   doc.text('SELECTION CERTIFICATE', 105, 43, { align: 'center' });
 
-  // Add student photo in top right if available
-  if (application.documents?.photo?.url) {
+  // Add student photo in top right if available (check both locations)
+  const photoUrl = application.documents?.photo?.url || application.personalDetails.photoUrl;
+  if (photoUrl) {
+    console.log('Certificate: Attempting to load photo from:', photoUrl);
     try {
-      doc.addImage(application.documents.photo.url, 'JPEG', 165, 10, 30, 30);
+      const photoBase64 = await loadImageAsBase64(photoUrl);
+      console.log('Certificate: Photo loaded successfully as base64');
+      doc.addImage(photoBase64, 'JPEG', 165, 10, 30, 30);
       // Add border around photo
       doc.setDrawColor(200, 200, 200);
       doc.rect(165, 10, 30, 30);
     } catch (error) {
-      console.log('Photo not loaded in PDF:', error);
+      console.error('Certificate: Failed to load photo in PDF:', error);
     }
+  } else {
+    console.log('Certificate: No photo URL found');
   }
 
   // Reset colors for content

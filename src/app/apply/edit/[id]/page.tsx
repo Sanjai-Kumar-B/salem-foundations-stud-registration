@@ -209,6 +209,7 @@ export default function EditApplicationPage() {
         mobile: app.personalDetails.mobile || '',
         whatsappNumber: app.personalDetails.whatsappNumber || '',
         aadharNumber: app.personalDetails.aadharNumber || '',
+        photoUrl: app.personalDetails.photoUrl || '',
         address: app.personalDetails.address || {
           line1: '',
           line2: '',
@@ -367,6 +368,7 @@ export default function EditApplicationPage() {
         mobile: values.mobile,
         whatsappNumber: values.whatsappNumber,
         aadharNumber: values.aadharNumber,
+        photoUrl: values.photoUrl,
         address: values.address,
         fatherName: values.fatherName,
         fatherOccupation: values.fatherOccupation,
