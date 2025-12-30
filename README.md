@@ -63,38 +63,54 @@
     - Tamil medium education tracking (6th-12th)
   - **Step 3 - Course Preferences**: 
     - 12 course categories with specialized options:
-      - Engineering & Technology (17 specializations)
-      - Medical & Health Sciences (15 specializations)
-      - Arts & Science (17 specializations)
-      - Law & Civil Services
-      - Agriculture (4 specializations)
-      - Architecture (4 specializations)
-      - Marine (4 specializations)
-      - Aviation (5 specializations)
-      - Hotel Management (4 specializations)
-      - Veterinary (3 specializations)
-      - Fisheries (3 specializations)
-      - Others (custom input)
+      - Engineering & Technology (8 specializations including B.E/B.Tech CS, Mechanical, EEE, AI & DS, Polytechnic, ITI)
+      - Medical & Health Sciences (7 specializations including MBBS, BDS, B.Sc Nursing, Pharmacy, Paramedical)
+      - Arts & Science (5 specializations including B.A/B.Sc/B.Com, BBA/BCA, Agriculture, B.Ed, Hotel Management)
+      - Law & Civil Services (3 specializations)
+      - Others (custom text input for unlisted courses)
     - **Engineering Students - Location Preferences**:
       - District selection: Choose from 36 Tamil Nadu districts
       - College selection: Browse 600+ engineering colleges organized by district
       - Select up to 3 preferred colleges from chosen districts
       - Smart filtering: Colleges automatically filtered by selected districts
-    - Multiple college type selection (up to 3) for non-engineering courses
+    - **Non-Engineering Students**:
+      - College type selection: Government, Private, Abroad (max 3 selections)
     - 4 additional free courses: Spoken English, Coding, Abroad Courses, Soft Skills
   - **Step 4 - Community & Scholarship**:
-    - 7 community options (including BCM, SC(A))
-    - **Multi-select scholarships** (18 types):
-      - Government scholarships (7 types)
-      - Salem Foundations Scholarship
-      - Tamil Puthalvan, Pudumaipen
-      - Welfare Scholarship, and more
+    - 7 community options (OC, BC, BCM, MBC, SC, SC(A), ST)
+    - **14 Scholarship Types** (single or multiple selection):
+      - 75% Government Scholarship
+      - Post Matric Government Scholarship
+      - TNMM Government Scholarship
+      - Central Sector Government Scholarship
+      - NSP Government Scholarship
+      - State Scholarship
+      - Moovalur Scholarship
+      - Merit Scholarship
+      - Sports Scholarship
+      - Minority Scholarship
+      - EWS Scholarship
+      - Private Trust
+      - College Scholarship
+      - None
     - Educational loan requirement
+    - Annual family income
     - First graduate status
   - **Step 5 - Referral Tracking**:
-    - Counselor referral option with mobile number
-    - Social media follow integration (Instagram, Facebook, YouTube)
-    - Source tracking
+    - Source tracking: How did you hear about Salem Foundations?
+      - Friends/Family (with referrer details)
+      - School/College (with institution details)
+      - Social Media
+      - Newspaper Advertisement
+      - Website
+      - WhatsApp
+      - Others (custom input)
+    - Optional counselor referral with name and mobile number
+    - Social media follow integration:
+      - Instagram: [@salemfoundations](https://www.instagram.com/salemfoundations?igsh=cGlpNW95czNmYW93)
+      - Facebook: [Salem Foundations](https://www.facebook.com/salemfoundations)
+      - YouTube: [@salemfoundations-smedutrust](https://youtube.com/@salemfoundations-smedutrust?si=IN0hlh3vuw6ziumQ)
+    - Interactive checkboxes to track social media engagement
 
 - **Auto-Validation & Smart Features**
   - WhatsApp number mandatory with validation
@@ -121,38 +137,47 @@
   - Filter by 12 course types
   - District-wise filtering (38 TN districts)
   - Community-based filtering (7 options)
-  - Multi-scholarship type filtering
+  - Scholarship type filtering (14 types)
+  - 12th Group filtering (9 options)
   - Mark range filtering (80+, 90+, etc.)
   - Status-based filtering
   - Real-time search across all fields
 
 - **Application Management**
   - Detailed student profile view
-  - Display of multiple selected scholarships
+  - Display of selected scholarships (up to 14 types)
   - Educational loan status
-  - Tamil medium education status
-  - Entrance exam preparation details
+  - Tamil medium education status (6th-12th)
+  - Entrance exam preparation details (33 exam types)
   - Custom course inputs for "Others" category
+  - 12th Group display with detailed subject combinations
   - **Engineering Applications - Location Preferences**:
     - View preferred districts as visual badges
     - Display selected colleges from each district
     - Export district/college preferences in Excel and PDF reports
+  - **Non-Engineering Applications**:
+    - Display selected college types (Government/Private/Abroad)
+  - Referral source tracking with referrer details
+  - Social media engagement tracking
   - Document preview and download
   - Status updates with notes
 
 - **Analytics & Reports**
-  - Course-wise distribution (12 categories)
-  - District-wise statistics
-  - Community demographics
-  - Multi-scholarship analysis
+  - Course-wise distribution (12 categories with specializations)
+  - District-wise statistics (38 TN districts)
+  - Community demographics (7 categories)
+  - Scholarship analysis (14 types)
   - High scorer identification (90%+ tracking)
-  - Entrance exam preparation trends
+  - Entrance exam preparation trends (33 exam types)
+  - Referral source analytics
+  - Social media engagement metrics
 
 - **Data Export**
-  - Export to Excel (.xlsx) with all fields including multiple scholarships
-  - Export to CSV
-  - PDF generation with complete application details
-  - Filtered data export
+  - Export to Excel (.xlsx) with all fields including scholarships and referrals
+  - Export to CSV with complete application data
+  - PDF generation with detailed application information
+  - Engineering applications include district and college preferences
+  - Filtered data export with custom selections
   - Application-wise PDF download
 
 ---
@@ -187,41 +212,58 @@
 Registration_tool/
 ├── src/
 │   ├── app/                          # Next.js App Router pages
-│   │   ├── page.tsx                  # Landing page
-│   │   ├── layout.tsx                # Root layout
-│   │   ├── globals.css               # Global styles
+│   │   ├── page.tsx                  # Landing page with hero section
+│   │   ├── layout.tsx                # Root layout with metadata
+│   │   ├── globals.css               # Global styles and Tailwind directives
 │   │   ├── apply/                    # Student application module
-│   │   │   ├── page.tsx              # Multi-step form
-│   │   │   └── success/page.tsx      # Success confirmation
-│   │   └── admin/                    # Admin module
-│   │       ├── login/page.tsx        # Admin login
-│   │       ├── dashboard/page.tsx    # Dashboard with stats
-│   │       ├── applications/page.tsx # Applications list
-│   │       └── analytics/page.tsx    # Analytics & charts
-│   ├── components/                   # Reusable components
-│   │   ├── FormComponents.tsx        # Form input components
-│   │   ├── FileUpload.tsx            # File upload component
-│   │   └── AdminLayout.tsx           # Admin layout wrapper
-│   ├── data/                         # Data files
-│   │   └── collegesByDistrict.ts     # Engineering colleges by district (600+)
-│   ├── lib/                          # Utility libraries
-│   │   ├── firebase.ts               # Firebase configuration
-│   │   ├── firestore.ts              # Firestore operations
-│   │   ├── storage.ts                # Storage operations
-│   │   ├── validations.ts            # Yup validation schemas
-│   │   ├── export.ts                 # Export utilities (Excel/PDF)
-│   │   └── utils.ts                  # Helper functions
+│   │   │   ├── page.tsx              # 5-step multi-step form with validation
+│   │   │   └── success/page.tsx      # Success confirmation with application number
+│   │   └── admin/                    # Admin module (protected routes)
+│   │       ├── login/page.tsx        # Admin authentication
+│   │       ├── dashboard/page.tsx    # Dashboard with real-time statistics
+│   │       ├── applications/page.tsx # Applications list with filters
+│   │       └── analytics/page.tsx    # Analytics with charts and reports
+│   ├── components/                   # Reusable React components
+│   │   ├── FormComponents.tsx        # Form input components (text, select, radio, checkbox)
+│   │   ├── ApplicationForm.tsx       # Main application form component
+│   │   ├── FileUpload.tsx            # File upload component with validation
+│   │   └── AdminLayout.tsx           # Admin layout wrapper with navigation
+│   ├── data/                         # Static data files
+│   │   ├── collegesByDistrict.ts     # 600+ Engineering colleges organized by 36 TN districts
+│   │   ├── engineeringCollegesByDistrict.ts  # Engineering-specific college data
+│   │   ├── mbbsCollegesByDistrict.ts # Medical colleges data
+│   │   └── schoolsByDistrict.ts      # School data by district
+│   ├── lib/                          # Utility libraries and helpers
+│   │   ├── firebase.ts               # Firebase SDK initialization and configuration
+│   │   ├── firestore.ts              # Firestore CRUD operations and queries
+│   │   ├── storage.ts                # Firebase Storage file operations
+│   │   ├── validations.ts            # Yup validation schemas for all form steps
+│   │   ├── export.ts                 # Export utilities (Excel/CSV/PDF generation)
+│   │   └── utils.ts                  # Helper functions and utilities
 │   ├── hooks/                        # Custom React hooks
-│   │   └── useAuth.ts                # Authentication hook
-│   └── types/                        # TypeScript definitions
-│       └── index.ts                  # Type definitions
-├── public/                           # Static assets
-├── .env.example                      # Environment variables template
-├── package.json                      # Dependencies
-├── tsconfig.json                     # TypeScript configuration
-├── tailwind.config.ts                # Tailwind configuration
-├── next.config.mjs                   # Next.js configuration
-└── README.md                         # This file
+│   │   └── useAuth.ts                # Authentication hook with Firebase Auth
+│   ├── types/                        # TypeScript type definitions
+│   │   └── index.ts                  # All interfaces, enums, and type definitions
+│   └── assests/                      # Static assets (images, icons, etc.)
+├── public/                           # Static public assets
+├── College_list_csv/                 # CSV files with college data (600+ colleges)
+├── School_list_csv/                  # CSV files with school data
+├── scripts/                          # Data parsing and utility scripts
+│   ├── parseColleges.js              # Parse college CSV files
+│   ├── parseEngineeringColleges.js   # Parse engineering colleges
+│   ├── parseSchools.js               # Parse school data
+│   └── analyzeSchoolData.js          # Analyze school data structure
+├── .env.example                      # Environment variables template with Firebase config
+├── package.json                      # Project dependencies and scripts
+├── tsconfig.json                     # TypeScript compiler configuration
+├── tailwind.config.ts                # Tailwind CSS configuration with custom theme
+├── next.config.mjs                   # Next.js configuration with image domains
+├── firebase.json                     # Firebase hosting configuration
+├── firestore.rules                   # Firestore security rules
+├── FORM_UPDATES.md                   # Detailed changelog of form updates
+├── SETUP_GUIDE.md                    # Step-by-step setup instructions
+├── DEPLOYMENT.md                     # Deployment guide for Vercel/Firebase
+└── README.md                         # This comprehensive documentation
 ```
 
 ---
@@ -477,33 +519,56 @@ firebase deploy
     guardianName, guardianMobile
   },
   academicDetails: {
-    tenthSchool, tenthBoard (dropdown), tenthMarks, tenthPercentage,
-    twelfthSchool, twelfthBoard (dropdown), twelfthMarks, twelfthPercentage,
-    twelfthGroup (Maths-Biology, Maths-CS, CS-Biology, Commerce, Arts, Vocational),
+    tenthSchool, tenthBoard (dropdown: CBSE, Matric, State Board, ICSE), 
+    tenthMarks, tenthPercentage,
+    twelfthSchool, twelfthBoard (dropdown: CBSE, Matric, State Board, ICSE), 
+    twelfthMarks, twelfthPercentage,
+    twelfthGroup (9 options: PCB, PCM, PCCS, Commerce combinations, Arts combinations, Vocational),
     neetScore, neetRank, neetYear,
     jeeScore, jeeRank, jeeYear,
     preparingForExam (33 entrance exam options),
-    studiedInTamilMedium (boolean)
+    studiedInTamilMedium (boolean, grades 6-12)
   },
   coursePreference: {
     preferredCourse (12 categories),
-    courseSpecialization (conditional dropdown or custom input),
-    preferredDistricts (array - for Engineering students),
-    preferredColleges (array, max 3),
-    additionalFreeCourses (array of 4 options)
+    courseSpecialization (conditional dropdown or custom text input),
+    preferredDistricts (array - for Engineering students only),
+    preferredColleges (array, max 3 - Engineering students from district-based list),
+    collegeTypes (array, max 3 - Non-Engineering: Government, Private, Abroad),
+    additionalFreeCourses (array of 4 options: Spoken English, Coding, Abroad Courses, Soft Skills)
   },
   communityScholarship: {
-    community (7 options including BCM, SC(A)),
-    scholarshipType (array - multi-select from 18 types),
-    scholarshipDetails,
+    community (7 options: OC, BC, BCM, MBC, SC, SC(A), ST),
+    scholarshipType (14 options - can select multiple or None):
+      - 75% Government Scholarship
+      - Post Matric Government Scholarship
+      - TNMM Government Scholarship
+      - Central Sector Government Scholarship
+      - NSP Government Scholarship
+      - State Scholarship
+      - Moovalur Scholarship
+      - Merit Scholarship
+      - Sports Scholarship
+      - Minority Scholarship
+      - EWS Scholarship
+      - Private Trust
+      - College Scholarship
+      - None,
+    scholarshipDetails (optional text),
     annualFamilyIncome,
     firstGraduate (boolean),
     needsEducationalLoan (boolean)
   },
   referralDetails: {
-    source (Counselor, Friends/Family, Social Media, etc.),
-    referrerName, referrerMobile,
-    followedSocialMedia: { instagram, facebook, youtube }
+    source (Friends/Family, School/College, Social Media, Newspaper, Website, WhatsApp, Others),
+    referrerName (conditional - required for Friends/Family and School/College sources),
+    referrerMobile (conditional - required for Friends/Family and School/College sources),
+    otherSource (conditional - required if source is Others),
+    followedSocialMedia: { 
+      instagram (boolean), 
+      facebook (boolean), 
+      youtube (boolean) 
+    }
   },
   status: "NEW" | "SHORTLISTED" | "FOLLOW_UP" | "COMPLETED" | "REJECTED",
   tags: string[],
@@ -517,55 +582,80 @@ firebase deploy
 
 ## 🆕 Latest Updates
 
-### November 2025 - Major Feature Enhancements
+### December 2025 - Comprehensive System Enhancement
 
-#### Form Enhancements
-- ✅ **Extended Course Categories**: Added 7 new course types (Agriculture, Architecture, Marine, Aviation, Hotel Management, Veterinary, Fisheries)
-- ✅ **Specialized Course Dropdowns**: 49 total specialization options across all categories
-- ✅ **Multi-Select Scholarships**: Students can now select multiple scholarships (18 types available)
-- ✅ **Educational Loan Field**: New required field for loan requirement tracking
-- ✅ **33 Entrance Exams**: Comprehensive entrance exam preparation dropdown
-- ✅ **Tamil Medium Tracking**: Dedicated field for Tamil medium education (6th-12th)
-- ✅ **Additional Free Courses**: 4 optional free course selections
+#### Form Structure Improvements
+- ✅ **5-Step Application Process**: Enhanced from 4 to 5 steps with referral tracking
+- ✅ **WhatsApp Number Mandatory**: Required field with 10-digit validation
+- ✅ **Complete Parent Contact**: Father and mother mobile numbers now mandatory
+- ✅ **38 Tamil Nadu Districts**: Comprehensive district dropdown covering all TN districts
+- ✅ **State Dropdown**: Changed from text input to dropdown (6 states)
+- ✅ **Board Selection**: Dropdown with CBSE, Matric, State Board, ICSE options
+
+#### Academic Enhancements
+- ✅ **Enhanced 12th Group Options**: 9 detailed combinations including:
+  - Science groups (PCB, PCM, PCCS)
+  - Commerce groups (with Accountancy, CA, Maths)
+  - Arts groups (with History, Economics)
+  - Vocational courses
+- ✅ **Conditional Course Specializations**: Dynamic dropdowns based on course selection
+- ✅ **NEET/JEE Score Tracking**: Optional fields for entrance exam scores and ranks
+- ✅ **33 Entrance Exam Options**: Comprehensive entrance exam preparation tracking
+
+#### Course & College Selection
+- ✅ **12 Course Categories**: Engineering, Medical, Arts & Science, Law, and more
 - ✅ **Engineering Location Preferences**: 
   - District-wise college selection system
   - 600+ engineering colleges organized by 36 TN districts
   - Smart cascading selection (Districts → Colleges)
   - Maximum 3 college selections per student
+- ✅ **Simplified College Types**: Government, Private, Abroad (max 3 selections for non-engineering)
+- ✅ **4 Additional Free Courses**: Spoken English, Coding, Abroad Courses, Soft Skills
 
-#### New Scholarship Types
-- Salem Foundations Scholarship
-- Welfare Scholarship
-- Tamil Puthalvan
-- Pudumaipen
-- (Total 18 scholarship options)
+#### Community & Scholarship System
+- ✅ **7 Community Options**: Including BCM and SC(A) for better demographic tracking
+- ✅ **14 Scholarship Types**: Comprehensive government and private scholarship options:
+  - 75% Government Scholarship
+  - Post Matric, TNMM, Central Sector, NSP Scholarships
+  - Merit, Sports, Minority, EWS Scholarships
+  - Private Trust and College Scholarships
+- ✅ **Multi-Select Support**: Students can select multiple applicable scholarships
+- ✅ **Educational Loan Tracking**: Dedicated field for loan requirement
+- ✅ **First Graduate Status**: Track first-generation college students
+
+#### Referral & Social Media Integration (Step 5)
+- ✅ **Referral Source Tracking**: How students heard about Salem Foundations
+- ✅ **Counselor Referrals**: Optional referrer name and mobile number
+- ✅ **Social Media Follow Integration**: 
+  - Instagram, Facebook, YouTube checkboxes
+  - Direct links to Salem Foundations social media pages
+  - Beautiful gradient-styled platform cards
+- ✅ **Source Options**: Friends/Family, School/College, Social Media, Newspaper, Website, WhatsApp, Others
 
 #### Application Number System
 - ✅ **Truly Unique Generation**: Uses Firestore document ID for guaranteed uniqueness
-- ✅ **Format**: SF{YY}{MM}{UNIQUE6} (e.g., SF2511A3F2D9)
+- ✅ **Format**: SF{YY}{MM}{UNIQUE6} (e.g., SF2512A3F2D9)
 - ✅ **Sync Fix**: Student and admin now see the same application number
 
 #### Admin Dashboard Updates
-- ✅ **Multi-Scholarship Display**: Shows all selected scholarships as bulleted list
-- ✅ **Educational Loan Status**: Displays loan requirement
-- ✅ **Extended Filters**: Support for 12 course types and 18 scholarship types
-- ✅ **Enhanced Export**: Excel/PDF exports include all new fields
+- ✅ **Enhanced Filters**: Support for all 12 course types and 7 communities
+- ✅ **Multi-Field Scholarship Display**: Shows all selected scholarships
 - ✅ **Engineering Preferences Display**:
   - Visual badge display for preferred districts
   - Organized college list by district
   - Export includes district and college preferences
-  - Dedicated columns in Excel/PDF reports
+- ✅ **Comprehensive Data Export**: Excel, CSV, and PDF with all new fields
+- ✅ **12th Group Updated**: Changed from "+2 Group" throughout admin panel
 
 #### Technical Improvements
-- ✅ **Updated Firestore Rules**: Public write access for ratings collection
-- ✅ **Array Handling**: Proper handling of multi-select scholarship arrays
-- ✅ **Type Safety**: Comprehensive TypeScript updates for new fields
-- ✅ **Validation Schemas**: Updated Yup validations for all new fields
+- ✅ **Type Safety**: Comprehensive TypeScript updates with new enums and interfaces
+- ✅ **Validation Schemas**: Updated Yup validations for all mandatory fields
+- ✅ **Conditional Validation**: Dynamic validation based on course and referral selections
 - ✅ **Data Management**:
   - New `collegesByDistrict.ts` data file with 600+ colleges
-  - Conditional validation for Engineering course preferences
   - Optimized college filtering by district selection
-  - Git ignore setup for CSV source files
+  - Proper handling of multi-select arrays
+- ✅ **Build Status**: Zero TypeScript errors, full type safety maintained
 
 ---
 
@@ -611,15 +701,20 @@ For support and queries:
 ## 📈 Future Enhancements
 
 - [ ] SMS notifications for application status updates
-- [ ] Email notifications with application confirmation
-- [ ] Student portal for application tracking
-- [ ] Document verification system
-- [ ] Interview scheduling module
-- [ ] Payment gateway integration for fees
-- [ ] Mobile app for students
-- [ ] Advanced analytics dashboard with charts
-- [ ] Bulk operations for admin
-- [ ] Application comparison feature
+- [ ] Email notifications with application confirmation and unique application number
+- [ ] Student portal for application tracking and status checking
+- [ ] Document verification system with admin approval workflow
+- [ ] Interview scheduling module with calendar integration
+- [ ] Payment gateway integration for application and course fees
+- [ ] Mobile app for students (Android/iOS)
+- [ ] Advanced analytics dashboard with interactive charts and trends
+- [ ] Bulk operations for admin (bulk status updates, bulk exports)
+- [ ] Application comparison feature for counselors
+- [ ] Automated scholarship eligibility checker based on criteria
+- [ ] Integration with college admission APIs
+- [ ] Multi-language support (Tamil, English)
+- [ ] Video interview capability
+- [ ] Digital signature for documents
 
 ---
 
@@ -627,7 +722,7 @@ For support and queries:
 
 **Built with ❤️ by SANJAI KUMAR**
 
-**Version 2.0** | Last Updated: November 2025
+**Version 2.1** | Last Updated: December 2025
 
 [⬆ Back to Top](#salem-foundations---student-application-automation-system)
 
