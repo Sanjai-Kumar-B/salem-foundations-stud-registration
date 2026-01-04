@@ -447,151 +447,311 @@ export async function exportSingleApplicationPDF(application: StudentApplication
 export async function exportStudentCertificatePDF(application: StudentApplication) {
   const doc = new jsPDF();
 
-  // Header with logo and title
-  doc.setFillColor(37, 99, 235);
-  doc.rect(0, 0, 210, 50, 'F');
+  // === HEADER SECTION ===
+  // Dark blue header background (matching reference design)
+  doc.setFillColor(0, 51, 102); // Dark blue #003366
+  doc.rect(0, 0, 210, 25, 'F');
+  
+  // Organization name in header
+  doc.setFontSize(24);
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('helvetica', 'bold');
+  doc.text('SALEM FOUNDATIONS', 105, 16, { align: 'center' });
 
-  // Add Logo
+  // Blue information strip
+  doc.setFillColor(0, 102, 204); // Bright blue #0066CC
+  doc.rect(0, 25, 210, 13, 'F');
+  
+  doc.setFontSize(9);
+  doc.setTextColor(255, 255, 255); // White text on blue background
+  doc.setFont('helvetica', 'normal');
+  doc.text('Government Registered National Educational Support Organization', 105, 31, { align: 'center' });
+  doc.text('Government Registration Number: 9/16', 105, 36, { align: 'center' });
+
+  // Certificate title
+  doc.setFontSize(13);
+  doc.setTextColor(0, 0, 0); // Black text
+  doc.setFont('helvetica', 'bold');
+  doc.text('INDIA-WIDE STUDENT SUPPORT PROGRAM', 105, 45, { align: 'center' });
+  doc.text('SELECTION CERTIFICATE', 105, 52, { align: 'center' });
+  
+  // Horizontal line under title
+  doc.setDrawColor(0, 51, 102);
+  doc.setLineWidth(1);
+  doc.line(35, 55, 175, 55);
+
+  // === LOGO AND PHOTO SECTION ===
+  let yPos = 62;
+  
+  // Add Logo on left side with circular frame design
+  // Draw main circle border
+  doc.setDrawColor(0, 51, 102);
+  doc.setLineWidth(1.5);
+  doc.circle(40, yPos + 18, 20);
+  
+  // Add logo image in center
   try {
     const logoImg = document.createElement('img');
     logoImg.src = '/logo_eng.jpg';
-    doc.addImage(logoImg, 'JPEG', 15, 10, 30, 30);
+    doc.addImage(logoImg, 'JPEG', 26, yPos + 4, 28, 28);
   } catch (error) {
     console.log('Logo not loaded in PDF');
   }
-
-  // Organization Name and Title
-  doc.setFontSize(22);
-  doc.setTextColor(255, 255, 255);
-  doc.setFont('helvetica', 'bold');
-  doc.text('SALEM FOUNDATIONS', 105, 22, { align: 'center' });
   
-  doc.setFontSize(10);
-  doc.setFont('helvetica', 'normal');
-  doc.text('Govt. Registered', 105, 29, { align: 'center' });
-
-  doc.setFontSize(16);
+  // Logo text below with proper styling
+  doc.setFontSize(8);
+  doc.setTextColor(0, 0, 0);
   doc.setFont('helvetica', 'bold');
-  doc.text('SELECTION CERTIFICATE', 105, 43, { align: 'center' });
+  doc.text('Govt. Registered', 40, yPos + 41, { align: 'center' });
+  doc.setFontSize(8);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Registration No: 9/16', 40, yPos + 46, { align: 'center' });
 
-  // Add student photo in top right if available (check both locations)
+  // Add student photo on right side
   const photoUrl = application.documents?.photo?.url || application.personalDetails.photoUrl;
   if (photoUrl) {
-    console.log('Certificate: Attempting to load photo from:', photoUrl);
     try {
       const photoBase64 = await loadImageAsBase64(photoUrl);
-      console.log('Certificate: Photo loaded successfully as base64');
-      doc.addImage(photoBase64, 'JPEG', 165, 10, 30, 30);
-      // Add border around photo
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(165, 10, 30, 30);
+      // Photo with border
+      doc.setDrawColor(0, 0, 0);
+      doc.setLineWidth(0.5);
+      doc.rect(160, yPos, 35, 35);
+      doc.addImage(photoBase64, 'JPEG', 160, yPos, 35, 35);
     } catch (error) {
       console.error('Certificate: Failed to load photo in PDF:', error);
     }
-  } else {
-    console.log('Certificate: No photo URL found');
   }
-
-  // Reset colors for content
-  doc.setTextColor(0, 0, 0);
-  doc.setFont('helvetica', 'normal');
-
-  let yPos = 65;
-
-  // Introduction text
-  doc.setFontSize(11);
-  doc.text('This is to certify that the student listed below has been successfully selected by Salem Foundations', 14, yPos);
-  yPos += 6;
-  doc.text('and is eligible for Salem Foundations full support.', 14, yPos);
-  yPos += 15;
-
-  // Student Details
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
   
-  const details = [
-    ['Name:', `${application.personalDetails.firstName} ${application.personalDetails.lastName}`],
-    ['SF Reference Number:', application.applicationNumber],
-    ['School:', application.academicDetails.twelfthSchool],
-    ['Group/Stream:', application.academicDetails.twelfthGroup.replace(/_/g, ' ')],
-    ['Community:', application.communityScholarship.community],
-    ['Phone Number:', application.personalDetails.mobile],
-    ['Preferred Course:', application.coursePreference.preferredCourse.replace(/_/g, ' ')],
-    ['Course Specialization:', application.coursePreference.courseSpecialization || 
-      application.coursePreference.collegeName || '-'],
-    ['Date Applied:', formatDate(application.submittedAt.toDate())],
+  // Photo label
+  doc.setFontSize(7);
+  doc.setFont('helvetica', 'normal');
+  doc.setTextColor(0, 51, 102);
+  doc.text('Student Photograph', 177.5, yPos + 38, { align: 'center' });
+
+  // === CERTIFICATE REFERENCE AND DATE ===
+  yPos += 52;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'bold');
+  const refId = `SF2026-${application.applicationNumber.slice(-4)}`;
+  const issueDate = formatDate(application.submittedAt.toDate());
+  doc.text(`Certificate Reference ID: ${refId}`, 14, yPos);
+  doc.text(`Date of Issue: ${issueDate}`, 140, yPos);
+
+  // === STUDENT INFORMATION TABLE ===
+  yPos += 8;
+  const tableData = [
+    ['Student Name:', `${application.personalDetails.firstName} ${application.personalDetails.lastName}`, 
+     'Parent / Guardian Name:', application.personalDetails.fatherName],
+    ['Contact Number:', application.personalDetails.mobile, 
+     'Category:', application.communityScholarship.community],
+    ['10th / 12th Status:', `${application.academicDetails.tenthPercentage}% / ${application.academicDetails.twelfthPercentage}%`, 
+     'Preferred Course:', application.coursePreference.preferredCourse.replace(/_/g, ' ')],
+    ['Specialization:', application.coursePreference.courseSpecialization || '-', 
+     'Preferred State / City:', application.personalDetails.address.district],
   ];
 
-  details.forEach(([label, value]) => {
-    doc.setFont('helvetica', 'bold');
-    doc.text(label, 14, yPos);
-    doc.setFont('helvetica', 'normal');
-    const textWidth = doc.getTextWidth(label);
-    const valueLines = doc.splitTextToSize(value, 180 - textWidth - 5);
-    doc.text(valueLines, 14 + textWidth + 3, yPos);
-    yPos += 7 * valueLines.length;
+  autoTable(doc, {
+    body: tableData,
+    startY: yPos,
+    theme: 'grid',
+    styles: { 
+      fontSize: 8, 
+      cellPadding: 2,
+      lineColor: [200, 200, 200],
+      lineWidth: 0.1,
+    },
+    columnStyles: {
+      0: { fontStyle: 'bold', cellWidth: 42, fillColor: [245, 245, 245] },
+      1: { cellWidth: 50 },
+      2: { fontStyle: 'bold', cellWidth: 42, fillColor: [245, 245, 245] },
+      3: { cellWidth: 56 },
+    },
   });
 
-  yPos += 10;
+  yPos = (doc as any).lastAutoTable.finalY + 8;
 
-  // Benefits Provided Section
-  doc.setFont('helvetica', 'bold');
-  doc.text('Benefits Provided:', 14, yPos);
-  yPos += 8;
-
+  // === CERTIFICATION TEXT ===
+  doc.setFontSize(9);
   doc.setFont('helvetica', 'normal');
+  doc.setTextColor(0, 0, 0);
+  const certText = `This is to certify that the above student has been officially selected under the Salem Foundations National Student Support Program and is eligible for free support benefits.`;
+  const certLines = doc.splitTextToSize(certText, 182);
+  doc.text(certLines, 14, yPos);
+
+  yPos += certLines.length * 5 + 8;
+
+  // === BENEFITS PROVIDED SECTION ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Benefits Provided (100% Free)', 14, yPos);
+  
+  yPos += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  
   const benefits = [
-    '• Scholarship Support',
-    '• Counseling & Course Guidance',
-    '• College Selection & Admission Support',
-    '• Documentation Assistance',
-    '• Job & Career Support',
-    '• Long-term Guidance Until a Successful Career is Achieved',
+    '• Real Scholarship Support',
+    '• Free Counseling & Career Guidance',
+    '• Government & Private College Admission Support',
+    '• Course & College Selection Assistance',
+    '• Documentation Support',
+    '• Free Spoken English Training',
+    '• Free Computer Skills Training',
+    '• Job & Career Placement Support',
+    '• Continuous Mentorship & Student Support',
   ];
 
   benefits.forEach(benefit => {
-    doc.text(benefit, 20, yPos);
-    yPos += 7;
+    doc.text(benefit, 14, yPos);
+    yPos += 5;
   });
+
+  yPos += 5;
+
+  // === COURSES SUPPORTED SECTION ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Courses Supported (All India)', 14, yPos);
+
+  // Check if we need a new page
+  if (yPos > 240) {
+    doc.addPage();
+    yPos = 20;
+  } else {
+    yPos += 6;
+  }
+  
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  
+  const courses = [
+    'MBBS / BDS / Allied Health / Paramedical',
+    'Engineering & Technology',
+    'Law',
+    'Agriculture & Veterinary',
+    'Architecture',
+    'Aviation & Airline Courses',
+    'Hotel Management & Catering Science',
+    'Arts & Science',
+    'Polytechnic & Diploma Programs',
+    'And Other Higher Education Programs',
+  ];
+
+  courses.forEach(course => {
+    doc.text(course, 14, yPos);
+    yPos += 5;
+  });
+
+  yPos += 8;
+
+  // Check if we need page 2 for remaining content
+  if (yPos > 240) {
+    doc.addPage();
+    yPos = 20;
+  }
+
+  // === IMPORTANT TERMS & CONDITIONS ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Important Terms & Conditions', 14, yPos);
+  
+  yPos += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  
+  const terms = [
+    '• Selection means eligibility for support, not automatic admission guarantee.',
+    '• Scholarships depend on Government / Private college rules & student eligibility.',
+    '• Student must provide correct documents.',
+    '• Support continues only while student cooperates with Salem Foundations.',
+    '• No counseling fee or hidden charges.',
+  ];
+
+  terms.forEach(term => {
+    const termLines = doc.splitTextToSize(term, 182);
+    doc.text(termLines, 14, yPos);
+    yPos += termLines.length * 5;
+  });
+
+  yPos += 6;
+
+  // === CANCELLATION CLAUSE ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Cancellation Clause', 14, yPos);
+  
+  yPos += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  const cancellationText = 'If the student joins another consultancy or proceeds with admission without informing Salem Foundations, all support and scholarship assistance will be cancelled.';
+  const cancellationLines = doc.splitTextToSize(cancellationText, 182);
+  doc.text(cancellationLines, 14, yPos);
+
+  yPos += cancellationLines.length * 5 + 6;
+
+  // === OFFICIAL ORGANIZATION DETAILS ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Official Organization Details', 14, yPos);
+  
+  yPos += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Salem Foundations (Government Registered)', 14, yPos);
+  yPos += 5;
+  doc.text('Head Office: Salem, Tamil Nadu – India', 14, yPos);
+  yPos += 5;
+  doc.text('Helpline / WhatsApp: +91 8838503547', 14, yPos);
+  yPos += 5;
+  doc.text('Email: admin@salemfoundations.com', 14, yPos);
+  yPos += 5;
+  doc.text('Website: www.salemfoundations.com', 14, yPos);
 
   yPos += 10;
 
-  // Cancellation Clause Box
-  doc.setFillColor(255, 245, 230);
-  doc.rect(10, yPos, 190, 30, 'F');
-  doc.setDrawColor(255, 200, 100);
-  doc.setLineWidth(0.5);
-  doc.rect(10, yPos, 190, 30);
+  // === CERTIFICATE VERIFICATION ===
+  doc.setFontSize(11);
+  doc.setTextColor(0, 51, 102);
+  doc.setFont('helvetica', 'bold');
+  doc.text('Certificate Verification', 14, yPos);
+  
+  yPos += 6;
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0);
+  doc.setFont('helvetica', 'normal');
+  doc.text('Scan QR to verify authenticity', 14, yPos);
+  yPos += 5;
+  doc.text(`Or visit www.salemfoundations.com/verify and enter Reference ID`, 14, yPos);
 
+  // QR Code placeholder box (left side)
+  yPos += 8;
+  doc.setDrawColor(0, 0, 0);
+  doc.setLineWidth(0.5);
+  doc.rect(14, yPos, 40, 40);
+  doc.setFontSize(8);
+  doc.text('Sample QR Verification Code', 34, yPos + 20, { align: 'center' });
+  doc.setFontSize(7);
+  doc.text('(QR code will be generated', 34, yPos + 30, { align: 'center' });
+  doc.text('for actual certificate)', 34, yPos + 34, { align: 'center' });
+
+  // Authorized signature on right side
   doc.setFontSize(10);
   doc.setFont('helvetica', 'bold');
-  doc.text('STRICT CANCELLATION CLAUSE:', 14, yPos + 6);
-  
+  doc.text('Dr. Sreeja', 155, yPos + 30);
   doc.setFont('helvetica', 'normal');
   doc.setFontSize(9);
-  const cancellationText = 'If the student joins any college, consultancy, or course without informing Salem Foundations, all benefits including scholarship, counseling, admission, and job support will be fully cancelled.';
-  const cancellationLines = doc.splitTextToSize(cancellationText, 182);
-  doc.text(cancellationLines, 14, yPos + 12);
-
-  yPos += 40;
-
-  // Authorization
-  doc.setFontSize(11);
-  doc.setFont('helvetica', 'bold');
-  doc.text('Authorized By:', 14, yPos);
-  yPos += 5;
-  doc.setFont('helvetica', 'normal');
-  doc.text('Salem Foundations', 14, yPos);
-
-  // Footer
-  doc.setFontSize(8);
-  doc.setTextColor(150, 150, 150);
-  doc.text(
-    `Generated on ${formatDate(new Date())}`,
-    105,
-    285,
-    { align: 'center' }
-  );
+  doc.text('Authorized Signatory', 155, yPos + 35);
 
   doc.save(`certificate_${application.applicationNumber}.pdf`);
 }
